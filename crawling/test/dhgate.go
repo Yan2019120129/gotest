@@ -1,16 +1,15 @@
 package test
 
 import (
+	"github.com/gocolly/colly"
+	"github.com/so68/zfeng/utils"
 	"strconv"
 	"strings"
 	"sync"
-
-	"github.com/gocolly/colly"
-	"github.com/so68/zfeng/utils"
 )
 
 const (
-	saveImagePath = "assets/uploads/crawling/product/" // 存储爬取图片
+	saveImagePath = "./assets/uploads/crawling/product/" // 存储爬取图片
 )
 
 type ProductInfo struct {
@@ -39,6 +38,17 @@ func NewDhgate() *Dhgate {
 		},
 		collyCollector: collyCollector,
 	}
+}
+
+func (_Dhgate *Dhgate) Index(url string) (productDetailsUrl []string) {
+	_Dhgate.collyCollector.OnHTML("#proGallery > div.content-middle.clearfix > div.gallery-box > div > div.gwrap", func(element *colly.HTMLElement) {
+		element.ForEach("div.photo > a.pic", func(i int, element *colly.HTMLElement) {
+			domClass := element.Attr("href")
+			productDetailsUrl = append(productDetailsUrl, domClass)
+		})
+	})
+	_Dhgate.collyCollector.Visit(url)
+	return productDetailsUrl
 }
 
 // Details 获取产品详情

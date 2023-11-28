@@ -1,90 +1,85 @@
 package main
 
-import "fmt"
+import (
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
+	"gotest/models"
+	"time"
+)
 
-// 抽象产品接口
-type Shape interface {
-	Draw() string
+// Product 结构体表示产品信息
+type Product struct {
+	ID    int64  `json:"id"`
+	Name  string `json:"name"`
+	Price int    `json:"price"`
 }
 
-type Color interface {
-	Fill() string
-}
-
-// 具体产品类型A
-type Circle struct{}
-
-func (c *Circle) Draw() string {
-	return "Draw Circle"
-}
-
-type Red struct{}
-
-func (r *Red) Fill() string {
-	return "Fill with Red color"
-}
-
-// 具体产品类型B
-type Square struct{}
-
-func (s *Square) Draw() string {
-	return "Draw Square"
-}
-
-type Blue struct{}
-
-func (b *Blue) Fill() string {
-	return "Fill with Blue color"
-}
-
-// 抽象工厂接口
-type AbstractFactory interface {
-	CreateShape() Shape
-	CreateColor() Color
-}
-
-// 具体工厂类型A
-type ShapeAndColorFactoryA struct{}
-
-func (f *ShapeAndColorFactoryA) CreateShape() Shape {
-	return &Circle{}
-}
-
-func (f *ShapeAndColorFactoryA) CreateColor() Color {
-	return &Red{}
-}
-
-// 具体工厂类型B
-type ShapeAndColorFactoryB struct{}
-
-func (f *ShapeAndColorFactoryB) CreateShape() Shape {
-	return &Square{}
-}
-
-func (f *ShapeAndColorFactoryB) CreateColor() Color {
-	return &Blue{}
-}
-
-// 客户端
 func main() {
-	// 选择具体工厂类型
-	factoryA := &ShapeAndColorFactoryA{}
-	factoryB := &ShapeAndColorFactoryB{}
+	dsn := "root:Aa123098..@tcp(127.0.0.1:3306)/basic?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		SkipDefaultTransaction: true,
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+	})
 
-	// 使用工厂A创建产品
-	shapeA := factoryA.CreateShape()
-	colorA := factoryA.CreateColor()
+	if err != nil {
+		panic(err)
+	}
+	nowTime := time.Now()
+	user := models.User{
+		AdminId:     1,
+		ParentId:    0,
+		UserName:    "wang",
+		NickName:    "wangyang",
+		Email:       "15564036382",
+		Telephone:   "188494",
+		Avatar:      "/public/images/logo.png",
+		Sex:         1,
+		Birthday:    1700998487,
+		Password:    "13135",
+		SecurityKey: "unlock",
+		Money:       1000000,
+		Type:        models.UserTypeDefault,
+		Status:      models.UserStatusActive,
+		Data:        "粗布麻衣生涯，包含诗书气自华",
+		Desc:        "",
+		UpdatedAt:   int(nowTime.Unix()),
+		CreatedAt:   int(nowTime.Unix()),
+	}
 
-	// 使用工厂B创建产品
-	shapeB := factoryB.CreateShape()
-	colorB := factoryB.CreateColor()
+	// 手动事务
+	//tx := db.Begin()
+	//defer tx.Rollback()
+	//tx.Create(&user)
+	//panic(errors.New("打断更新"))
+	//tx.Model(&models.User{}).Where("id=?", user.Id).Updates(models.User{
+	//	UserName:  "li",
+	//	NickName:  "lifu",
+	//	Email:     "214656551",
+	//	Telephone: "98765242",
+	//})
+	//
+	//tx.Commit()
 
-	// 展示产品信息
-	fmt.Println("Factory A products:")
-	fmt.Println(shapeA.Draw())
-	fmt.Println(colorA.Fill())
-
-	fmt.Println("\nFactory B products:")
-	fmt.Println(shapeB.Draw())
-	fmt.Println(colorB.Fill())
+	// 自动事务
+	err = db.Transaction(func(tx *gorm.DB) error {
+		tx.Create(&user)
+		if true {
+			// 返回 nil 提交事务
+			return gorm.ErrRecordNotFound
+		}
+		tx.Model(&models.User{}).Where("id=?", user.Id).Updates(models.User{
+			UserName:  "li",
+			NickName:  "lifu",
+			Email:     "214656551",
+			Telephone: "98765242",
+		})
+		// 返回 nil 提交事务
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
 }
