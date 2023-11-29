@@ -1,40 +1,53 @@
 database:
+  use-database: "mysql"
+  # mysql 数据库配置
   mysql:
+    # 服务地址
     host: "127.0.0.1"
+    # 数据库名
     db-name: "shop"
+    # 用户名
     user: "root"
+    # 密码
     pass: "Aa123098.."
+    # 端口
     port: 3306
+    # postgresql 数据库配置
   postgresql:
+    # 服务地址
     host: "127.0.0.1"
+    # 数据库名
     db-name: "shop"
+    # 用户名
     user: "root"
+    # 密码
     pass: "Aa123098.."
+    # 端口
     port: 9920
 
 # Redis配置
-Redis:
+redis:
   # 连接协议
-  Network: "tcp"
+  network: "tcp"
   # 服务器地址
-  Server: "127.0.0.1"
+  server: "127.0.0.1"
   # 端口
-  Port: 6379
+  port: 6379
   # 密码
-  Pass: ""
+  pass: ""
   # 数据库 0-15
-  Dbname: 0
+  dbname: 0
   # 连接超时时间
-  ConnectTimeout: 30
+  connect-timeout: 30
   # 读取超时时间
-  ReadTimeout: 30
+  read-timeout: 30
   # 写入超时时间
-  WriteTimeout: 30
+  Write-timeout: 30
   # 设置最大连接数
-  MaxOpenConn: 0
+  max-open-conn: 0
   # 空闲连接超时
-  ConnMaxIdleTime: 30
+  conn-max-idle-time: 30
   # 最大空闲连接数
-  MaxIdleConn: 0
+  max-idle-conn: 0
   # 如果超过最大连接数是否等待
-  Wait: false
+  wait: false

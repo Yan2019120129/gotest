@@ -1,12 +1,13 @@
-package index
+package test
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gotest/my_frame/init_config"
+	"gotest/my_frame/models"
 )
 
-func Index(c *gin.Context) {
+func Redis(c *gin.Context) {
 	rds := init_config.Rds.Get()
 
 	defer rds.Close()
@@ -25,4 +26,13 @@ func Index(c *gin.Context) {
 	fmt.Println(r)
 
 	c.JSON(200, r)
+}
+
+func Mysql(c *gin.Context) {
+	userInfo := new(models.User)
+	rep := init_config.Db.Model(userInfo).Where("id=?", 1).Find(userInfo)
+	if rep.Error != nil {
+		panic(rep.Error)
+	}
+	c.JSON(200, userInfo)
 }
