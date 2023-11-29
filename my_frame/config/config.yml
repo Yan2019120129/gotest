@@ -11,3 +11,30 @@ database:
     user: "root"
     pass: "Aa123098.."
     port: 9920
+
+# Redis配置
+Redis:
+  # 连接协议
+  Network: "tcp"
+  # 服务器地址
+  Server: "127.0.0.1"
+  # 端口
+  Port: 6379
+  # 密码
+  Pass: ""
+  # 数据库 0-15
+  Dbname: 0
+  # 连接超时时间
+  ConnectTimeout: 30
+  # 读取超时时间
+  ReadTimeout: 30
+  # 写入超时时间
+  WriteTimeout: 30
+  # 设置最大连接数
+  MaxOpenConn: 0
+  # 空闲连接超时
+  ConnMaxIdleTime: 30
+  # 最大空闲连接数
+  MaxIdleConn: 0
+  # 如果超过最大连接数是否等待
+  Wait: false

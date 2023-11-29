@@ -1,17 +1,24 @@
 package main
 
 import (
-	"errors"
-	models "gotest/my_frame/ models"
-	"gotest/my_frame/database"
+	"github.com/gin-gonic/gin"
+	"gotest/my_frame/api/admin"
+	"gotest/my_frame/database/redis"
 )
 
 func main() {
-	factory := new(database.New)
-	db := factory.NewMysql().Connect()
-	user := new(models.User)
-	result := db.Find(&user)
-	if result.RowsAffected == 0 {
-		errors.New("")
+	// 配置gin
+	ctx := gin.Default()
+
+	// 初始化后台路由
+	admin.InitRouter(ctx)
+
+	// 初始化Redis
+	redis.InitRedis()
+
+	// 运行服务
+	err := ctx.Run()
+	if err != nil {
+		return
 	}
 }
