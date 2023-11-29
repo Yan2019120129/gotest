@@ -2,8 +2,7 @@ package database
 
 import (
 	"gorm.io/gorm"
-	"gotest/my_frame/database/mysql"
-	"gotest/my_frame/database/postgresql"
+	"gotest/my_frame/init_config"
 )
 
 type Database interface {
@@ -20,9 +19,9 @@ type New struct {
 }
 
 func (c *New) NewMysql() Database {
-	return &mysql.Mysql{}
+	return &init_config.Mysql{}
 }
 
 func (c *New) NewPostgresql() Database {
-	return &postgresql.Postgresql{}
+	return &init_config.Postgresql{}
 }
