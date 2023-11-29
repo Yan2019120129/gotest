@@ -1,85 +1,59 @@
 package main
 
 import (
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
-	"gotest/models"
-	"time"
+	"fmt"
+	"github.com/dchest/captcha"
+	"html/template"
+	"net/http"
 )
 
-// Product 结构体表示产品信息
-type Product struct {
-	ID    int64  `json:"id"`
-	Name  string `json:"name"`
-	Price int    `json:"price"`
-}
-
 func main() {
-	dsn := "root:Aa123098..@tcp(127.0.0.1:3306)/basic?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-		SkipDefaultTransaction: true,
-		NamingStrategy: schema.NamingStrategy{
-			SingularTable: true,
-		},
-	})
-
+	// 设置模板
+	tmpl, err := template.New("index").Parse(`
+	<html>
+		<body>
+			<form action="/submit" method="post">
+				<label>验证码: </label>
+				<img src="/captcha" alt="captcha"/>
+				<input type="text" name="captcha"/>
+				<input type="submit" value="提交"/>
+			</form>
+		</body>
+	</html>
+	`)
 	if err != nil {
 		panic(err)
 	}
-	nowTime := time.Now()
-	user := models.User{
-		AdminId:     1,
-		ParentId:    0,
-		UserName:    "wang",
-		NickName:    "wangyang",
-		Email:       "15564036382",
-		Telephone:   "188494",
-		Avatar:      "/public/images/logo.png",
-		Sex:         1,
-		Birthday:    1700998487,
-		Password:    "13135",
-		SecurityKey: "unlock",
-		Money:       1000000,
-		Type:        models.UserTypeDefault,
-		Status:      models.UserStatusActive,
-		Data:        "粗布麻衣生涯，包含诗书气自华",
-		Desc:        "",
-		UpdatedAt:   int(nowTime.Unix()),
-		CreatedAt:   int(nowTime.Unix()),
-	}
 
-	// 手动事务
-	//tx := db.Begin()
-	//defer tx.Rollback()
-	//tx.Create(&user)
-	//panic(errors.New("打断更新"))
-	//tx.Model(&models.User{}).Where("id=?", user.Id).Updates(models.User{
-	//	UserName:  "li",
-	//	NickName:  "lifu",
-	//	Email:     "214656551",
-	//	Telephone: "98765242",
-	//})
-	//
-	//tx.Commit()
+	// 设置验证码服务
+	http.HandleFunc("/captcha", func(w http.ResponseWriter, r *http.Request) {
+		image := captcha.New()
+		fmt.Println("image:", image)
+		captcha.WriteImage(w, image, 200, 50)
+	})
 
-	// 自动事务
-	err = db.Transaction(func(tx *gorm.DB) error {
-		tx.Create(&user)
-		if true {
-			// 返回 nil 提交事务
-			return gorm.ErrRecordNotFound
+	// 处理表单提交
+	http.HandleFunc("/submit", func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		userCaptcha := r.FormValue("captcha")
+
+		// 验证用户输入的验证码
+		if captcha.VerifyString(userCaptcha, userCaptcha) {
+			fmt.Fprintf(w, "验证码正确！")
+		} else {
+			fmt.Fprintf(w, "验证码错误！")
 		}
-		tx.Model(&models.User{}).Where("id=?", user.Id).Updates(models.User{
-			UserName:  "li",
-			NickName:  "lifu",
-			Email:     "214656551",
-			Telephone: "98765242",
-		})
-		// 返回 nil 提交事务
-		return nil
 	})
-	if err != nil {
-		panic(err)
-	}
+
+	// 设置静态文件服务
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	// 设置首页
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		tmpl.Execute(w, nil)
+	})
+
+	// 启动服务器
+	fmt.Println("Server is running on :8080")
+	http.ListenAndServe(":8080", nil)
 }
