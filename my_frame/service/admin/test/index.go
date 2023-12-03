@@ -3,12 +3,12 @@ package test
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/init_config"
+	"gotest/my_frame/config"
 	"gotest/my_frame/models"
 )
 
 func Redis(c *gin.Context) {
-	rds := init_config.Rds.Get()
+	rds := config.Rds.Get()
 
 	defer rds.Close()
 	_, err := rds.Do("Set", "abc", 100)
@@ -30,7 +30,7 @@ func Redis(c *gin.Context) {
 
 func Mysql(c *gin.Context) {
 	userInfo := new(models.User)
-	rep := init_config.Db.Model(userInfo).Where("id=?", 1).Find(userInfo)
+	rep := config.Db.Model(userInfo).Where("id=?", 1).Find(userInfo)
 	if rep.Error != nil {
 		panic(rep.Error)
 	}

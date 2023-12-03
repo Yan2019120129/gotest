@@ -1,4 +1,4 @@
-package init_config
+package config
 
 import (
 	"gopkg.in/yaml.v3"
@@ -11,12 +11,21 @@ const (
 )
 
 type Config struct {
+	Gin      GinConfig `yaml:"gin"`
 	Database struct {
 		UseDatabase string         `yaml:"use-database"`
 		Mysql       DatabaseConfig `yaml:"mysql"`
 		Postgresql  DatabaseConfig `yaml:"postgresql"`
 	} `yaml:"database"`
 	Redis RedisConfig `yaml:"redis"`
+}
+
+// GinConfig gin配置参数
+type GinConfig struct {
+	Port           string `yaml:"port"`           // gin端口号
+	ReadTimeout    int    `yaml:"readTimeout"`    // 读取超时时间
+	WriteTimeout   int    `yaml:"writeTimeout"`   // 写入超时时间
+	MaxHeaderBytes int    `yaml:"maxHeaderBytes"` // 请求头的最大字节数
 }
 
 type NamingStrategy struct {
@@ -53,7 +62,7 @@ type RedisConfig struct {
 }
 
 const (
-	FilePath = "./my_frame/config/config.yml"
+	FilePath = "./my_frame/config.yml"
 )
 
 var Cfg = &Config{}

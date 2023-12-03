@@ -1,4 +1,13 @@
+gin:
+  port: ":3100"
+  # 读取请求的最大持续时间
+  read-timeout: 10
+  # 写入响应的最大持续时间
+  write-timeout: 10
+  # 请求头的最大字节数
+  max-header-bytes: 1048576
 database:
+  # 使用的数据库
   use-database: "mysql"
   # mysql 数据库配置
   mysql:
