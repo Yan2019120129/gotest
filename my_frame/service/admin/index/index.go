@@ -3,11 +3,11 @@ package index
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/config"
+	"gotest/my_frame/config/redis"
 )
 
 func Index(c *gin.Context) {
-	rds := config.Rds.Get()
+	rds := redis.Rds.Get()
 
 	defer rds.Close()
 	_, err := rds.Do("Set", "abc", 100)

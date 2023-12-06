@@ -6,6 +6,7 @@ gin:
   write-timeout: 10
   # 请求头的最大字节数
   max-header-bytes: 1048576
+
 database:
   # 使用的数据库
   use-database: "mysql"
@@ -22,6 +23,7 @@ database:
     # 端口
     port: 3306
     # postgresql 数据库配置
+
   postgresql:
     # 服务地址
     host: "127.0.0.1"
@@ -60,3 +62,9 @@ redis:
   max-idle-conn: 0
   # 如果超过最大连接数是否等待
   wait: false
+
+elasticsearch:
+  # ip地址
+  url: "47.101.70.217"
+  # 端口号
+  port: 1014

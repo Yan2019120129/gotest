@@ -1,9 +1,10 @@
-package config
+package postgresql
 
 import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gotest/my_frame/config"
 	"log"
 )
 
@@ -19,6 +20,6 @@ func (m *Postgresql) Connect() (db *gorm.DB) {
 }
 
 func (m *Postgresql) GetDsn() string {
-	cfg := &Cfg.Database.Postgresql
+	cfg := &config.Cfg.Database.Postgresql
 	return fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable TimeZone=Asia/Shanghai", cfg.Host, cfg.User, cfg.Pass, cfg.DbName, cfg.Port)
 }

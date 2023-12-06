@@ -17,7 +17,14 @@ type Config struct {
 		Mysql       DatabaseConfig `yaml:"mysql"`
 		Postgresql  DatabaseConfig `yaml:"postgresql"`
 	} `yaml:"database"`
-	Redis RedisConfig `yaml:"redis"`
+	Redis         RedisConfig   `yaml:"redis"`
+	Elasticsearch Elasticsearch `yaml:"elasticsearch"`
+}
+
+// Elasticsearch 配置参数
+type Elasticsearch struct {
+	Port int    `yaml:"port"`        // Elasticsearch端口号
+	Url  string `yaml:"readTimeout"` // IP地址
 }
 
 // GinConfig gin配置参数
