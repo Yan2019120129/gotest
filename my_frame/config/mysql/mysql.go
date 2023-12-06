@@ -6,13 +6,15 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"gotest/my_frame/config"
+	"gotest/my_frame/models"
 )
 
-type Mysql struct{}
+var Db *gorm.DB
 
-func (m *Mysql) Connect() (db *gorm.DB) {
-	db, err := gorm.Open(mysql.Open(m.GetDsn()), &gorm.Config{
+// Init 初始化mysql
+func Init(cfg *models.DatabaseConfig) {
+	var err error
+	Db, err = gorm.Open(mysql.Open(GetDsn(cfg)), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
@@ -21,10 +23,8 @@ func (m *Mysql) Connect() (db *gorm.DB) {
 	if err != nil {
 		panic(err)
 	}
-	return db
 }
 
-func (m *Mysql) GetDsn() string {
-	cfg := &config.Cfg.Database.Mysql
+func GetDsn(cfg *models.DatabaseConfig) string {
 	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Pass, cfg.Host, cfg.Port, cfg.DbName)
 }

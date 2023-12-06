@@ -2,8 +2,6 @@ package database
 
 import (
 	"gorm.io/gorm"
-	"gotest/my_frame/config/mysql"
-	"gotest/my_frame/config/postgresql"
 )
 
 type Database interface {
@@ -19,10 +17,11 @@ type ObstructFactory interface {
 type New struct {
 }
 
-func (c *New) NewMysql() Database {
-	return &redis.Mysql{}
-}
-
-func (c *New) NewPostgresql() Database {
-	return &postgresql.Postgresql{}
-}
+//
+//func (c *New) NewMysql() Database {
+//	return &mysql.Mysql{}
+//}
+//
+//func (c *New) NewPostgresql() Database {
+//	return &postgresql.Postgresql{}
+//}
