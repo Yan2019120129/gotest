@@ -1,9 +1,4 @@
-package config
-
-import (
-	"gopkg.in/yaml.v3"
-	"os"
-)
+package models
 
 const (
 	DatabaseTypeMysql      = "mysql"
@@ -12,19 +7,21 @@ const (
 
 type Config struct {
 	Gin      GinConfig `yaml:"gin"`
-	Database struct {
-		UseDatabase string         `yaml:"use-database"`
-		Mysql       DatabaseConfig `yaml:"mysql"`
-		Postgresql  DatabaseConfig `yaml:"postgresql"`
-	} `yaml:"database"`
-	Redis         RedisConfig   `yaml:"redis"`
-	Elasticsearch Elasticsearch `yaml:"elasticsearch"`
+	Database Database  `yaml:"database"`
 }
 
 // Elasticsearch 配置参数
 type Elasticsearch struct {
 	Port int    `yaml:"port"`        // Elasticsearch端口号
 	Url  string `yaml:"readTimeout"` // IP地址
+}
+
+type Database struct {
+	UseDatabase   string         `yaml:"use-database"`
+	Mysql         DatabaseConfig `yaml:"mysql"`
+	Postgresql    DatabaseConfig `yaml:"postgresql"`
+	Redis         RedisConfig    `yaml:"redis"`
+	Elasticsearch Elasticsearch  `yaml:"elasticsearch"`
 }
 
 // GinConfig gin配置参数
@@ -71,16 +68,3 @@ type RedisConfig struct {
 const (
 	FilePath = "./my_frame/config.yml"
 )
-
-var Cfg = &Config{}
-
-func InitConfig() {
-	configByte, err := os.ReadFile(FilePath)
-	if err != nil {
-		panic(err)
-	}
-	err = yaml.Unmarshal(configByte, Cfg)
-	if err != nil {
-		panic(err)
-	}
-}

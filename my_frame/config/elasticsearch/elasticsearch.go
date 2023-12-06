@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"gotest/my_frame/config"
+	"gotest/my_frame/models"
 	"log"
 	"strings"
 )
@@ -15,9 +15,8 @@ var Clinet *elasticsearch.Client
 type ESearch struct {
 }
 
-// InitElasticsearch 初始化elasticsearch
-func InitElasticsearch() {
-	cfg := &config.Cfg.Elasticsearch
+// Init 初始化elasticsearch
+func Init(cfg *models.Elasticsearch) {
 
 	// 添加配置，初始化连接
 	var err error
