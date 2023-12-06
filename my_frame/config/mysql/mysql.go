@@ -1,4 +1,4 @@
-package config
+package mysql
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"gotest/my_frame/config"
 )
 
 type Mysql struct{}
@@ -24,6 +25,6 @@ func (m *Mysql) Connect() (db *gorm.DB) {
 }
 
 func (m *Mysql) GetDsn() string {
-	cfg := &Cfg.Database.Mysql
+	cfg := &config.Cfg.Database.Mysql
 	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Pass, cfg.Host, cfg.Port, cfg.DbName)
 }
