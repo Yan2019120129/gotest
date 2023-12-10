@@ -3,7 +3,7 @@ package test
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/config/mysql"
+	"gotest/my_frame/config/database/mysql"
 	"gotest/my_frame/config/redis"
 	"gotest/my_frame/models"
 )
