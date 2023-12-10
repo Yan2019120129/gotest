@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"gotest/my_frame/api/admin"
 	"gotest/my_frame/config"
+	esearch "gotest/my_frame/config/elasticsearch"
+	"gotest/my_frame/config/redis"
 	"net/http"
 	"time"
 )
@@ -12,8 +14,15 @@ func main() {
 
 	// 初始化配置文件，全局依赖配置文件配置
 	cfg := config.GetConfig()
+
 	// 初始化配置
 	config.InitDatabase(&cfg.Database)
+
+	// 初始化redis
+	redis.Init(&cfg.Redis)
+
+	// 初始化Elasticsearch
+	esearch.Init(&cfg.Elasticsearch)
 
 	// 配置gin
 	router := gin.Default()
