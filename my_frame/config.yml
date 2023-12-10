@@ -65,6 +65,11 @@ redis:
 
 elasticsearch:
   # ip地址
-  url: "47.101.70.217"
-  # 端口号
-  port: 1014
+  ip-address:
+  - "http://47.101.70.217:1014"
+  # 每个主机的最大空闲连接数
+  max-idle-conns-per-host: 10
+  # 接收响应头的超时时间
+  response-header-timeout: 5
+  # 建立连接的上下文和超时设置
+  dialer-timeout: 5

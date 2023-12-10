@@ -2,10 +2,8 @@ package config
 
 import (
 	"gopkg.in/yaml.v3"
-	esearch "gotest/my_frame/config/elasticsearch"
 	"gotest/my_frame/config/mysql"
 	"gotest/my_frame/config/postgresql"
-	"gotest/my_frame/config/redis"
 	"gotest/my_frame/models"
 	"os"
 )
@@ -20,12 +18,6 @@ func InitDatabase(cfg *models.Database) {
 	case models.DatabaseTypeMysql:
 		mysql.Init(&cfg.Mysql)
 	}
-
-	// 初始化redis
-	redis.Init(&cfg.Redis)
-
-	// 初始化Elasticsearch
-	esearch.Init(&cfg.Elasticsearch)
 }
 
 func GetConfig() *models.Config {

@@ -6,22 +6,24 @@ const (
 )
 
 type Config struct {
-	Gin      GinConfig `yaml:"gin"`
-	Database Database  `yaml:"database"`
+	Gin           GinConfig     `yaml:"gin"`
+	Database      Database      `yaml:"database"`
+	Redis         RedisConfig   `yaml:"redis"`
+	Elasticsearch Elasticsearch `yaml:"elasticsearch"`
 }
 
 // Elasticsearch 配置参数
 type Elasticsearch struct {
-	Port int    `yaml:"port"`        // Elasticsearch端口号
-	Url  string `yaml:"readTimeout"` // IP地址
+	IpAddress             []string `yaml:"ip-address"`              // IP地址
+	MaxIdleConnsPerHost   int      `yaml:"max-idle-conns-per-host"` // 每个主机的最大空闲连接数
+	ResponseHeaderTimeout int      `yaml:"response-header-timeout"` // 接收响应头的超时时间
+	DialerTimeout         int      `yaml:"dialer-timeout"`          // 建立连接的上下文和超时设置
 }
 
 type Database struct {
-	UseDatabase   string         `yaml:"use-database"`
-	Mysql         DatabaseConfig `yaml:"mysql"`
-	Postgresql    DatabaseConfig `yaml:"postgresql"`
-	Redis         RedisConfig    `yaml:"redis"`
-	Elasticsearch Elasticsearch  `yaml:"elasticsearch"`
+	UseDatabase string         `yaml:"use-database"`
+	Mysql       DatabaseConfig `yaml:"mysql"`
+	Postgresql  DatabaseConfig `yaml:"postgresql"`
 }
 
 // GinConfig gin配置参数
