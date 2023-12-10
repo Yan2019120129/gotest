@@ -2,10 +2,8 @@ package main
 
 import (
 	"gotest/my_frame/config"
-	"gotest/my_frame/config/database"
 	esearch "gotest/my_frame/config/elasticsearch"
-	"gotest/my_frame/config/gin"
-	"gotest/my_frame/config/redis"
+	"gotest/my_frame/test"
 )
 
 func main() {
@@ -14,14 +12,16 @@ func main() {
 	cfg := config.GetConfig()
 
 	// 初始化配置
-	database.Init(&cfg.Database)
+	//database.Init(&cfg.Database)
 
 	// 初始化redis
-	redis.Init(&cfg.Redis)
+	//redis.Init(&cfg.Redis)
 
 	// 初始化Elasticsearch
 	esearch.Init(&cfg.Elasticsearch)
 
-	// 初始化gin
-	gin.Init(&cfg.Gin)
+	//// 初始化gin
+	//gin.Init(&cfg.Gin)
+
+	test.DeleteIndex("customer")
 }
