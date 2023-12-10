@@ -17,7 +17,6 @@ type ObstructFactory interface {
 type New struct {
 }
 
-//
 //func (c *New) NewMysql() Database {
 //	return &mysql.Mysql{}
 //}

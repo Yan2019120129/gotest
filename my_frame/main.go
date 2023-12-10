@@ -2,6 +2,7 @@ package main
 
 import (
 	"gotest/my_frame/config"
+	"gotest/my_frame/config/database"
 	esearch "gotest/my_frame/config/elasticsearch"
 	"gotest/my_frame/config/gin"
 	"gotest/my_frame/config/redis"
@@ -13,7 +14,7 @@ func main() {
 	cfg := config.GetConfig()
 
 	// 初始化配置
-	config.InitDatabase(&cfg.Database)
+	database.Init(&cfg.Database)
 
 	// 初始化redis
 	redis.Init(&cfg.Redis)
