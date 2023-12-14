@@ -6,14 +6,14 @@ const (
 )
 
 type Config struct {
-	Gin           GinConfig     `yaml:"gin"`
-	Database      Database      `yaml:"database"`
-	Redis         RedisConfig   `yaml:"redis"`
-	Elasticsearch Elasticsearch `yaml:"elasticsearch"`
+	Gorm          GormConfig          `yaml:"gorm"`
+	Gin           GinConfig           `yaml:"gin"`
+	Redis         RedisConfig         `yaml:"redis"`
+	Elasticsearch ElasticsearchConfig `yaml:"elasticsearch"`
 }
 
-// Elasticsearch 配置参数
-type Elasticsearch struct {
+// ElasticsearchConfig 配置参数
+type ElasticsearchConfig struct {
 	IpAddress             []string `yaml:"ip-address"`              // IP地址
 	MaxIdleConnsPerHost   int      `yaml:"max-idle-conns-per-host"` // 每个主机的最大空闲连接数
 	ResponseHeaderTimeout int      `yaml:"response-header-timeout"` // 接收响应头的超时时间
@@ -21,9 +21,16 @@ type Elasticsearch struct {
 }
 
 type Database struct {
-	UseDatabase string         `yaml:"use-database"`
-	Mysql       DatabaseConfig `yaml:"mysql"`
-	Postgresql  DatabaseConfig `yaml:"postgresql"`
+	Mysql      DatabaseConfig `yaml:"mysql"`
+	Postgresql DatabaseConfig `yaml:"postgresql"`
+}
+
+// GormConfig gorm 配置
+type GormConfig struct {
+	QueryFields   bool     `yaml:"query-fields"`   // 是否开启全字段匹配查询
+	SingularTable bool     `yaml:"singular-table"` // 是否关闭数据库表复数s
+	UseDatabase   string   `yaml:"use-database"`   // 数据库选择
+	Database      Database `yaml:"database"`       // 数据库配置
 }
 
 // GinConfig gin配置参数
@@ -44,6 +51,7 @@ type NamingStrategy struct {
 	IndexName          string
 }
 
+// DatabaseConfig 数据库基本配置
 type DatabaseConfig struct {
 	Host   string `yaml:"host"`    // 服务器地址
 	DbName string `yaml:"db-name"` // 数据库名
@@ -68,5 +76,5 @@ type RedisConfig struct {
 }
 
 const (
-	FilePath = "./my_frame/config.yml"
+	FilePath = "/home/yan/document/GolandProjects/gotest/my_frame/config.yml"
 )

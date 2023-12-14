@@ -3,6 +3,7 @@ package redis
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"gotest/my_frame/config"
 	"gotest/my_frame/models"
 	"time"
 )
@@ -10,7 +11,8 @@ import (
 var Rds *redis.Pool
 
 // Init 初始化Redis
-func Init(cfg *models.RedisConfig) {
+func Init() {
+	cfg := config.GetRedis()
 	Rds = &redis.Pool{
 		MaxIdle:     cfg.MaxIdleConn,
 		MaxActive:   cfg.MaxOpenConn,
