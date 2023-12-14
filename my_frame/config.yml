@@ -7,34 +7,40 @@ gin:
   # 请求头的最大字节数
   max-header-bytes: 1048576
 
-database:
+gorm:
+  # 全字段查询
+  query-fields: true
+  # 是否关闭单表复数s
+  singular-table: true
   # 使用的数据库
   use-database: "mysql"
-  # mysql 数据库配置
-  mysql:
-    # 服务地址
-    host: "127.0.0.1"
-    # 数据库名
-    db-name: "basic"
-    # 用户名
-    user: "root"
-    # 密码
-    pass: "Aa123098.."
-    # 端口
-    port: 3306
-    # postgresql 数据库配置
+  # 支持的数据库
+  database:
+    # mysql 数据库配置
+    mysql:
+      # 服务地址
+      host: "127.0.0.1"
+      # 数据库名
+      db-name: "basic"
+      # 用户名
+      user: "root"
+      # 密码
+      pass: "Aa123098.."
+      # 端口
+      port: 3306
+      # postgresql 数据库配置
 
-  postgresql:
-    # 服务地址
-    host: "127.0.0.1"
-    # 数据库名
-    db-name: "shop"
-    # 用户名
-    user: "root"
-    # 密码
-    pass: "Aa123098.."
-    # 端口
-    port: 9920
+    postgresql:
+      # 服务地址
+      host: "127.0.0.1"
+      # 数据库名
+      db-name: "shop"
+      # 用户名
+      user: "root"
+      # 密码
+      pass: "Aa123098.."
+      # 端口
+      port: 9920
 
 # Redis配置
 redis:

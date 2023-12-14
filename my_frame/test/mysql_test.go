@@ -2,30 +2,53 @@ package test
 
 import (
 	"fmt"
-	"golang.org/x/net/context"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"gotest/my_frame/config/database/mysql"
-	esearch "gotest/my_frame/config/elasticsearch"
+	"gotest/my_frame/config/gin"
+	"gotest/my_frame/config/gorm/database"
 	"gotest/my_frame/models"
 	"log"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 	"time"
 )
 
+// TestConnectTable 测试连表同步
+func TestConnectTable(t *testing.T) {
+	var product []models.WalletAssets
+	var field []map[string]interface{}
+	database.Db.Where(field).Find(&product)
+	fmt.Println(product)
+}
+
+// TestLogin 测试登录接口
+func TestLogin(t *testing.T) {
+	router := gin.GetEngin()
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/ping", nil)
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "pong", w.Body.String())
+}
+
 // TestTime 测试gorm 自动更新时间
-func TestTime() {
+func TestTime(t *testing.T) {
 	product := models.WalletAssets{
 		Name: "test",
 	}
-	mysql.Db.Create(&product)
+	database.Db.Create(&product)
 	fmt.Println(product.UpdatedAt)
 	fmt.Println(product.CreatedAt)
 }
 
 // TestMap 测试map条件查询
-func TestMap() {
+func TestMap(t *testing.T) {
 	var product []models.WalletAssets
 	var field = map[string]interface{}{"name": "test"}
-	mysql.Db.Where(field).Find(&product)
+	database.Db.Where(field).Find(&product)
 	fmt.Println(product)
 }
 
@@ -44,10 +67,10 @@ type CopyParams struct {
 func Synchronous(params []*SynchronousParams) error {
 
 	nowTime := int(time.Now().Unix())
-	err := mysql.Db.Transaction(func(tx *gorm.DB) error {
+	err := database.Db.Transaction(func(tx *gorm.DB) error {
 		for _, param := range params {
 			var tempMap []map[string]interface{}
-			mysql.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
+			database.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
 
 			for _, temp := range tempMap {
 				// 遍历条件
@@ -59,7 +82,7 @@ func Synchronous(params []*SynchronousParams) error {
 				}
 
 				var outcome map[string]interface{}
-				mysql.Db.Table(param.Table).Where(field).Where("admin_id = ?", param.AdminId).Find(&outcome)
+				database.Db.Table(param.Table).Where(field).Where("admin_id = ?", param.AdminId).Find(&outcome)
 				if outcome != nil {
 					continue
 				}
@@ -87,12 +110,12 @@ func Synchronous(params []*SynchronousParams) error {
 // Copy 复制
 func Copy(params []*CopyParams) error {
 	nowTime := int(time.Now().Unix())
-	err := mysql.Db.Transaction(func(tx *gorm.DB) error {
+	err := database.Db.Transaction(func(tx *gorm.DB) error {
 		for _, param := range params {
 
 			// 获取超级管理员数据
 			var tempMap []map[string]interface{}
-			mysql.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
+			database.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
 
 			// 如果没有管理员数据则不进行下一步
 			if len(tempMap) == 0 {
@@ -100,7 +123,7 @@ func Copy(params []*CopyParams) error {
 			}
 
 			// 清空商户管理员数据
-			mysql.Db.Table(param.Table).Delete("admin_id", param.AdminId)
+			database.Db.Table(param.Table).Delete("admin_id", param.AdminId)
 
 			// 更新查询数据准备插入
 			for _, temp := range tempMap {
@@ -126,7 +149,7 @@ func Copy(params []*CopyParams) error {
 
 // CreateTable 创建表
 func CreateTable() {
-	result := mysql.Db.AutoMigrate(&models.WalletAssets{})
+	result := database.Db.AutoMigrate(&models.WalletAssets{})
 	if result.Error() != "" {
 		log.Panicln(result.Error())
 	}
@@ -137,43 +160,8 @@ func InsertMysql() {
 	// 给我列举一个gorm 子查询例子，用请用中文回答我的问题
 	var product models.Product
 
-	mysql.Db.Where("id = ?", 1).Find(&product)
+	database.Db.Where("id = ?", 1).Find(&product)
 
 	fmt.Println(product)
-
-}
-
-// CreateIndex 创建缩影
-func CreateIndex(index string) {
-	do, err := esearch.ES.Clint.Indices.Create(index).Do(context.TODO())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("result", do.Index)
-	fmt.Println("result：", do.Acknowledged)
-	fmt.Println("result：", do.ShardsAcknowledged)
-}
-
-// DeleteIndex 删除索引
-func DeleteIndex(index string) {
-	do, err := esearch.ES.Clint.Indices.Delete(index).Do(context.TODO())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("result:", do.Shards_)
-	fmt.Println("result:", do.Acknowledged)
-}
-
-// FindIndexAll 获取节点信息
-func FindIndexAll() {
-	do, err := esearch.ES.Clint.Indices.GetTemplate().Do(context.TODO())
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("result:", do)
-}
-
-// InsertDocument 插入文档
-func InsertDocument() {
 
 }

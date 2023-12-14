@@ -12,7 +12,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/update"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
-	"gotest/my_frame/models"
+	"gotest/my_frame/config"
 	"log"
 	"net"
 	"net/http"
@@ -24,7 +24,8 @@ var url = []string{"http://47.101.70.217:1014"}
 var ES Esearch
 
 // Init 初始化elasticsearch
-func Init(cfg *models.Elasticsearch) {
+func Init() {
+	cfg := config.GetElasticsearch()
 	// 配置bing创建类型连接
 	var err error
 	ES.Clint, err = elasticsearch.NewTypedClient(

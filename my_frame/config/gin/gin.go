@@ -1,32 +1,30 @@
 package gin
 
 import (
+	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/api/admin"
-	"gotest/my_frame/models"
-	"net/http"
-	"time"
+	"gotest/my_frame/app/admin/router"
+	"gotest/my_frame/config"
 )
 
-func Init(cfg *models.GinConfig) {
+var engin *gin.Engine
 
+func Init() {
+	cfg := config.GetGin()
 	// 配置gin
-	router := gin.Default()
-	s := &http.Server{
-		Addr:           cfg.Port,
-		Handler:        router,
-		ReadTimeout:    time.Duration(cfg.ReadTimeout) * time.Second,
-		WriteTimeout:   time.Duration(cfg.WriteTimeout) * time.Second,
-		MaxHeaderBytes: cfg.MaxHeaderBytes,
-	}
+	engin = gin.Default()
 
 	// 初始化后台路由
-	admin.InitRouter(router)
+	router.InitRouter(engin)
 
-	// 运行服务
-	err := s.ListenAndServe()
+	err := endless.ListenAndServe(cfg.Port, engin)
 	if err != nil {
 		panic(err)
 		return
 	}
+}
+
+// GetEngin 获取gin实例
+func GetEngin() *gin.Engine {
+	return engin
 }
