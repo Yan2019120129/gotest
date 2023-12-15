@@ -18,7 +18,7 @@ import (
 func TestConnectTable(t *testing.T) {
 	var product []models.WalletAssets
 	var field []map[string]interface{}
-	database.Db.Where(field).Find(&product)
+	database.DB.Where(field).Find(&product)
 	fmt.Println(product)
 }
 
@@ -39,7 +39,7 @@ func TestTime(t *testing.T) {
 	product := models.WalletAssets{
 		Name: "test",
 	}
-	database.Db.Create(&product)
+	database.DB.Create(&product)
 	fmt.Println(product.UpdatedAt)
 	fmt.Println(product.CreatedAt)
 }
@@ -48,7 +48,7 @@ func TestTime(t *testing.T) {
 func TestMap(t *testing.T) {
 	var product []models.WalletAssets
 	var field = map[string]interface{}{"name": "test"}
-	database.Db.Where(field).Find(&product)
+	database.DB.Where(field).Find(&product)
 	fmt.Println(product)
 }
 
@@ -67,10 +67,10 @@ type CopyParams struct {
 func Synchronous(params []*SynchronousParams) error {
 
 	nowTime := int(time.Now().Unix())
-	err := database.Db.Transaction(func(tx *gorm.DB) error {
+	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		for _, param := range params {
 			var tempMap []map[string]interface{}
-			database.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
+			database.DB.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
 
 			for _, temp := range tempMap {
 				// 遍历条件
@@ -82,7 +82,7 @@ func Synchronous(params []*SynchronousParams) error {
 				}
 
 				var outcome map[string]interface{}
-				database.Db.Table(param.Table).Where(field).Where("admin_id = ?", param.AdminId).Find(&outcome)
+				database.DB.Table(param.Table).Where(field).Where("admin_id = ?", param.AdminId).Find(&outcome)
 				if outcome != nil {
 					continue
 				}
@@ -110,12 +110,12 @@ func Synchronous(params []*SynchronousParams) error {
 // Copy 复制
 func Copy(params []*CopyParams) error {
 	nowTime := int(time.Now().Unix())
-	err := database.Db.Transaction(func(tx *gorm.DB) error {
+	err := database.DB.Transaction(func(tx *gorm.DB) error {
 		for _, param := range params {
 
 			// 获取超级管理员数据
 			var tempMap []map[string]interface{}
-			database.Db.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
+			database.DB.Table(param.Table).Where("admin_id = ?", 1).Find(&tempMap)
 
 			// 如果没有管理员数据则不进行下一步
 			if len(tempMap) == 0 {
@@ -123,7 +123,7 @@ func Copy(params []*CopyParams) error {
 			}
 
 			// 清空商户管理员数据
-			database.Db.Table(param.Table).Delete("admin_id", param.AdminId)
+			database.DB.Table(param.Table).Delete("admin_id", param.AdminId)
 
 			// 更新查询数据准备插入
 			for _, temp := range tempMap {
@@ -149,7 +149,7 @@ func Copy(params []*CopyParams) error {
 
 // CreateTable 创建表
 func CreateTable() {
-	result := database.Db.AutoMigrate(&models.WalletAssets{})
+	result := database.DB.AutoMigrate(&models.WalletAssets{})
 	if result.Error() != "" {
 		log.Panicln(result.Error())
 	}
@@ -160,7 +160,7 @@ func InsertMysql() {
 	// 给我列举一个gorm 子查询例子，用请用中文回答我的问题
 	var product models.Product
 
-	database.Db.Where("id = ?", 1).Find(&product)
+	database.DB.Where("id = ?", 1).Find(&product)
 
 	fmt.Println(product)
 

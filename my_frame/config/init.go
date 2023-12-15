@@ -1,22 +1,38 @@
 package config
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v3"
 	"gotest/my_frame/models"
 	"os"
+	"sync"
 )
 
-var config models.Config
+// once 用于初始化config变量，并保证只初始化一次
+var once sync.Once
 
-func Init() {
-	configByte, err := os.ReadFile(models.FilePath)
-	if err != nil {
-		panic(err)
+// 定义全局变量config，并初始化为nil
+var config *models.Config
+
+func init() {
+	if config == nil {
+		once.Do(
+			func() {
+				configByte, err := os.ReadFile(models.FilePath)
+				if err != nil {
+					panic(err)
+				}
+				err = yaml.Unmarshal(configByte, &config)
+				if err != nil {
+					panic(err)
+				}
+				fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", config)
+			},
+		)
+	} else {
+		fmt.Println("配置文件实例已存在！！！")
 	}
-	err = yaml.Unmarshal(configByte, &config)
-	if err != nil {
-		panic(err)
-	}
+
 }
 
 // GetGorm  获取gorm 配置
