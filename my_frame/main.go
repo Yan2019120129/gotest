@@ -1,7 +1,6 @@
 package main
 
 import (
-	esearch "gotest/my_frame/config/elasticsearch"
 	"gotest/my_frame/config/gin"
 )
 
@@ -17,7 +16,7 @@ func main() {
 	//redis.Init()
 
 	// 初始化Elasticsearch
-	esearch.Init()
+	//esearch.Init()
 
 	//// 初始化gin
 	gin.Init()
