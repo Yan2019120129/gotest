@@ -5,22 +5,21 @@ import (
 	"gotest/my_frame/config/redis"
 )
 
-func Index() {
+func Index() (interface{}, error) {
 	rds := redis.Rds.Get()
 
 	defer rds.Close()
 	_, err := rds.Do("Set", "abc", 100)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil, err
 	}
 
-	r, err := rds.Do("Get", "abc")
+	data, err := rds.Do("Get", "abc")
 	if err != nil {
 		fmt.Println("get abc failed,", err)
-		return
+		return nil, err
 	}
 
-	fmt.Println(r)
-
+	return data, nil
 }

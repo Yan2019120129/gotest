@@ -14,7 +14,10 @@ var once sync.Once
 // 定义全局变量config，并初始化为nil
 var config *models.Config
 
-func init() {
+//	func init() {
+//		Init()
+//	}
+func Init() {
 	if config == nil {
 		once.Do(
 			func() {

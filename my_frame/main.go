@@ -1,19 +1,22 @@
 package main
 
 import (
+	"gotest/my_frame/config"
 	"gotest/my_frame/config/gin"
+	"gotest/my_frame/config/gorm/database"
+	"gotest/my_frame/config/redis"
 )
 
 func main() {
 
 	//// 初始化配置文件，全局依赖配置文件配置
-	//config.Init()
-	//
-	//// 初始化配置
-	//database.Init()
+	config.Init()
 
-	// 初始化redis
-	//redis.Init()
+	// 初始化配置
+	database.Init()
+
+	//初始化redis
+	redis.Init()
 
 	// 初始化Elasticsearch
 	//esearch.Init()

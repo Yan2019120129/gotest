@@ -14,8 +14,12 @@ var once sync.Once
 
 var Rds *redis.Pool
 
+//func init() {
+//	Init()
+//}
+
 // Init 初始化Redis
-func init() {
+func Init() {
 	if Rds == nil {
 		once.Do(func() {
 			cfg := config.GetRedis()
@@ -35,6 +39,7 @@ func init() {
 						redis.DialWriteTimeout(time.Duration(cfg.WriteTimeout)*time.Second),
 					)
 					if err != nil {
+						panic(err)
 						return nil, err
 					}
 					return conn, nil
