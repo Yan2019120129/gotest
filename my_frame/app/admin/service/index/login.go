@@ -8,6 +8,6 @@ import (
 // Login 登录接口
 func Login() (interface{}, error) {
 	userInfo := &models.User{}
-	result := database.Db.First(userInfo)
+	result := database.DB.First(userInfo)
 	return userInfo, result.Error
 }

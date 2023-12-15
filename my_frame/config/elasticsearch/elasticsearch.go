@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
+	"fmt"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/bulk"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/delete"
@@ -16,32 +17,44 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"sync"
 	"time"
 )
 
 var url = []string{"http://47.101.70.217:1014"}
 
-var ES Esearch
+// 保证全局唯一单例
+var once sync.Once
+
+// ES 全局配置elasticsearch 实例
+var ES *Esearch
 
 // Init 初始化elasticsearch
-func Init() {
-	cfg := config.GetElasticsearch()
-	// 配置bing创建类型连接
-	var err error
-	ES.Clint, err = elasticsearch.NewTypedClient(
-		elasticsearch.Config{
-			Addresses: cfg.IpAddress,
-			Transport: &http.Transport{
-				MaxIdleConnsPerHost:   cfg.MaxIdleConnsPerHost,
-				ResponseHeaderTimeout: time.Duration(cfg.ResponseHeaderTimeout) * time.Second,
-				DialContext:           (&net.Dialer{Timeout: time.Duration(cfg.DialerTimeout) * time.Second}).DialContext,
-				TLSClientConfig: &tls.Config{
-					MinVersion: tls.VersionTLS12,
-				},
-			},
+func init() {
+	if ES == nil {
+		once.Do(func() {
+			cfg := config.GetElasticsearch()
+			// 配置bing创建类型连接
+			var err error
+			ES.Clint, err = elasticsearch.NewTypedClient(
+				elasticsearch.Config{
+					Addresses: cfg.IpAddress,
+					Transport: &http.Transport{
+						MaxIdleConnsPerHost:   cfg.MaxIdleConnsPerHost,
+						ResponseHeaderTimeout: time.Duration(cfg.ResponseHeaderTimeout) * time.Second,
+						DialContext:           (&net.Dialer{Timeout: time.Duration(cfg.DialerTimeout) * time.Second}).DialContext,
+						TLSClientConfig: &tls.Config{
+							MinVersion: tls.VersionTLS12,
+						},
+					},
+				})
+			if err != nil {
+				panic(err)
+			}
 		})
-	if err != nil {
-		panic(err)
+		fmt.Printf("内存地址：%p----->已经存在elasticsearch实例！！！", ES)
+	} else {
+		fmt.Println("已经存在elasticsearch实例！！！")
 	}
 }
 
@@ -75,7 +88,7 @@ func GetEs() *Esearch {
 	if err != nil {
 		panic(err)
 	}
-	return &ES
+	return ES
 }
 
 // Insert 添加数据
