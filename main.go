@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"gotest/my_frame/config/gorm/database"
 	"gotest/my_frame/models"
-	"gotest/test"
 )
 
 func main() {
-	var userInfo []*models.AdminUser
-	database.DB.Find(userInfo)
+	userInfo := &models.User{}
+	result := database.DB.First(userInfo)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+		return
+	}
 	fmt.Println("data:", userInfo)
-}
-
-func init() {
-	fmt.Println(test.Success)
 }

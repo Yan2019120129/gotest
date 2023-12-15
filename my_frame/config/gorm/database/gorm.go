@@ -18,7 +18,11 @@ var once sync.Once
 // DB 定义全局数据库对象
 var DB *gorm.DB
 
-func init() {
+//func init() {
+//	Init()
+//}
+
+func Init() {
 	if DB == nil {
 		once.Do(func() {
 			var err error
@@ -33,7 +37,7 @@ func init() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Printf("内存地址：%p----->Gorm.DB实例创建成功！！！\n")
+			fmt.Printf("内存地址：%p----->Gorm.DB实例创建成功！！！\n", DB)
 		})
 	} else {
 		fmt.Println("已经存在DB实例")

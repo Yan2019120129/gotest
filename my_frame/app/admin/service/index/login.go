@@ -7,7 +7,7 @@ import (
 
 // Login 登录接口
 func Login() (interface{}, error) {
-	userInfo := &models.User{}
+	userInfo := &models.AdminUser{}
 	result := database.DB.First(userInfo)
 	return userInfo, result.Error
 }
