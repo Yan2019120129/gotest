@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	//// 初始化配置文件，全局依赖配置文件配置
+	// 初始化配置文件，全局依赖配置文件配置
 	config.Init()
 
 	// 初始化配置
@@ -21,7 +21,7 @@ func main() {
 	// 初始化Elasticsearch
 	//esearch.Init()
 
-	//// 初始化gin
+	// 初始化gin
 	gin.Init()
 
 }
