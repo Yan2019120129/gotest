@@ -7,14 +7,14 @@ import (
 	"gotest/my_frame/config"
 )
 
-var open gorm.Dialector
+var _open gorm.Dialector
 
 // Init 初始化mysql
-func Init() {
+func init() {
 	cfg := config.GetMysql()
-	mysql.Open(fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Pass, cfg.Host, cfg.Port, cfg.DbName))
+	_open = mysql.Open(fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Pass, cfg.Host, cfg.Port, cfg.DbName))
 }
 
 func GetOpen() gorm.Dialector {
-	return open
+	return _open
 }
