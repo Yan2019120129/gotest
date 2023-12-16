@@ -33,7 +33,6 @@ func init() {
 				QueryFields: cfg.QueryFields,                     // 是否全字段映射
 				Logger:      logger.Default.LogMode(logger.Info), // 日志级别
 			}); err != nil {
-
 				panic(err)
 			}
 			fmt.Printf("内存地址：%p----->Gorm.DB实例创建成功！！！\n", DB)

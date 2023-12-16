@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+)
+
+import (
 	"gotest/my_frame/config"
 )
 
