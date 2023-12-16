@@ -1,27 +1,21 @@
 package main
 
 import (
+	"github.com/fvbock/endless"
+	"github.com/gin-gonic/gin"
+	"gotest/my_frame/app/admin/router"
 	"gotest/my_frame/config"
-	"gotest/my_frame/config/gin"
-	"gotest/my_frame/config/gorm/database"
-	"gotest/my_frame/config/redis"
 )
 
 func main() {
+	// 配置gin
+	cfg := config.GetGin()
+	engin := gin.Default()
 
-	// 初始化配置文件，全局依赖配置文件配置
-	config.Init()
+	// 初始化后台路由
+	router.InitRouter(engin)
 
-	// 初始化配置
-	database.Init()
-
-	//初始化redis
-	redis.Init()
-
-	// 初始化Elasticsearch
-	//esearch.Init()
-
-	// 初始化gin
-	gin.Init()
-
+	if err := endless.ListenAndServe(cfg.Port, engin); err != nil {
+		panic(err)
+	}
 }

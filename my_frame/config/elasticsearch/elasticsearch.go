@@ -1,4 +1,4 @@
-package Esearch
+package esearch
 
 import (
 	"context"

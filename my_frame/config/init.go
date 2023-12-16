@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"gotest/my_frame/models"
@@ -9,27 +10,22 @@ import (
 )
 
 // once 用于初始化config变量，并保证只初始化一次
-var once sync.Once
+var _once sync.Once
 
 // 定义全局变量config，并初始化为nil
 var config *models.Config
 
 func init() {
-	Init()
-}
-func Init() {
 	if config == nil {
-		once.Do(
+		_once.Do(
 			func() {
-				configByte, err := os.ReadFile(models.FilePath)
-				if err != nil {
-					panic(err)
+				if configByte, err := os.ReadFile(models.FilePath); err == nil {
+					if err = yaml.Unmarshal(configByte, &config); err != nil {
+						panic(err)
+					}
+					fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", config)
 				}
-				err = yaml.Unmarshal(configByte, &config)
-				if err != nil {
-					panic(err)
-				}
-				fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", config)
+				panic(errors.New("配置文件初始化失败！！！"))
 			},
 		)
 	} else {

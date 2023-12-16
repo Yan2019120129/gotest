@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"gotest/my_frame/config"
@@ -14,12 +15,8 @@ var once sync.Once
 
 var Rds *redis.Pool
 
-//func init() {
-//	Init()
-//}
-
 // Init 初始化Redis
-func Init() {
+func init() {
 	if Rds == nil {
 		once.Do(func() {
 			cfg := config.GetRedis()
@@ -29,7 +26,7 @@ func Init() {
 				IdleTimeout: time.Duration(cfg.ConnectTimeout) * time.Second,
 				Wait:        false,
 				Dial: func() (redis.Conn, error) {
-					conn, err := redis.Dial(
+					if conn, err := redis.Dial(
 						cfg.Network,
 						getDsn(cfg),
 						redis.DialPassword(cfg.Pass),
@@ -37,12 +34,10 @@ func Init() {
 						redis.DialConnectTimeout(time.Duration(cfg.ConnectTimeout)*time.Second),
 						redis.DialReadTimeout(time.Duration(cfg.ReadTimeout)*time.Second),
 						redis.DialWriteTimeout(time.Duration(cfg.WriteTimeout)*time.Second),
-					)
-					if err != nil {
-						panic(err)
-						return nil, err
+					); err == nil {
+						return conn, nil
 					}
-					return conn, nil
+					return nil, errors.New("redis初始化失败！！！")
 				},
 			}
 			fmt.Printf("内存地址：%p----->Res实例创建成功！！！\n", Rds)
