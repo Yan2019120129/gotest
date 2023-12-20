@@ -1,8 +1,12 @@
 package models
 
 const (
-	DatabaseTypeMysql      = "mysql"
-	DatabaseTypePostgresql = "postgresql"
+	Database_Type_Mysql      = "mysql"
+	Database_Type_Postgresql = "postgresql"
+)
+
+const (
+	FilePath = "/home/yan/document/GolandProjects/gotest/my_frame/config.yml"
 )
 
 type Config struct {
@@ -12,7 +16,7 @@ type Config struct {
 	Elasticsearch ElasticsearchConfig `yaml:"elasticsearch"`
 }
 
-// ElasticsearchConfig 配置参数
+// ElasticsearchConfig 配置参数。
 type ElasticsearchConfig struct {
 	IpAddress             []string `yaml:"ip-address"`              // IP地址
 	MaxIdleConnsPerHost   int      `yaml:"max-idle-conns-per-host"` // 每个主机的最大空闲连接数
@@ -20,6 +24,7 @@ type ElasticsearchConfig struct {
 	DialerTimeout         int      `yaml:"dialer-timeout"`          // 建立连接的上下文和超时设置
 }
 
+// Database 数据库配置
 type Database struct {
 	Mysql      DatabaseConfig `yaml:"mysql"`
 	Postgresql DatabaseConfig `yaml:"postgresql"`
@@ -39,16 +44,6 @@ type GinConfig struct {
 	ReadTimeout    int    `yaml:"readTimeout"`    // 读取超时时间
 	WriteTimeout   int    `yaml:"writeTimeout"`   // 写入超时时间
 	MaxHeaderBytes int    `yaml:"maxHeaderBytes"` // 请求头的最大字节数
-}
-
-type NamingStrategy struct {
-	TableName          string
-	SchemaName         string
-	ColumnName         string
-	JoinTableName      string
-	RelationshipFKName string
-	CheckerName        string
-	IndexName          string
 }
 
 // DatabaseConfig 数据库基本配置
@@ -74,7 +69,3 @@ type RedisConfig struct {
 	MaxIdleConn     int    `yaml:"max-idle-conn"`      // 最大空闲连接数
 	Wait            bool   `yaml:"wait"`               // 如果超时最大连接数是否等待
 }
-
-const (
-	FilePath = "/home/yan/document/GolandProjects/gotest/my_frame/config.yml"
-)

@@ -9,7 +9,7 @@ import (
 
 var _open gorm.Dialector
 
-// Init 初始化Postgresql
+// init 初始化Postgresql
 func init() {
 	cfg := config.GetPostgres()
 	_open = postgres.Open(fmt.Sprintf("host=%v user=%v password=%v dbname=%v port=%v sslmode=disable TimeZone=Asia/Shanghai", cfg.Host, cfg.User, cfg.Pass, cfg.DbName, cfg.Port))
