@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"gotest/my_frame/models"
@@ -24,8 +23,9 @@ func init() {
 						panic(err)
 					}
 					fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", config)
+				} else {
+					panic(err)
 				}
-				panic(errors.New("配置文件初始化失败！！！"))
 			},
 		)
 	} else {

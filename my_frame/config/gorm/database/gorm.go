@@ -21,6 +21,7 @@ var _once sync.Once
 // DB 定义全局数据库对象
 var DB *gorm.DB
 
+// 初始化数据库连接，保证只执行一次
 func init() {
 	if DB == nil {
 		_once.Do(func() {
@@ -46,11 +47,11 @@ func init() {
 func getDatabaseOpen(useDatabase string) (databaseOpen gorm.Dialector) {
 	// 选用数据库
 	switch useDatabase {
-	case models.DatabaseTypePostgresql:
+	case models.Database_Type_Postgresql:
 		// 初始化Postgresql数据库
 		databaseOpen = postgresql.GetOpen()
 
-	case models.DatabaseTypeMysql:
+	case models.Database_Type_Mysql:
 		// 初始化mysql数据库
 		databaseOpen = mysql.GetOpen()
 	}

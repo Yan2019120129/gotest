@@ -10,15 +10,16 @@ import (
 	"time"
 )
 
-// 初始化redis连接池,保证全局单例
-var once sync.Once
+// 初始化redis连接池,保证全局单例。
+var _once sync.Once
 
+// Rds redis连接池单例,保证全局单例,保证全局单例,保证全局单例。
 var Rds *redis.Pool
 
-// Init 初始化Redis
+// Init 初始化Redis。
 func init() {
 	if Rds == nil {
-		once.Do(func() {
+		_once.Do(func() {
 			cfg := config.GetRedis()
 			Rds = &redis.Pool{
 				MaxIdle:     cfg.MaxIdleConn,
@@ -47,6 +48,7 @@ func init() {
 	}
 }
 
+// getDsn 获取dsn字符串。
 func getDsn(cfg *models.RedisConfig) string {
 	return fmt.Sprintf("%v:%v", cfg.Network, cfg.Port)
 }

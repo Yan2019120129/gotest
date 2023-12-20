@@ -12,7 +12,7 @@ import (
 
 var _open gorm.Dialector
 
-// Init 初始化mysql
+// init 初始化mysql
 func init() {
 	cfg := config.GetMysql()
 	_open = mysql.Open(fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", cfg.User, cfg.Pass, cfg.Host, cfg.Port, cfg.DbName))
