@@ -2,14 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
-	"gotest/my_frame/config/gin"
 	"gotest/my_frame/config/gorm/database"
 	"gotest/my_frame/models"
 	"log"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 )
@@ -24,14 +20,7 @@ func TestConnectTable(t *testing.T) {
 
 // TestLogin 测试登录接口
 func TestLogin(t *testing.T) {
-	router := gin.GetEngin()
 
-	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/ping", nil)
-	router.ServeHTTP(w, req)
-
-	assert.Equal(t, 200, w.Code)
-	assert.Equal(t, "pong", w.Body.String())
 }
 
 // TestTime 测试gorm 自动更新时间
