@@ -1,4 +1,4 @@
-package websocket
+package main
 
 type Data struct {
 	Ip       string   `json:"ip"`

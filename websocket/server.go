@@ -1,14 +1,13 @@
-package websocket
+package main
 
 import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
-	"testing"
 )
 
 // TestWebsocket 测试websocket
-func TestWebsocket(t *testing.T) {
+func main() {
 	router := mux.NewRouter()
 	go h.run()
 	router.HandleFunc("/ws", myws)
