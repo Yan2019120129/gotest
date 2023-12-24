@@ -2,7 +2,7 @@ package index
 
 import (
 	"fmt"
-	"gotest/my_frame/config/redis"
+	"gotest/my_frame/module/redis"
 )
 
 func Index() (interface{}, error) {

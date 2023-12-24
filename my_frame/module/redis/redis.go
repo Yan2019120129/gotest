@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"gotest/my_frame/config"
-	"gotest/my_frame/models"
+	"gotest/my_frame/module"
 	"sync"
 	"time"
 )
@@ -20,7 +20,7 @@ var Rds *redis.Pool
 func init() {
 	if Rds == nil {
 		_once.Do(func() {
-			cfg := config.GetRedis()
+			cfg := module.GetRedis()
 			Rds = &redis.Pool{
 				MaxIdle:     cfg.MaxIdleConn,
 				MaxActive:   cfg.MaxOpenConn,
@@ -49,6 +49,6 @@ func init() {
 }
 
 // getDsn 获取dsn字符串。
-func getDsn(cfg *models.RedisConfig) string {
+func getDsn(cfg *config.RedisConfig) string {
 	return fmt.Sprintf("%v:%v", cfg.Network, cfg.Port)
 }

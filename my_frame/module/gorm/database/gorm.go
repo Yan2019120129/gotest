@@ -5,14 +5,11 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"sync"
-)
-
-import (
 	"gotest/my_frame/config"
-	"gotest/my_frame/config/gorm/database/mysql"
-	"gotest/my_frame/config/gorm/database/postgresql"
-	"gotest/my_frame/models"
+	"gotest/my_frame/module"
+	"gotest/my_frame/module/gorm/database/mysql"
+	"gotest/my_frame/module/gorm/database/postgresql"
+	"sync"
 )
 
 // 定义once 保证初始化只执行一次
@@ -26,7 +23,7 @@ func init() {
 	if DB == nil {
 		_once.Do(func() {
 			var err error
-			cfg := config.GetGorm()
+			cfg := module.GetGorm()
 			if DB, err = gorm.Open(getDatabaseOpen(cfg.UseDatabase), &gorm.Config{
 				NamingStrategy: schema.NamingStrategy{ // 命名策略
 					SingularTable: cfg.SingularTable, // 单表去复数s
@@ -47,11 +44,11 @@ func init() {
 func getDatabaseOpen(useDatabase string) (databaseOpen gorm.Dialector) {
 	// 选用数据库
 	switch useDatabase {
-	case models.Database_Type_Postgresql:
+	case config.Database_Type_Postgresql:
 		// 初始化Postgresql数据库
 		databaseOpen = postgresql.GetOpen()
 
-	case models.Database_Type_Mysql:
+	case config.Database_Type_Mysql:
 		// 初始化mysql数据库
 		databaseOpen = mysql.GetOpen()
 	}
