@@ -1,4 +1,4 @@
-package models
+package config
 
 const (
 	Database_Type_Mysql      = "mysql"
@@ -6,7 +6,7 @@ const (
 )
 
 const (
-	FilePath = "/home/yan/document/GolandProjects/gotest/my_frame/config.yml"
+	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
 )
 
 type Config struct {

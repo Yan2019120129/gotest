@@ -3,8 +3,8 @@ package test
 import (
 	"fmt"
 	"gorm.io/gorm"
-	"gotest/my_frame/config/gorm/database"
 	"gotest/my_frame/models"
+	"gotest/my_frame/module/gorm/database"
 	"log"
 	"testing"
 	"time"

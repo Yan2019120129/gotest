@@ -13,7 +13,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/update"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
-	"gotest/my_frame/config"
+	"gotest/my_frame/module"
 	"log"
 	"net"
 	"net/http"
@@ -33,7 +33,7 @@ var ES *Esearch
 func init() {
 	if ES == nil {
 		once.Do(func() {
-			cfg := config.GetElasticsearch()
+			cfg := module.GetElasticsearch()
 			// 配置bing创建类型连接
 			var err error
 			ES.Clint, err = elasticsearch.NewTypedClient(

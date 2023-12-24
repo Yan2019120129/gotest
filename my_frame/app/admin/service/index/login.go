@@ -1,8 +1,8 @@
 package index
 
 import (
-	"gotest/my_frame/config/gorm/database"
 	"gotest/my_frame/models"
+	"gotest/my_frame/module/gorm/database"
 )
 
 // Login 登录接口
