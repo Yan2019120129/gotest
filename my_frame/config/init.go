@@ -1,9 +1,8 @@
-package module
+package config
 
 import (
 	"fmt"
 	"gopkg.in/yaml.v3"
-	"gotest/my_frame/config"
 	"os"
 	"sync"
 )
@@ -12,13 +11,13 @@ import (
 var _once sync.Once
 
 // 定义全局变量config，并初始化为nil
-var cfg *config.Config
+var cfg *Config
 
 func init() {
 	if cfg == nil {
 		_once.Do(
 			func() {
-				if configByte, err := os.ReadFile(config.FilePath); err == nil {
+				if configByte, err := os.ReadFile(FilePath); err == nil {
 					if err = yaml.Unmarshal(configByte, &cfg); err != nil {
 						panic(err)
 					}
@@ -34,31 +33,36 @@ func init() {
 }
 
 // GetGorm  获取gorm 配置
-func GetGorm() *config.GormConfig {
+func GetGorm() *GormConfig {
 	return &cfg.Gorm
 }
 
+// GetGen  获取gen 配置
+func GetGen() *GenConfig {
+	return &cfg.Gorm.GenConfig
+}
+
 // GetMysql  获取mysql 配置
-func GetMysql() *config.DatabaseConfig {
+func GetMysql() *DatabaseConfig {
 	return &cfg.Gorm.Database.Mysql
 }
 
 // GetPostgres  获取postgres 配置
-func GetPostgres() *config.DatabaseConfig {
+func GetPostgres() *DatabaseConfig {
 	return &cfg.Gorm.Database.Postgresql
 }
 
 // GetGin  获取gin 配置
-func GetGin() *config.GinConfig {
+func GetGin() *GinConfig {
 	return &cfg.Gin
 }
 
 // GetRedis  获取redis 配置
-func GetRedis() *config.RedisConfig {
+func GetRedis() *RedisConfig {
 	return &cfg.Redis
 }
 
 // GetElasticsearch  获取elasticsearch 配置
-func GetElasticsearch() *config.ElasticsearchConfig {
+func GetElasticsearch() *ElasticsearchConfig {
 	return &cfg.Elasticsearch
 }

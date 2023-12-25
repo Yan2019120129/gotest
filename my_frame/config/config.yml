@@ -41,7 +41,14 @@ gorm:
       pass: "Aa123098.."
       # 端口
       port: 9920
-
+  gen:
+    # 指定生成代码的路径
+    out-path: "/Users/taozi/Documents/Golang/gotest/gen/query"
+    # 指定模式
+    mode:
+      - "WithoutContext"
+      - "WithDefaultQuery"
+      - "WithQueryInterface"
 # Redis配置
 redis:
   # 连接协议
