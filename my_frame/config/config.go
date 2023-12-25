@@ -1,12 +1,13 @@
 package config
 
 const (
-	Database_Type_Mysql      = "mysql"
-	Database_Type_Postgresql = "postgresql"
+	DatabaseTypeMysql      = "mysql"
+	DatabaseTypePostgresql = "postgresql"
 )
 
 const (
-	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
+	//FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
+	FilePath = "/Users/taozi/Documents/Golang/gotest/my_frame/config/config.yml"
 )
 
 type Config struct {

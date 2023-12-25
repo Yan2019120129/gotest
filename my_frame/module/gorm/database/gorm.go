@@ -44,11 +44,11 @@ func init() {
 func getDatabaseOpen(useDatabase string) (databaseOpen gorm.Dialector) {
 	// 选用数据库
 	switch useDatabase {
-	case config.Database_Type_Postgresql:
+	case config.DatabaseTypePostgresql:
 		// 初始化Postgresql数据库
 		databaseOpen = postgresql.GetOpen()
 
-	case config.Database_Type_Mysql:
+	case config.DatabaseTypeMysql:
 		// 初始化mysql数据库
 		databaseOpen = mysql.GetOpen()
 	}
