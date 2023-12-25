@@ -6,7 +6,6 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"gotest/my_frame/config"
-	"gotest/my_frame/module"
 	"gotest/my_frame/module/gorm/database/mysql"
 	"gotest/my_frame/module/gorm/database/postgresql"
 	"sync"
@@ -18,13 +17,19 @@ var _once sync.Once
 // DB 定义全局数据库对象
 var DB *gorm.DB
 
+// 定义公共数据库配置
+var databaseOpen gorm.Dialector
+
+// 获取配置文件数据
+var cfg = config.GetGorm()
+
 // 初始化数据库连接，保证只执行一次
 func init() {
 	if DB == nil {
 		_once.Do(func() {
+			InitOpen()
 			var err error
-			cfg := module.GetGorm()
-			if DB, err = gorm.Open(getDatabaseOpen(cfg.UseDatabase), &gorm.Config{
+			if DB, err = gorm.Open(databaseOpen, &gorm.Config{
 				NamingStrategy: schema.NamingStrategy{ // 命名策略
 					SingularTable: cfg.SingularTable, // 单表去复数s
 				},
@@ -40,10 +45,10 @@ func init() {
 	}
 }
 
-// DatabaseConfig 获取数据库配置
-func getDatabaseOpen(useDatabase string) (databaseOpen gorm.Dialector) {
+// InitOpen 初始化配置要连接的数据库
+func InitOpen() (databaseOpen gorm.Dialector) {
 	// 选用数据库
-	switch useDatabase {
+	switch cfg.UseDatabase {
 	case config.DatabaseTypePostgresql:
 		// 初始化Postgresql数据库
 		databaseOpen = postgresql.GetOpen()
@@ -53,4 +58,9 @@ func getDatabaseOpen(useDatabase string) (databaseOpen gorm.Dialector) {
 		databaseOpen = mysql.GetOpen()
 	}
 	return
+}
+
+// GetDatabaseOpen 获取数据库配置
+func GetDatabaseOpen() (databaseOpen gorm.Dialector) {
+	return databaseOpen
 }

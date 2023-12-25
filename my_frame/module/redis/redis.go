@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"gotest/my_frame/config"
-	"gotest/my_frame/module"
 	"sync"
 	"time"
 )
@@ -20,7 +19,7 @@ var Rds *redis.Pool
 func init() {
 	if Rds == nil {
 		_once.Do(func() {
-			cfg := module.GetRedis()
+			cfg := config.GetRedis()
 			Rds = &redis.Pool{
 				MaxIdle:     cfg.MaxIdleConn,
 				MaxActive:   cfg.MaxOpenConn,

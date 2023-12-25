@@ -1,9 +1,17 @@
 package config
 
+import "gorm.io/gen"
+
 const (
 	DatabaseTypeMysql      = "mysql"
 	DatabaseTypePostgresql = "postgresql"
 )
+
+var GenMdoe = map[string]interface{}{
+	"WithoutContext":     gen.WithoutContext,
+	"WithDefaultQuery":   gen.WithDefaultQuery,
+	"WithQueryInterface": gen.WithQueryInterface,
+}
 
 const (
 	//FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
@@ -33,10 +41,17 @@ type Database struct {
 
 // GormConfig gorm 配置
 type GormConfig struct {
-	QueryFields   bool     `yaml:"query-fields"`   // 是否开启全字段匹配查询
-	SingularTable bool     `yaml:"singular-table"` // 是否关闭数据库表复数s
-	UseDatabase   string   `yaml:"use-database"`   // 数据库选择
-	Database      Database `yaml:"database"`       // 数据库配置
+	QueryFields   bool      `yaml:"query-fields"`   // 是否开启全字段匹配查询
+	SingularTable bool      `yaml:"singular-table"` // 是否关闭数据库表复数s
+	UseDatabase   string    `yaml:"use-database"`   // 数据库选择
+	GenConfig     GenConfig `yaml:"gen"`            // 数据库配置
+	Database      Database  `yaml:"database"`       // 数据库配置
+}
+
+// GenConfig gen配置
+type GenConfig struct {
+	OutPath string   `yaml:"out-path"` // 生成模型接口文件路径
+	mode    []string `yaml:"mode"`     // 生成模式
 }
 
 // GinConfig gin配置参数
@@ -56,6 +71,7 @@ type DatabaseConfig struct {
 	Port   int    `yaml:"port"`    // 端口
 }
 
+// RedisConfig redis配置
 type RedisConfig struct {
 	Network         string `yaml:"network"`            // 连接协议
 	Server          string `yaml:"server"`             // 服务地址

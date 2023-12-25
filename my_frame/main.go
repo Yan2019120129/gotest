@@ -4,14 +4,14 @@ import (
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 	"gotest/my_frame/app/admin/router"
-	"gotest/my_frame/module"
+	"gotest/my_frame/config"
 	ws "gotest/my_frame/module/websocket"
 )
 
 func main() {
 
 	// 配置gin
-	cfg := module.GetGin()
+	cfg := config.GetGin()
 	engin := gin.Default()
 
 	// 初始化后台路由
