@@ -2,20 +2,20 @@ package main
 
 import "encoding/json"
 
-// 管理链接和消息分发
-var h = hub{
-	c: make(map[*connection]bool),
-	u: make(chan *connection),
-	b: make(chan []byte),
-	r: make(chan *connection),
-}
-
 // hub 定义websocket链接的集线器。
 type hub struct {
 	c map[*connection]bool
 	b chan []byte
 	r chan *connection
 	u chan *connection
+}
+
+// 管理链接和消息分发
+var h = hub{
+	c: make(map[*connection]bool),
+	b: make(chan []byte),
+	r: make(chan *connection),
+	u: make(chan *connection),
 }
 
 // run 方法是hub结构的方法，用于启用集线器并处理链接注册，注销和消息广播。

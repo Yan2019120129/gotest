@@ -7,84 +7,63 @@ import (
 	"net/http"
 )
 
-// connection 表示websocket 链接。
-type connection struct {
-	ws   *websocket.Conn // 底层时wb链接。
-	sc   chan []byte     // sc是用于发送消息的通道。
-	data *Data           // 包含与链接相关的数据
-}
-
-// wu 是websocket升级器，负责将HTTP链接升级微websocket 链接。
-var wu = &websocket.Upgrader{ReadBufferSize: 512,
+// WU 是websocket升级器，负责将HTTP链接升级微websocket 链接。
+var WU = &websocket.Upgrader{ReadBufferSize: 512,
 	WriteBufferSize: 512, CheckOrigin: func(r *http.Request) bool { return true }}
 
-// ws 连接http的处理器。
-func ws(w http.ResponseWriter, r *http.Request) {
-	// 将HTTP链接升级为websocket 链接。
-	ws, err := wu.Upgrade(w, r, nil)
-	if err != nil {
+// Connection 表示websocket 链接。
+type Connection struct {
+	Ws   *websocket.Conn // 底层时wb链接。
+	Sc   chan []byte     // sc是用于发送消息的通道。
+	Data *Data           // 包含与链接相关的数据
+}
+
+// Writer 负责处理从ws读取的消息。
+func (c *Connection) Writer() {
+	for message := range c.Sc {
+		if err := c.Ws.WriteMessage(websocket.TextMessage, message); err != nil {
+			panic(err)
+			return
+		}
+	}
+	if err := c.Ws.Close(); err != nil {
 		return
 	}
-
-	// 创建结构体，并将其注册到集线器中。
-	c := &connection{sc: make(chan []byte, 256), ws: ws, data: &Data{}}
-	h.r <- c
-
-	// 启动连接器，写入协程。
-	go c.writer()
-
-	// 处理链接的读取。
-	c.reader()
-	// 连接关闭时执行的清理工作。
-	defer func() {
-		c.data.Type = "logout"
-		user_list = del(user_list, c.data.User)
-		c.data.UserList = user_list
-		c.data.Content = c.data.User
-		data_b, _ := json.Marshal(c.data)
-		h.b <- data_b
-		h.r <- c
-	}()
 }
 
-// writer 负责处理从ws读取的消息。
-func (c *connection) writer() {
-	for message := range c.sc {
-		c.ws.WriteMessage(websocket.TextMessage, message)
-	}
-	c.ws.Close()
-}
-
-// reader 读取连接消息的方法。
-func (c *connection) reader() {
+// Reader 读取连接消息的方法。
+func (c *Connection) Reader() {
 	for {
-		_, message, err := c.ws.ReadMessage()
+		_, message, err := c.Ws.ReadMessage()
 		if err != nil {
-			h.r <- c
+			H.R <- c
 			break
 		}
-		json.Unmarshal(message, &c.data)
-		switch c.data.Type {
+		if err = json.Unmarshal(message, &c.Data); err != nil {
+			return
+		}
+		fmt.Println("message：", c.Data)
+		switch c.Data.Type {
 		case "login":
 			// 处理登录消息，更新用户列表，并广登录消息。
-			c.data.User = c.data.Content
-			c.data.From = c.data.User
-			user_list = append(user_list, c.data.User)
-			c.data.UserList = user_list
-			data_b, _ := json.Marshal(c.data)
-			h.b <- data_b
+			c.Data.User = c.Data.Content
+			c.Data.From = c.Data.User
+			User_list = append(User_list, c.Data.User)
+			c.Data.UserList = User_list
+			data_b, _ := json.Marshal(c.Data)
+			H.B <- data_b
 		case "user":
 			// 处理用户消息，广播用户消息。
-			c.data.Type = "user"
-			data_b, _ := json.Marshal(c.data)
-			h.b <- data_b
+			c.Data.Type = "user"
+			data_b, _ := json.Marshal(c.Data)
+			H.B <- data_b
 		case "logout":
 			// 处理用户推出登录消息，更新用户列表，并广播消息。
-			c.data.Type = "logout"
-			user_list = del(user_list, c.data.User)
-			data_b, _ := json.Marshal(c.data)
-			h.b <- data_b
-			h.r <- c
+			c.Data.Type = "logout"
+			User_list = Del(User_list, c.Data.User)
+			data_b, _ := json.Marshal(c.Data)
+			H.B <- data_b
+			H.R <- c
 		default:
 			// 处理未知消息。
 			fmt.Print("========default================")
