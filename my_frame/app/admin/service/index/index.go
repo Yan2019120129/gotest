@@ -2,11 +2,11 @@ package index
 
 import (
 	"fmt"
-	"gotest/my_frame/module/redis"
+	"gotest/my_frame/module/cache"
 )
 
 func Index() (interface{}, error) {
-	rds := redis.RdsPool.Get()
+	rds := cache.RdsPool.Get()
 
 	defer rds.Close()
 	_, err := rds.Do("Set", "abc", 100)
