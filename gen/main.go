@@ -19,19 +19,19 @@ func main() {
 	// 为结构模型生成基本类型安全的 DAO API。用户的以下约定
 
 	g.ApplyBasic(
-		// Generate struct `User` based on table `users`
-		//g.GenerateModel("product"),
+		// Generate struct `User` based on table `users`。
+		g.GenerateModel("product"),
 
-		// Generate struct `Employee` based on table `users`
-		//g.GenerateModelAs("product_category", "Employee"),
+		// Generate struct `Employee` based on table `users`。
+		g.GenerateModelAs("product_category", "Employee"),
 
-		// Generate struct `User` based on table `users` and generating options
+		// Generate struct `User` based on table `users` and generating options。
 		g.GenerateModel("user", gen.FieldType("id", "int")),
 	)
-	//g.ApplyBasic(
-	//	// 从当前数据库的所有表生成结构
-	//	g.GenerateAllTable()...,
-	//)
+	g.ApplyBasic(
+		// 从当前数据库的所有表生成结构
+		g.GenerateAllTable()...,
+	)
 	// 生成代码
 	g.Execute()
 }
