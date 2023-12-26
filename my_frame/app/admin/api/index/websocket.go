@@ -15,13 +15,3 @@ func WebsocketServer(c *gin.Context) {
 	}
 	c.JSON(dto.Success(data))
 }
-
-// WebsocketClient  websocket服务
-func WebsocketClient(c *gin.Context) {
-	data, err := index.WebsocketClient(c.Writer, c.Request)
-	if err != nil {
-		c.JSON(dto.Error(err))
-		return
-	}
-	c.JSON(dto.Success(data))
-}
