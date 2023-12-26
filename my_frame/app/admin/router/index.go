@@ -13,6 +13,5 @@ func InitRouter(ctx *gin.Engine) {
 		router.GET("/init", index.Init)
 		router.GET("/registration", index.Registration)
 		router.GET("/websocket/server", index.WebsocketServer)
-		router.GET("/websocket/client", index.WebsocketClient)
 	}
 }
