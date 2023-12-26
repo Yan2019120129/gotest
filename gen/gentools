@@ -1,1 +1,4 @@
-
+# -dsn 指定连接驱动以及配置，
+# -tables 指定要生成的表
+# -onlyModel 只生成模型
+gentool -dsn "root:Aa123098..@tcp(127.0.0.1:3306)/exchange?charset=utf8mb4&parseTime=True&loc=Local" -tables "product"  -onlyModel
