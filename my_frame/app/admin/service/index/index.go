@@ -6,7 +6,7 @@ import (
 )
 
 func Index() (interface{}, error) {
-	rds := redis.Rds.Get()
+	rds := redis.RdsPool.Get()
 
 	defer rds.Close()
 	_, err := rds.Do("Set", "abc", 100)
