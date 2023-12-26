@@ -30,19 +30,21 @@ func init() {
 				IdleTimeout: time.Duration(cfg.Pool.ConnectTimeout) * time.Second,
 				Wait:        false,
 				Dial: func() (redis.Conn, error) {
-					if conn, err := redis.Dial(
+					host := fmt.Sprintf("%v:%v", cfg.Pool.Server, cfg.Pool.Port)
+					conn, err := redis.Dial(
 						cfg.Pool.Network,
-						getDsn(&cfg.Pool),
+						host,
 						redis.DialPassword(cfg.Pool.Pass),
 						redis.DialDatabase(cfg.Pool.DbName),
 						redis.DialConnectTimeout(time.Duration(cfg.Pool.ConnectTimeout)*time.Second),
 						redis.DialReadTimeout(time.Duration(cfg.Pool.ReadTimeout)*time.Second),
 						redis.DialWriteTimeout(time.Duration(cfg.Pool.WriteTimeout)*time.Second),
-					); err == nil {
-						return conn, nil
-					} else {
+					)
+					if err != nil {
+						panic(err)
 						return nil, err
 					}
+					return conn, nil
 				},
 			}
 
@@ -56,9 +58,4 @@ func init() {
 	} else {
 		fmt.Println("已经存在Res实例！！！")
 	}
-}
-
-// getDsn 获取dsn字符串。
-func getDsn(cfg *config.RedisPoolConfig) string {
-	return fmt.Sprintf("%v:%v", cfg.Network, cfg.Port)
 }
