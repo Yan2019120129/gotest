@@ -20,8 +20,8 @@ var GenMdoe = map[string]interface{}{
 }
 
 const (
-	//FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
-	FilePath = "/Users/taozi/Documents/Golang/gotest/my_frame/config/config.yml"
+	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
+	//FilePath = "/Users/taozi/Documents/Golang/gotest/my_frame/config/config.yml"
 )
 
 type Config struct {
