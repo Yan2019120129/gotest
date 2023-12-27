@@ -44,10 +44,9 @@ type Datum struct {
 
 const ServerAddr = "wss://ws.okx.com:8443/ws/v5/public"
 
-var wg sync.WaitGroup
-
 // Instance websocket实例
 type Instance struct {
+	wg   sync.WaitGroup
 	conn *websocket.Conn
 	Data chan string
 }
@@ -67,10 +66,10 @@ func main() {
 	data := &TickerData{}
 
 	go ws.ReadMessages(data)
-	wg.Add(1)
+	//ws.wg.Add(1)
 	go ws.HandleMessages()
-	wg.Add(1)
-	wg.Wait()
+	ws.wg.Add(2)
+	ws.wg.Wait()
 }
 
 // ConnectWS 连接 websocket
