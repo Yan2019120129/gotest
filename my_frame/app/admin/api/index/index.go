@@ -6,7 +6,7 @@ import (
 )
 
 func Index(c *gin.Context) {
-	data, err := index.Index()
+	data, err := indexserver.Index()
 	if err != nil {
 		c.JSON(500, err)
 	}

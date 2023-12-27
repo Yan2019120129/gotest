@@ -13,7 +13,7 @@ func Rds(c *gin.Context) {
 		c.JSON(dto.Error(err))
 		return
 	}
-	if data, err := index.Rds(params); err != nil {
+	if data, err := indexserver.Rds(params); err != nil {
 		c.JSON(dto.Error(err))
 	} else {
 		c.JSON(dto.Success(data))
@@ -29,7 +29,7 @@ func SubRds(c *gin.Context) {
 		return
 	}
 
-	if data, err := index.SubRds(params); err != nil {
+	if data, err := indexserver.SubRds(params); err != nil {
 		c.JSON(dto.Error(err))
 	} else {
 		c.JSON(dto.Success(data))
@@ -44,7 +44,7 @@ func Publish(c *gin.Context) {
 		return
 	}
 
-	if data, err := index.Publish(params); err != nil {
+	if data, err := indexserver.Publish(params); err != nil {
 		c.JSON(dto.Error(err))
 	} else {
 		c.JSON(dto.Success(data))

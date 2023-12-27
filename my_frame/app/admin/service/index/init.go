@@ -1,4 +1,4 @@
-package index
+package indexserver
 
 // Init 初始化
 func Init() {

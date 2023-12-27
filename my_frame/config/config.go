@@ -118,7 +118,6 @@ func init() {
 				}
 			},
 		)
-		fmt.Println("cfg:", cfg.Redis)
 	} else {
 		fmt.Println("配置文件实例已存在！！！")
 	}

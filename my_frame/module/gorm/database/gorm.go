@@ -46,7 +46,7 @@ func init() {
 }
 
 // InitOpen 初始化配置要连接的数据库
-func InitOpen() (databaseOpen gorm.Dialector) {
+func InitOpen() {
 	// 选用数据库
 	switch cfg.UseDatabase {
 	case config.DatabaseTypePostgresql:
@@ -58,9 +58,4 @@ func InitOpen() (databaseOpen gorm.Dialector) {
 		databaseOpen = mysql.GetOpen()
 	}
 	return
-}
-
-// GetDatabaseOpen 获取数据库配置
-func GetDatabaseOpen() (databaseOpen gorm.Dialector) {
-	return databaseOpen
 }
