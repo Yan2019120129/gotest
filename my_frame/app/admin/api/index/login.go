@@ -7,7 +7,7 @@ import (
 
 // Login 登录接口
 func Login(c *gin.Context) {
-	data, err := index.Login()
+	data, err := indexserver.Login()
 	if err != nil {
 		return
 	}

@@ -8,7 +8,7 @@ import (
 
 // WebsocketServer  websocket服务
 func WebsocketServer(c *gin.Context) {
-	data, err := index.WebsocketServer(c.Writer, c.Request)
+	data, err := indexserver.WebsocketServer(c.Writer, c.Request)
 	if err != nil {
 		c.JSON(dto.Error(err))
 		return

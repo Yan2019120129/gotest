@@ -1,4 +1,4 @@
-package index
+package indexserver
 
 import (
 	"github.com/gomodule/redigo/redis"
