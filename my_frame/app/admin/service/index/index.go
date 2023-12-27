@@ -2,20 +2,21 @@ package index
 
 import (
 	"fmt"
-	"gotest/my_frame/module/redis"
+	"github.com/gomodule/redigo/redis"
+	"gotest/my_frame/module/cache"
 )
 
 func Index() (interface{}, error) {
-	rds := redis.RdsPool.Get()
+	rds := cache.RdsPool.Get()
 
 	defer rds.Close()
-	_, err := rds.Do("Set", "abc", 100)
+	_, err := rds.Do("Set", "age", 18)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	data, err := rds.Do("Get", "abc")
+	data, err := redis.Int(rds.Do("GET", "age"))
 	if err != nil {
 		fmt.Println("get abc failed,", err)
 		return nil, err

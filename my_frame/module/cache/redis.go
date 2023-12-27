@@ -1,7 +1,6 @@
-package redis
+package cache
 
 import (
-	"errors"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"gotest/my_frame/config"
@@ -19,30 +18,33 @@ var RdsPool *redis.Pool
 var RdsPubSubConn *redis.PubSubConn
 
 // 获取redis配置
-var cfg = config.GetRedisConfig()
 
 // Init 初始化Redis。
 func init() {
 	if RdsPool == nil {
 		_once.Do(func() {
+			var cfg = config.GetRedisConfig()
 			RdsPool = &redis.Pool{
-				MaxIdle:     cfg.Poll.MaxIdleConn,
-				MaxActive:   cfg.Poll.MaxOpenConn,
-				IdleTimeout: time.Duration(cfg.Poll.ConnectTimeout) * time.Second,
+				MaxIdle:     cfg.Pool.MaxIdleConn,
+				MaxActive:   cfg.Pool.MaxOpenConn,
+				IdleTimeout: time.Duration(cfg.Pool.ConnectTimeout) * time.Second,
 				Wait:        false,
 				Dial: func() (redis.Conn, error) {
-					if conn, err := redis.Dial(
-						cfg.Poll.Network,
-						getDsn(&cfg.Poll),
-						redis.DialPassword(cfg.Poll.Pass),
-						redis.DialDatabase(cfg.Poll.DbName),
-						redis.DialConnectTimeout(time.Duration(cfg.Poll.ConnectTimeout)*time.Second),
-						redis.DialReadTimeout(time.Duration(cfg.Poll.ReadTimeout)*time.Second),
-						redis.DialWriteTimeout(time.Duration(cfg.Poll.WriteTimeout)*time.Second),
-					); err == nil {
-						return conn, nil
+					host := fmt.Sprintf("%v:%v", cfg.Pool.Server, cfg.Pool.Port)
+					conn, err := redis.Dial(
+						cfg.Pool.Network,
+						host,
+						redis.DialPassword(cfg.Pool.Pass),
+						redis.DialDatabase(cfg.Pool.DbName),
+						redis.DialConnectTimeout(time.Duration(cfg.Pool.ConnectTimeout)*time.Second),
+						redis.DialReadTimeout(time.Duration(cfg.Pool.ReadTimeout)*time.Second),
+						redis.DialWriteTimeout(time.Duration(cfg.Pool.WriteTimeout)*time.Second),
+					)
+					if err != nil {
+						panic(err)
+						return nil, err
 					}
-					return nil, errors.New("redis初始化失败！！！")
+					return conn, nil
 				},
 			}
 
@@ -56,9 +58,4 @@ func init() {
 	} else {
 		fmt.Println("已经存在Res实例！！！")
 	}
-}
-
-// getDsn 获取dsn字符串。
-func getDsn(cfg *config.RedisPollConfig) string {
-	return fmt.Sprintf("%v:%v", cfg.Network, cfg.Port)
 }

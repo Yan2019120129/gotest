@@ -80,11 +80,11 @@ type DatabaseConfig struct {
 // RedisConfig redis配置
 type RedisConfig struct {
 	UsePub bool            `yaml:"use-pub"` // 是否配置redis订阅功能
-	Poll   RedisPollConfig `yaml:"poll"`    // 连接池配置
+	Pool   RedisPoolConfig `yaml:"pool"`    // 连接池配置
 }
 
-// RedisPollConfig redisPool 连接池连接配置
-type RedisPollConfig struct {
+// RedisPoolConfig redisPool 连接池连接配置
+type RedisPoolConfig struct {
 	Network         string `yaml:"network"`            // 连接协议
 	Server          string `yaml:"server"`             // 服务地址
 	Port            int    `yaml:"port"`               // 端口号
@@ -109,16 +109,16 @@ func init() {
 	if cfg == nil {
 		_once.Do(
 			func() {
-				if configByte, err := os.ReadFile(FilePath); err == nil {
-					if err = yaml.Unmarshal(configByte, &cfg); err != nil {
-						panic(err)
-					}
+				configByte, err := os.ReadFile(FilePath)
+				if err != nil {
 					fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", cfg)
-				} else {
+				}
+				if err = yaml.Unmarshal(configByte, &cfg); err != nil {
 					panic(err)
 				}
 			},
 		)
+		fmt.Println("cfg:", cfg.Redis)
 	} else {
 		fmt.Println("配置文件实例已存在！！！")
 	}
