@@ -3,29 +3,33 @@ package main
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
+	"log"
 )
 
 func main() {
-	c, err := redis.Dial("tcp", "127.0.0.1:6379")
-	defer c.Close()
+	conn, err := redis.Dial("tcp", "127.0.0.1:6379")
+	defer conn.Close()
 	if err != nil {
-		fmt.Println("Error connecting to Redis:", err)
-		return
+		log.Println("redis dial failed.")
+	}
+	var message string
+	for {
+		_, err = fmt.Scan(&message)
+		if err != nil {
+			return
+		}
+		publish(conn, message)
 	}
 
-	// 发送命令
-	err = c.Send("HGET", "_Token", "1-0")
+}
+
+// publish 发布信息
+func publish(conn redis.Conn, message string) {
+	// 发布消息到频道 "example_channel"
+	_, err := conn.Do("PUBLISH", "example_channel", message)
 	if err != nil {
-		fmt.Println("Error sending command:", err)
+		fmt.Println("发布消息错误:", err)
 		return
 	}
-
-	// 接收结果
-	result, err := redis.String(c.Receive())
-	if err != nil {
-		fmt.Println("Error receiving result:", err)
-		return
-	}
-
-	fmt.Println("Result:", result)
+	fmt.Printf("发布消息: %s\n", message)
 }
