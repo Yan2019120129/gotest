@@ -101,7 +101,8 @@ func Publish() {
 
 // Subscribe 订阅消息
 func Subscribe() {
-	channel := "SPOT"
+	//channel := "SPOT"
+	channel := "tickers-MDT-USDT"
 	pubsub := client.Subscribe(ctx, channel)
 	defer pubsub.Close()
 	ch := pubsub.Channel()

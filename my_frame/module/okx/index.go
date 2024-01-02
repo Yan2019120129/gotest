@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"gotest/my_frame/module/cache"
+	"gotest/my_frame/utils"
 	"log"
 	"sync"
 	"time"
@@ -23,6 +25,35 @@ var ServerAddr = map[string]string{
 	"trades-all":    ServerCandleAndTradeAddr,
 }
 
+type Message struct {
+	Arg  Arg    `json:"arg"`
+	Data []Data `json:"data"`
+}
+
+type Arg struct {
+	Channel string `json:"channel"`
+	InstId  string `json:"instId"`
+}
+
+type Data struct {
+	InstType  string `json:"instType"`
+	InstId    string `json:"instId"`
+	Last      string `json:"last"`
+	LastSz    string `json:"lastSz"`
+	AskPx     string `json:"askPx"`
+	AskSz     string `json:"askSz"`
+	BidPx     string `json:"bidPx"`
+	BidSz     string `json:"bidSz"`
+	Open24h   string `json:"open24h"`
+	High24h   string `json:"high24h"`
+	Low24h    string `json:"low24h"`
+	SodUtc0   string `json:"sodUtc0"`
+	SodUtc8   string `json:"sodUtc8"`
+	VolCcy24h string `json:"volCcy24h"`
+	Vol24h    string `json:"vol24h"`
+	Ts        string `json:"ts"`
+}
+
 var OkxInstance *okxInstance
 
 // 用于保证websocket单例
@@ -36,9 +67,10 @@ func init() {
 				wg:           new(sync.WaitGroup),
 				conn:         new(websocket.Conn),
 				serverAddr:   ServerTickerAddr, // 连接地址
-				maxReconnect: 5,                // 最大重连次数
-				message:      []byte("ping"),
-				data:         make(chan string, 10), // 用于接收参数。
+				maxReconnect: 2,                // 最大重连次数
+				//message:      []byte("ping"),
+				message: []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [\n        {\n            \"channel\": \"tickers\",\n            \"instId\": \"MDT-USDT\"\n        },\n        {\n            \"channel\": \"tickers\",\n            \"instId\": \"1INCH-EUR\"\n        }\n    ]\n}"),
+				data:    make(chan []byte, 10), // 用于接收参数。
 			}
 		})
 	}
@@ -52,7 +84,7 @@ type okxInstance struct {
 	maxReconnect int         // 最大重连次数
 	publishName  string      // 生产的消息名
 	message      []byte      // 用于发送的数据
-	data         chan string // 用于接收参数。
+	data         chan []byte // 用于接收参数。
 }
 
 // ConnectWS 连接okx websocket。
@@ -77,7 +109,7 @@ func (instance *okxInstance) ConnectWS() (err error) {
 
 // SendMessages 发送消息。
 func (instance *okxInstance) SendMessages() {
-	fmt.Println("发送信息")
+	defer fmt.Println("发送信息关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	if err := instance.conn.WriteMessage(websocket.TextMessage, instance.message); err != nil {
 		panic(err)
@@ -87,7 +119,7 @@ func (instance *okxInstance) SendMessages() {
 
 // ReadMessages 读取消息。
 func (instance *okxInstance) ReadMessages() {
-	fmt.Println("读取信息")
+	defer fmt.Println("读取信息关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	for {
 		_, message, err := instance.conn.ReadMessage()
@@ -98,23 +130,26 @@ func (instance *okxInstance) ReadMessages() {
 			break
 		}
 		log.Println("读取到的消息:", string(message))
-		instance.data <- string(message)
+		instance.data <- message
 	}
 }
 
 // HandleMessages 处理收到的信息。
 func (instance *okxInstance) handleMessages() {
-	fmt.Println("处理信息")
+	defer fmt.Println("处理信息关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	for {
 		message := <-instance.data
-		log.Println("收到消息:", message)
+		log.Println("收到消息:", string(message))
+		data := &Message{}
+		utils.ByteListToObj(message, data)
+		cache.Publish(data.Arg.Channel+"-"+data.Arg.InstId, utils.ObjToByteList(data.Data))
 	}
 }
 
 // heartbeatMessage 测试websocket心跳。
 func (instance *okxInstance) heartbeatMessage() {
-	fmt.Println("测试心跳")
+	defer fmt.Println("测试心跳关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	for {
 		// 发送心跳消息
@@ -122,15 +157,21 @@ func (instance *okxInstance) heartbeatMessage() {
 		if err != nil {
 			// 断开连接的时候重新连接
 			for i := 0; i < instance.maxReconnect; i++ {
-				fmt.Println("重新连接-", i)
+				instance.maxReconnect--
+				fmt.Println("重新连接-", instance.maxReconnect)
 				err := instance.ConnectWS()
 				if err != nil {
 					continue
 				}
+
+				if err := instance.conn.Close(); err != nil {
+					defer instance.wg.Done() // 在函数退出时递减计数器
+					return
+				}
 				return
 			}
 		}
-		// 每隔三秒发送消息时间
+		// 每隔三秒发送消息
 		time.Sleep(3 * time.Second)
 	}
 }

@@ -10,7 +10,8 @@ import (
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		// 在这里进行一些逻辑判断，例如检查请求的域名是否在白名单中
+		return true // 或者根据判断返回相应的结果
 	},
 }
 

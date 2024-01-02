@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"gotest/my_frame/config"
+	"log"
 	"sync"
 	"time"
 )
@@ -57,5 +58,19 @@ func init() {
 		})
 	} else {
 		fmt.Println("已经存在Res实例！！！")
+	}
+}
+
+// SubRds 订阅消息
+func SubRds(channel string, message []byte) {
+}
+
+// Publish 发布信息
+func Publish(channel string, message []byte) {
+	rdsConn := RdsPool.Get()
+	defer rdsConn.Close()
+	if err := rdsConn.Send("PUBLISH", channel, message); err != nil {
+		log.Println(err)
+		return
 	}
 }
