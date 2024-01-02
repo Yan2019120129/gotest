@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gotest/my_frame/app/admin/router"
 	"gotest/my_frame/config"
-	ws "gotest/my_frame/module/websocket"
+	"gotest/my_frame/module/okx"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	router.InitRouter(engin)
 
 	// 初始化websocket
-	go ws.H.Run()
+	_ = okx.OkxInstance.ConnectWS()
 
 	if err := endless.ListenAndServe(cfg.Port, engin); err != nil {
 		panic(err)
