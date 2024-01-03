@@ -7,5 +7,6 @@ import (
 
 // TickerIndex 获取行情数据
 func TickerIndex(c *gin.Context) {
+
 	okxserver.TickerIndex(c.Writer, c.Request)
 }

@@ -1,11 +1,8 @@
 package okxserver
 
 import (
-	"context"
-	"fmt"
-	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/websocket"
-	"gotest/my_frame/module/cache"
+	"gotest/my_frame/module/logger"
 	"net/http"
 )
 
@@ -20,37 +17,37 @@ var upgrader = websocket.Upgrader{
 func TickerIndex(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println("WebSocket 升级错误:", err)
-		panic(err)
-		return
+		logger.Logger.Error(err.Error())
 	}
 	defer conn.Close()
 
-	rdsConn := cache.RdsPubSubConn
-	defer rdsConn.Close()
-	ctx := context.Background()
-	if err := rdsConn.Subscribe(ctx, "tickers-MDT-USDT"); err != nil {
-		panic(err)
-		return
-	}
+	//rdsConn := cache.RdsPubSubConn
+	//defer rdsConn.Close()
+	//ctx := context.Background()
+	//if err := rdsConn.Subscribe(ctx, "tickers-MDT-USDT"); err != nil {
+	//	logger.Logger.Error(err.Error())
+	//}
 
 	for {
-		switch v := rdsConn.Receive().(type) {
-		case redis.Message:
-			fmt.Printf("收到消息: %s\n", v.Data)
-			// 向客户端发送消息
-			if err := conn.WriteMessage(websocket.TextMessage, v.Data); err != nil {
-				fmt.Println("服务端发送消息错误:", err)
-				panic(err)
-				return
-			}
-		case redis.Subscription:
-			fmt.Printf("订阅频道: %s，订阅数量: %d\n", v.Channel, v.Count)
-		case error:
-			fmt.Println("接收消息错误:", v)
-			panic(v)
+		_, message, err := conn.ReadMessage()
+		if err != nil {
 			return
 		}
+		// 向客户端发送消息
+		if err := conn.WriteMessage(websocket.TextMessage, message); err != nil {
+			logger.Logger.Error(err.Error())
+		}
 
+		//switch v := rdsConn.Receive().(type) {
+		//case redis.Message:
+		//	logger.Logger.Info(string(v.Data))
+		//
+		//
+		//case redis.Subscription:
+		//	logger.Logger.Info(v.Channel + ":" + strconv.Itoa(v.Count))
+		//case error:
+		//	logger.Logger.Error(v.Error())
+		//	return
+		//}
 	}
 }
