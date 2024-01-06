@@ -10,8 +10,8 @@ type AdminSetting struct {
 	Field     string `gorm:"type:varchar(60) not null;comment:建铭"`
 	Value     string `gorm:"type:text;comment:键值"`
 	Data      string `gorm:"type:text;comment:input配置"`
-	UpdatedAt int    `gorm:"type:int unsigned not null;comment:更新时间"`
-	CreatedAt int    `gorm:"type:int unsigned not null;comment:创建时间"`
+	UpdatedAt int    `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
+	CreatedAt int    `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (

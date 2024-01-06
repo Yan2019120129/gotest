@@ -7,8 +7,8 @@ type AuthItem struct {
 	Desc      string `gorm:"type:varchar(255) not null;comment:详情"`
 	Rule      string `gorm:"type:varchar(255) not null;comment:规则"`
 	Data      string `gorm:"type:varchar(255) not null;comment:数据"`
-	UpdatedAt int    `gorm:"type:int unsigned not null;comment:更新时间"`
-	CreatedAt int    `gorm:"type:int unsigned not null;comment:创建时间"`
+	UpdatedAt int    `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
+	CreatedAt int    `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (

@@ -12,7 +12,7 @@ type WalletBill struct {
 	Money     float64 `gorm:"type:decimal(12,2) not null;comment:金额"`
 	Balance   float64 `gorm:"type:decimal(12,2) not null;comment:余额"`
 	Data      string  `gorm:"type:text;comment:数据"`
-	CreatedAt int     `gorm:"type:int unsigned not null;comment:创建时间"`
+	CreatedAt int     `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 // WalletBillDepositTypeList 入金类型列表

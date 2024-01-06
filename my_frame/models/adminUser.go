@@ -15,8 +15,8 @@ type AdminUser struct {
 	Data        string  `gorm:"type:text;comment:数据"`
 	Domains     string  `gorm:"type:varchar(1020) not null;comment:绑定域名"`
 	ExpiredAt   int     `gorm:"type:int unsigned not null;comment:过期时间"`
-	UpdatedAt   int     `gorm:"type:int unsigned not null;comment:更新时间"`
-	CreatedAt   int     `gorm:"type:int unsigned not null;comment:创建时间"`
+	UpdatedAt   int     `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
+	CreatedAt   int     `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (
