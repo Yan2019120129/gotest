@@ -19,8 +19,8 @@ type User struct {
 	Status      int     `gorm:"type:smallint not null default 10;comment:状态"`
 	Data        string  `gorm:"type:text;comment:数据"`
 	Desc        string  `gorm:"type:text;comment:详情"`
-	UpdatedAt   int     `gorm:"type:int unsigned not null;comment:更新时间"`
-	CreatedAt   int     `gorm:"type:int unsigned not null;comment:创建时间"`
+	UpdatedAt   int     `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
+	CreatedAt   int     `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (
