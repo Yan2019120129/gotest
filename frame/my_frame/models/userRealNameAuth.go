@@ -15,8 +15,8 @@ type RealNameAuth struct {
 	Type      int    `gorm:"type:tinyint not null default 1;default:1;comment:类型 1身份证"`
 	Status    int    `gorm:"type:tinyint not null default 10;default:10;comment:状态 -2删除 -1拒绝 10审核 20完成"`
 	Data      string `gorm:"type:text;comment:input配置"`
-	UpdatedAt int    `gorm:"type:int unsigned not null;comment:更新时间"`
-	CreatedAt int    `gorm:"type:int unsigned not null;comment:创建时间"`
+	UpdatedAt int    `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
+	CreatedAt int    `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (

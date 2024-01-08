@@ -9,7 +9,7 @@ type Translate struct {
 	Type      int    `gorm:"type:tinyint unsigned not null default 1;default:1;comment:类型 1系统翻译 2前台翻译"`
 	Field     string `gorm:"type:varchar(60) not null;uniqueIndex;comment:建铭"`
 	Value     string `gorm:"type:text;comment:键值"`
-	CreatedAt int    `gorm:"type:int unsigned not null;comment:创建时间"`
+	CreatedAt int    `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
 }
 
 const (
