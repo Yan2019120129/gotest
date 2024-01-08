@@ -2,9 +2,10 @@ package kafka_test
 
 import (
 	"context"
+	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"go.uber.org/zap"
-	"gotest/module/logger"
+	"gotest/common/module/logger"
 	"time"
 )
 
@@ -29,12 +30,12 @@ func Topic() {
 		logger.Logger.Warn(err.Error())
 	}
 
+	adminName := adminClient.String()
+	logger.Logger.Info("连接成功：" + adminName)
+
 	// 上下文超时设置，超出时间关闭程序
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-
-	adminName := adminClient.String()
-	logger.Logger.Info(adminName)
 
 	// 使用 AdminClient 创建 Topic
 	results, err := adminClient.CreateTopics(ctx, []kafka.TopicSpecification{
@@ -66,7 +67,6 @@ func Producer() {
 	if err != nil {
 		logger.Logger.Warn("错误信息：", zap.Error(err))
 	}
-
 	defer p.Close()
 
 	// Delivery report handler for produced messages
@@ -77,7 +77,7 @@ func Producer() {
 				if ev.TopicPartition.Error != nil {
 					logger.Logger.Warn("错误信息：", zap.Error(ev.TopicPartition.Error))
 				} else {
-					logger.Logger.Warn("错误信息：", zap.Reflect("Delivered message to", ev))
+					logger.Logger.Info("发送信息：", zap.Reflect("Delivered message to", ev))
 				}
 			}
 		}
@@ -111,7 +111,7 @@ func Consumer() {
 	}
 	defer c.Close()
 
-	if err = c.SubscribeTopics([]string{topic, "^aRegex.*[Tt]opic"}, nil); err != nil {
+	if err = c.SubscribeTopics([]string{topic, topic}, nil); err != nil {
 		logger.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
 	}
 
@@ -119,10 +119,11 @@ func Consumer() {
 		msg, err := c.ReadMessage(time.Second)
 		if err == nil {
 			logger.Logger.Debug("信息：", zap.Reflect("Message", msg.TopicPartition), zap.ByteString("Message", msg.Value))
-		} else if !err.(kafka.Error).IsTimeout() {
+		} else {
 			// The client will automatically try to recover from all errors.
 			// Timeout is not considered an error because it is raised by
 			// ReadMessage in absence of messages.
+			fmt.Println("执行了", err)
 			logger.Logger.Debug("错误信息：", zap.String("error", err.Error()), zap.Reflect("error", msg))
 			return
 		}
