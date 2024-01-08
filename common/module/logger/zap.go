@@ -12,7 +12,7 @@ var Logger *zap.Logger
 func init() {
 	config := zap.NewDevelopmentConfig()
 	config.EncoderConfig.EncodeLevel = customColorEncodeLevel
-	config.Level = zap.NewAtomicLevelAt(zap.WarnLevel)
+	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 	// 调整编码器默认配置
 	config.EncoderConfig.EncodeTime = func(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 		encoder.AppendString(time.Format("[" + "2006-01-02 15:04:05.000" + "]"))
