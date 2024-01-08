@@ -1,4 +1,4 @@
-package kafka_test
+package exaple
 
 import (
 	"context"
@@ -20,7 +20,7 @@ var config = &kafka.ConfigMap{
 }
 
 // 主题
-var topic = "my-topic"
+var topic = "myTopic"
 
 // Topic 逻辑分类
 func Topic() {
@@ -69,7 +69,7 @@ func Producer() {
 	}
 	defer p.Close()
 
-	// Delivery report handler for produced messages
+	// 检查发送信息是否有问题
 	go func() {
 		for e := range p.Events() {
 			switch ev := e.(type) {
@@ -83,16 +83,21 @@ func Producer() {
 		}
 	}()
 
-	// Produce messages to topic (asynchronously)
-	for _, word := range []string{"Welcome", "to", "the", "Confluent", "Kafka", "Golang", "client"} {
+	// 手动输入信息
+	for {
+		message := ""
+		fmt.Print("请输入信息：")
+		if _, err = fmt.Scan(&message); err != nil {
+			logger.Logger.Warn("错误信息：", zap.Error(err))
+		}
 		if err = p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
-			Value:          []byte(word),
+			Value:          []byte(message),
 		}, nil); err != nil {
+			logger.Logger.Warn("错误信息：", zap.Error(err))
 			return
 		}
 	}
-
 	// Wait for message deliveries before shutting down
 	p.Flush(15 * 1000)
 }
@@ -100,30 +105,24 @@ func Producer() {
 // Consumer 消费者
 func Consumer() {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"api.version.request": true,
-		"bootstrap.servers":   serverAddr,
-		"group.id":            "myGroup",
-		"auto.offset.reset":   "earliest",
-		"security.protocol":   "PLAINTEXT",
+		"bootstrap.servers": serverAddr,
+		"group.id":          "myGroup",
+		"auto.offset.reset": "earliest",
 	})
 	if err != nil {
 		logger.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
 	}
 	defer c.Close()
 
-	if err = c.SubscribeTopics([]string{topic, topic}, nil); err != nil {
+	if err = c.SubscribeTopics([]string{topic}, nil); err != nil {
 		logger.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
 	}
 
 	for {
 		msg, err := c.ReadMessage(time.Second)
 		if err == nil {
-			logger.Logger.Debug("信息：", zap.Reflect("Message", msg.TopicPartition), zap.ByteString("Message", msg.Value))
-		} else {
-			// The client will automatically try to recover from all errors.
-			// Timeout is not considered an error because it is raised by
-			// ReadMessage in absence of messages.
-			fmt.Println("执行了", err)
+			logger.Logger.Info("信息：", zap.ByteString("Message", msg.Value))
+		} else if !err.(kafka.Error).IsTimeout() {
 			logger.Logger.Debug("错误信息：", zap.String("error", err.Error()), zap.Reflect("error", msg))
 			return
 		}
