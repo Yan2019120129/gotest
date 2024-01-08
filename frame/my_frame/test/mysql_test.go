@@ -26,12 +26,13 @@ func TestLogin(t *testing.T) {
 
 // TestTime 测试gorm 自动更新时间
 func TestTime(t *testing.T) {
-	product := models.WalletAssets{
-		Name: "test",
+	user := models.User{
+		AdminId:  1,
+		ParentId: 3,
 	}
-	database.DB.Create(&product)
-	fmt.Println(product.UpdatedAt)
-	fmt.Println(product.CreatedAt)
+	database.DB.Create(&user)
+	fmt.Println(user.UpdatedAt)
+	fmt.Println(user.CreatedAt)
 }
 
 // TestMap 测试map条件查询
