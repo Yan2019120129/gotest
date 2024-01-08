@@ -5,9 +5,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"gotest/my_frame/config"
-	"gotest/my_frame/module/gorm/database/mysql"
-	"gotest/my_frame/module/gorm/database/postgresql"
+	"gotest/common/config"
+	"gotest/common/module/gorm/database/mysql"
+	"gotest/common/module/gorm/database/postgresql"
 	"sync"
 )
 

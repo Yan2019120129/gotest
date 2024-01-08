@@ -2,8 +2,8 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/app/admin/api/index"
-	"gotest/my_frame/app/admin/api/okx"
+	"gotest/frame/my_frame/app/admin/api/index"
+	"gotest/frame/my_frame/app/admin/api/okx"
 )
 
 func InitRouter(ctx *gin.Engine) {

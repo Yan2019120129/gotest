@@ -1,8 +1,8 @@
 package abstruct
 
 import (
-	"gotest/designpatterns/factory/database"
-	"gotest/designpatterns/factory/log"
+	"gotest/base/designpatterns_test/factory/log"
+	"gotest/common/module/gorm/database"
 )
 
 type AbstractFactory interface {

@@ -3,9 +3,9 @@ package okx
 import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"gotest/my_frame/module/cache"
-	"gotest/my_frame/module/logger"
-	"gotest/my_frame/utils"
+	"gotest/frame/my_frame/module/cache"
+	"gotest/frame/my_frame/module/logger"
+	"gotest/frame/my_frame/utils"
 	"strconv"
 	"sync"
 	"time"

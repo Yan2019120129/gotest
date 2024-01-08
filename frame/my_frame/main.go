@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/app/admin/router"
-	"gotest/my_frame/config"
-	"gotest/my_frame/module/logger"
+	"gotest/frame/my_frame/app/admin/router"
+	"gotest/frame/my_frame/config"
+	"gotest/frame/my_frame/module/logger"
 )
 
 func main() {

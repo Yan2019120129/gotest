@@ -1,10 +1,9 @@
 package redis
 
 import (
-	"gotest/designpatterns/factory/database"
-	"gotest/designpatterns/factory/database/redis/imp"
+	"gotest/base/designpatterns_test/factory/database/redis/imp"
 )
 
-func CreateDatabase() database.Database {
+func CreateDatabase() *imp.Redis {
 	return &imp.Redis{}
 }

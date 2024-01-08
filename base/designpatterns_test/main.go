@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gotest/designpatterns/composite"
+	"gotest/base/designpatterns_test/composite"
 	"time"
 )
 
