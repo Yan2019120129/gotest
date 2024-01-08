@@ -2,7 +2,7 @@ package index
 
 import (
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/app/admin/service/index"
+	"gotest/frame/my_frame/app/admin/service/index"
 )
 
 func Index(c *gin.Context) {

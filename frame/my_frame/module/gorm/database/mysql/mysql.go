@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gotest/my_frame/config"
+	"gotest/frame/my_frame/config"
 )
 
 var _open gorm.Dialector

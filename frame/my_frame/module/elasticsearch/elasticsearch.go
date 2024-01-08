@@ -13,7 +13,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/search"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/update"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
-	"gotest/my_frame/config"
+	"gotest/frame/my_frame/config"
 	"log"
 	"net"
 	"net/http"

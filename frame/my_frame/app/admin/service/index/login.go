@@ -1,8 +1,8 @@
 package indexserver
 
 import (
-	"gotest/my_frame/models"
-	"gotest/my_frame/module/gorm/database"
+	"gotest/frame/my_frame/models"
+	"gotest/frame/my_frame/module/gorm/database"
 )
 
 // Login 登录接口

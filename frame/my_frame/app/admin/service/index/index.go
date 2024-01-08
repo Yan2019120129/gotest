@@ -3,7 +3,7 @@ package indexserver
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"gotest/my_frame/module/cache"
+	"gotest/frame/my_frame/module/cache"
 )
 
 func Index() (interface{}, error) {

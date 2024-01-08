@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gotest/designpatterns/factory/database/mysql"
-	"gotest/designpatterns/factory/database/oracle"
+	"gotest/base/designpatterns_test/factory/database/mysql"
+	"gotest/base/designpatterns_test/factory/database/oracle"
 )
 
 func main() {

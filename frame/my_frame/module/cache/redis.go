@@ -3,7 +3,7 @@ package cache
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"gotest/my_frame/config"
+	"gotest/frame/my_frame/config"
 	"log"
 	"sync"
 	"time"

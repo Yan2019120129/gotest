@@ -2,7 +2,7 @@ package gen
 
 import (
 	"gorm.io/gen"
-	"gotest/my_frame/config"
+	"gotest/common/config"
 )
 
 var GenDb *gen.Generator

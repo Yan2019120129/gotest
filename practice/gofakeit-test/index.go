@@ -3,7 +3,7 @@ package gofakeit_test
 import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
-	"gotest/models"
+	"gotest/common/models"
 )
 
 // User 用户表

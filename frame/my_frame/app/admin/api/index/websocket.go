@@ -2,8 +2,8 @@ package index
 
 import (
 	"github.com/gin-gonic/gin"
-	"gotest/my_frame/app/admin/service/dto"
-	"gotest/my_frame/app/admin/service/index"
+	"gotest/frame/my_frame/app/admin/service/dto"
+	"gotest/frame/my_frame/app/admin/service/index"
 )
 
 // WebsocketServer  websocket服务
