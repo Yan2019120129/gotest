@@ -5,6 +5,15 @@ import (
 	"log"
 )
 
+// ObjToString 结构体转换string
+func ObjToString(params interface{}) string {
+	if data, err := json.Marshal(params); err != nil {
+		return ""
+	} else {
+		return string(data)
+	}
+}
+
 // ObjToByteList 结构体转换byte数组
 func ObjToByteList(params interface{}) []byte {
 	if data, err := json.Marshal(params); err != nil {
