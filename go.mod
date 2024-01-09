@@ -10,6 +10,7 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.11.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/gomodule/redigo v1.8.9
+	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/websocket v1.5.1
 	github.com/redis/go-redis/v9 v9.3.1
