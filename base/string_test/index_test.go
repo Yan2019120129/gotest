@@ -21,3 +21,8 @@ func TestScan(t *testing.T) {
 	}
 	fmt.Println("输入内容:", message)
 }
+
+// TestString 测试[]string 转换[]byte
+func TestString(t *testing.T) {
+
+}

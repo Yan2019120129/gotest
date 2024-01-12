@@ -7,6 +7,7 @@ import (
 	"gotest/common/module/gorm/database"
 	"gotest/common/module/logger"
 	"gotest/common/utils"
+	"math/rand"
 	"strconv"
 	"testing"
 	"time"
@@ -86,4 +87,25 @@ func TestUUID(t *testing.T) {
 		logger.Logger.Debug("key:" + strconv.Itoa(int(key)))
 	}
 	logger.Logger.Debug("完成")
+}
+
+// TestRandomPrice 随机单价
+func TestRandomPrice(t *testing.T) {
+	currentPrice := 50.00
+	mode := 2
+	var resultPrice float64 = 0
+	if mode == 1 {
+		resultPrice = currentPrice * (1 + float64(randNum(1, 50))/10000)
+	} else {
+		resultPrice = currentPrice * float64(randNum(9950, 9999)) / 10000
+	}
+	fmt.Println("data:", resultPrice)
+}
+
+func randNum(m, n int) int {
+	// 设置随机数种子
+	rand.NewSource(time.Now().UnixNano())
+	// 生成大于m且小于n的随机整数
+	result := rand.Intn(n-m) + m
+	return result
 }
