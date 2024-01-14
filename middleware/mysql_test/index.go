@@ -1,6 +1,7 @@
 package mysql_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 	"go.uber.org/zap"
@@ -108,16 +109,67 @@ func TestGormFind() {
 
 // TestSelectClient 测试子查询,使用sql条件判断
 func TestSelectClient() {
-	model := database.DB.Table("product AS p").
-		Select("p.id", "p.category_id",
-			"CASE WHEN (SELECT pc.product_id FROM product_collect AS pc WHERE p.id=pc.product_id) IS NOT NULL THEN true ELSE false END AS IsCollect",
-			"p.images", "p.name", "p.money", "p.type", "p.sales", "p.nums", "p.used", "p.total", "p.data")
+	//model := database.DB.Table("product AS p").
+	//	Select("p.id", "p.category_id",
+	//		"CASE WHEN (SELECT pc.product_id FROM product_collect AS pc WHERE p.id=pc.product_id) IS NOT NULL THEN true ELSE false END AS isCollect",
+	//		"p.images", "p.name", "p.money", "p.type", "p.sales", "p.nums", "p.used", "p.total", "p.data")
 
-	productList := []*dto.IndexData{}
-	if result := model.Where("admin_id = ?", 1).
-		Scan(&productList); result.Error != nil {
+	productList := make([]map[string]interface{}, 0)
+	//if result := model.Where("admin_id = ?", 1).
+	//	Scan(&productList); result.Error != nil {
+	//}
+
+	database.DB.Model(&models.Product{}).Find(&productList)
+
+	//data := []*dto.IndexData{}
+	//fmt.Println("data:", productList)
+	for _, v := range productList {
+		//productInfo := &dto.IndexData{}
+		productInfo := &models.Product{}
+		dataByteArray, err := json.Marshal(v)
+		if err != nil {
+			panic(err)
+		}
+		if err = json.Unmarshal(dataByteArray, productInfo); err != nil {
+			panic(err)
+		}
+		//if result := database.DB.Where("product_id = ?", productInfo.Id).
+		//	Where("user_id = ?", 1).
+		//	Where("admin_id = ?", 1).
+		//	Find(&models.ProductCollect{}); result.Error != nil {
+		//} else if result.RowsAffected > 0 {
+		//	productInfo.IsCollect = true
+		//}
+		fmt.Println("data:", productInfo)
+		//data = append(data, productInfo)
+	}
+}
+
+// TestGormInsert 插入数据
+func TestGormInsert() {
+	productList := []*models.Product{}
+	if result := database.DB.Find(&productList); result.Error != nil {
+		logger.Logger.Warn("错误信息", zap.Error(result.Error))
 	}
 	for _, v := range productList {
-		fmt.Println("data:", v)
+		data := &dto.ProductData{
+			InstId:    gofakeit.MonthString(),
+			Last:      gofakeit.Float64Range(1000, 10000),
+			LastSz:    gofakeit.Float64Range(10, 100),
+			Open24h:   gofakeit.Float64Range(500, 1000),
+			High24h:   gofakeit.Float64Range(500, 1000),
+			Low24h:    gofakeit.Float64Range(500, 1000),
+			Vol24h:    gofakeit.Float64Range(500, 1000),
+			Amount24h: gofakeit.Float64Range(500, 1000),
+			Ts:        time.Now().Unix(),
+		}
+		dataBytes, err := json.Marshal(data)
+		if err != nil {
+			logger.Logger.Warn("错误信息", zap.Error(err))
+		}
+		v.Data = string(dataBytes)
+		if result := database.DB.Updates(v); result.Error != nil {
+			logger.Logger.Warn("错误信息", zap.Error(result.Error))
+		}
 	}
 }

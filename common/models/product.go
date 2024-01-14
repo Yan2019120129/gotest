@@ -9,8 +9,8 @@ const (
 	ProductTypeWholesale  = 2  //	批发商品
 )
 
-// Product 数据库模型属性
-type Product struct {
+// ProductShop 数据库模型属性
+type ProductShop struct {
 	Id            int64   `json:"id"`             //主键
 	ParentId      int64   `json:"parent_id"`      //上级ID
 	AdminId       int64   `json:"admin_id"`       //管理员ID
