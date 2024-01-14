@@ -48,3 +48,8 @@ func TestGormFind(t *testing.T) {
 func TestSelectClient(t *testing.T) {
 	mysql_test.TestSelectClient()
 }
+
+// TestGormInsert 添加测试数据
+func TestGormInsert(t *testing.T) {
+	mysql_test.TestGormInsert()
+}
