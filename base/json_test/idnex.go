@@ -5,6 +5,7 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/goccy/go-json"
 	"gotest/middleware/mysql_test/dto"
+	"log"
 	"time"
 )
 
@@ -48,4 +49,52 @@ func TestJson() {
 		panic(err)
 	}
 	fmt.Println("data:", product)
+}
+
+// booksData 返回的推送数据
+type booksData struct {
+	Arg    arg         `json:"arg"`
+	Action string      `json:"action"`
+	Data   []BooksData `json:"data"`
+}
+
+// BooksData 深度内部数据
+type BooksData struct {
+	Asks      [][]string `json:"asks"`
+	Bids      [][]string `json:"bids"`
+	Ts        string     `json:"ts"`
+	Checksum  int        `json:"checksum"`
+	PrevSeqId int        `json:"prevSeqId"`
+	SeqId     int        `json:"seqId"`
+}
+
+// Arg 币种订阅频道。
+type arg struct {
+	Channel string `json:"channel"` // 订阅的通道
+	InstID  string `json:"instId"`  // 货币类型
+}
+
+// StringToJson 字符串转换json
+func StringToJson() {
+	data := []byte(`{"arg":{"channel":"books","instId":"BTC-USDT"},"action":"update","data":[{"asks":[["42631.4","0.02790313","0","1"],["42637.7","0","0","0"],["42638.3","0.27038272","0","1"],["42647.7","0.7","0","1"],["42650.8","0.02501619","0","1"],["42759.1","0","0","0"],["42759.3","0","0"]],"bids":[["42607.7","0","0","0"],["42606.5","0.64830961","0","1"],["42582.2","0","0","0"],["42578","0.00361166","0","1"],["42577.9","0.05090297","0","1"],["42577","0","0","0"],["42576.6","1.20878136","0","5"],["42537.3","0.82198593","0","1"],["42507","0","0","0"]],"ts":"1705206812906","checksum":-682828320,"seqId":18330474721,"prevSeqId":18330474702}]}`)
+	//fmt.Printf("data:%T\n", data)
+	message := booksData{}
+	b := BooksData{}
+	channel := ""
+	for {
+		if err := json.Unmarshal(data, &channel); err == nil {
+
+			log.Println("data2", channel)
+		}
+		if err := json.Unmarshal(data, &message); err == nil {
+
+			log.Println("data3", message.Data)
+		}
+		if err := json.Unmarshal(data, &b); err == nil {
+
+			log.Println("data4", b)
+		}
+		log.Println("channel:", channel)
+		break
+	}
 }

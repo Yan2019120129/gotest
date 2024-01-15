@@ -9,3 +9,8 @@ import (
 func TestTestJson(t *testing.T) {
 	json_test.TestJson()
 }
+
+// TestStringToJson string转json
+func TestStringToJson(t *testing.T) {
+	json_test.StringToJson()
+}
