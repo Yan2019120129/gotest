@@ -20,7 +20,7 @@ var GenMdoe = map[string]interface{}{
 }
 
 const (
-	//FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
+	//FilePath = "/home/programmer-yan/Documents/GoFile/gotest/common/config/config.yml"
 	FilePath = "/Users/taozi/Documents/Golang/gotest/common/config/config.yml"
 )
 
