@@ -111,7 +111,6 @@ func (_OkexStruct *OkexStruct) Reader() {
 			_OkexStruct.ReconnectOkex()
 			break
 		}
-		logger.Logger.Info("info", zap.String("okx:", string(messageData)))
 
 		//	传播数据给客户端
 		data := new(SubscribeData)
@@ -136,6 +135,7 @@ func (_OkexStruct *OkexStruct) Reader() {
 					})
 				}
 			}
+			logger.Logger.Info("info", zap.Reflect("okx:", data))
 			Socket.WriterAllClient(data)
 		}
 	}
