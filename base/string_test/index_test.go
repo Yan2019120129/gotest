@@ -26,3 +26,8 @@ func TestScan(t *testing.T) {
 func TestString(t *testing.T) {
 
 }
+
+// TestStrconvFromInt 测试字符串转换十进制
+func TestStrconvFromInt(t *testing.T) {
+	string_test.TestStrconv()
+}

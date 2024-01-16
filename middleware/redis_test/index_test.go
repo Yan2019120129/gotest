@@ -4,6 +4,7 @@ import (
 	"gotest/middleware/redis_test"
 	"sync"
 	"testing"
+	"time"
 )
 
 // Hset 插入哈希表
@@ -35,4 +36,12 @@ func TestSubscribe1(t *testing.T) {
 	go redis_test.Subscribe()
 	wg.Add(1)
 	wg.Wait()
+}
+
+// TestGet 获取数据
+func TestGetGet(t *testing.T) {
+	for {
+		redis_test.Get()
+		time.Sleep(3 * time.Second)
+	}
 }
