@@ -8,6 +8,7 @@ import (
 	"gotest/common/config"
 	"gotest/common/module/gorm/database/mysql"
 	"gotest/common/module/gorm/database/postgresql"
+	"gotest/common/module/log/zap_log"
 	"sync"
 )
 
@@ -33,8 +34,12 @@ func init() {
 				NamingStrategy: schema.NamingStrategy{ // 命名策略
 					SingularTable: cfg.SingularTable, // 单表去复数s
 				},
-				QueryFields: cfg.QueryFields,                     // 是否全字段映射
-				Logger:      logger.Default.LogMode(logger.Info), // 日志级别
+				QueryFields: cfg.QueryFields, // 是否全字段映射
+				//Logger:      logger.Default.LogMode(logger.Silent), // 日志级别
+				//Logger: logger.Default.LogMode(logger.Error), // 日志级别
+				//Logger: logger.Default.LogMode(logger.Warn), // 日志级别
+				//Logger: logger.Default.LogMode(logger.Info), // 日志级别
+				Logger: zap_log.Instance.LogMode(logger.Info), // 日志级别
 			}); err != nil {
 				panic(err)
 			}

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
-	"gotest/common/module/logger"
+	"gotest/common/module/log/zap_log"
 )
 
 // redis连接对象
@@ -116,13 +116,13 @@ func Subscribe() {
 func Get() {
 	result := client.Get(ctx, "BTC-USDT")
 	if result.Err() != nil {
-		logger.Logger.Warn("错误信息", zap.Error(result.Err()))
+		zap_log.Logger.Warn("错误信息", zap.Error(result.Err()))
 	}
-	logger.Logger.Info("信息", zap.Reflect("BTC-USDT", result.Val))
+	zap_log.Logger.Info("信息", zap.Reflect("BTC-USDT", result.Val))
 
 	result = client.Get(ctx, "ADA-USDT")
 	if result.Err() != nil {
-		logger.Logger.Warn("错误信息", zap.Error(result.Err()))
+		zap_log.Logger.Warn("错误信息", zap.Error(result.Err()))
 	}
-	logger.Logger.Info("信息", zap.Reflect("ADA-USDT", result.Val))
+	zap_log.Logger.Info("信息", zap.Reflect("ADA-USDT", result.Val))
 }

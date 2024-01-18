@@ -5,9 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"go.uber.org/zap"
 	"gotest/common/module/cache"
-	"gotest/common/module/logger"
+	"gotest/common/module/log/zap_log"
 	"io"
 	"net/http"
 	"net/url"
@@ -91,12 +90,8 @@ func Get(path string, query url.Values) ([]byte, error) {
 
 	// 判断是否存在数据
 	data, err := redis.Bytes(rds.Do("get", currentRestURL))
-	//if err != nil {
-	//	logger.Logger.Warn("warn", zap.Error(err))
-	//	//return nil, err
-	//}
-	if data != nil {
-		logger.Logger.Info("info", zap.Reflect("data", data))
+	if err == nil {
+		//logger.Logger.Info("info", zap.Reflect("data", data))
 		return data, nil
 	}
 
@@ -106,6 +101,7 @@ func Get(path string, query url.Values) ([]byte, error) {
 		return nil, err
 	}
 	defer result.Body.Close()
+	zap_log.Logger.Info("A request has been sent")
 
 	// 读取body数据
 	body, err := io.ReadAll(result.Body)
@@ -136,7 +132,7 @@ func handle(kay string, data []byte) ([]byte, error) {
 	respDataBytes, _ := json.Marshal(respData.Data)
 
 	// 缓存1s数据，防止过量请求
-	if _, err := rds.Do("SETEX", kay, 1, respDataBytes); err != nil {
+	if _, err := rds.Do("SETEX", kay, 5, respDataBytes); err != nil {
 		return nil, err
 	}
 

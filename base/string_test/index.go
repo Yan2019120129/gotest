@@ -28,3 +28,21 @@ func TestStrconv() {
 	fmt.Printf("类型：%T \n", formatIntValue)
 	fmt.Println("值：", formatIntValue)
 }
+
+// MultipleDataString 测试传入多数据的情况
+func MultipleDataString(s ...string) {
+	fmt.Printf("类型:%T", s)
+	fmt.Println("值:", s)
+	for i, v := range s {
+		fmt.Printf("%v值:%v\n", i, v)
+	}
+}
+
+// MultipleDataInt 测试传入多数据的情况
+func MultipleDataInt(data ...int) {
+	fmt.Printf("类型:%T", data)
+	fmt.Println("值:", data)
+	for i, v := range data {
+		fmt.Printf("%v值:%v\n", i, v)
+	}
+}
