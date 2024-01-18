@@ -31,3 +31,14 @@ func TestString(t *testing.T) {
 func TestStrconvFromInt(t *testing.T) {
 	string_test.TestStrconv()
 }
+
+// TestMultipleDataString 测试传入多数据的情况
+func TestMultipleDataString(t *testing.T) {
+	string_test.MultipleDataString("yan", "jia", "jie")
+}
+
+// TestMultipleDataInt 测试传入多数据的情况
+func TestMultipleDataInt(t *testing.T) {
+	//string_test.MultipleDataInt(45, 33, 90)
+	string_test.MultipleDataInt(45)
+}
