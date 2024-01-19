@@ -24,7 +24,7 @@ var RdsPubSubConn *redis.PubSubConn
 func init() {
 	if RdsPool == nil {
 		_once.Do(func() {
-			var cfg = config.GetRedisConfig()
+			var cfg = config.GetRedis()
 			RdsPool = &redis.Pool{
 				MaxIdle:     cfg.Pool.MaxIdleConn,
 				MaxActive:   cfg.Pool.MaxOpenConn,

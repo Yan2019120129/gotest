@@ -1,44 +1,58 @@
 package logs
 
 import (
-	"context"
-	"errors"
 	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/utils"
+	config2 "gotest/common/config"
 	"time"
 )
 
 var Logger *zap.Logger
 
+var lever = map[string]zap.AtomicLevel{
+	"Debug":  zap.NewAtomicLevelAt(zapcore.DebugLevel),
+	"Info":   zap.NewAtomicLevelAt(zapcore.InfoLevel),
+	"Warn":   zap.NewAtomicLevelAt(zapcore.WarnLevel),
+	"Error":  zap.NewAtomicLevelAt(zapcore.ErrorLevel),
+	"DPanic": zap.NewAtomicLevelAt(zapcore.DPanicLevel),
+	"Panic":  zap.NewAtomicLevelAt(zapcore.PanicLevel),
+	"Fatal":  zap.NewAtomicLevelAt(zapcore.FatalLevel),
+}
+
+var formatTime = map[string]func(time time.Time, encoder zapcore.PrimitiveArrayEncoder){
+	"CustomOne":   customTimeEncoder,
+	"CustomTwo":   customTimeEncoderTwo,
+	"ISO8601":     zapcore.ISO8601TimeEncoder,
+	"RFC3339":     zapcore.RFC3339TimeEncoder,
+	"RFC3339Nano": zapcore.RFC3339NanoTimeEncoder,
+	"Layout":      zapcore.TimeEncoderOfLayout(""),
+}
+
+var FileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder){
+	"Full":  zapcore.FullCallerEncoder,
+	"Short": zapcore.ShortCallerEncoder,
+}
+
 // init 初始化zap日志
 func init() {
-	config := zap.NewDevelopmentConfig()
+	cfg := config2.GetZap()
+	config := zap.Config{}
+	switch cfg.Mode {
+	// 自定义环境
+	case "custom":
+		config = customConfig()
+		fmt.Println("mode:custom")
+		config.Level = lever[cfg.Level]
+	case "product":
+		// 适合在生产环境中使用
+		config = zap.NewProductionConfig()
+		fmt.Println("mode:product")
 
-	// 是否禁用信息文件位置
-	//config.DisableCaller = true
-
-	// 开启开发者模式
-	config.Development = true
-
-	// 设置对应的日志级别
-	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
-
-	// 给日志级别添加颜色
-	config.EncoderConfig.EncodeLevel = customColorEncodeLevel
-
-	// 禁用堆栈，错误和警告不提示上下文关联方法的信息
-	config.EncoderConfig.StacktraceKey = ""
-
-	// 添加调用位置信息添加全路径显示
-	//config.EncoderConfig.EncodeCaller = zapcore.FullCallerEncoder
-
-	// 调整编码器默认配置
-	config.EncoderConfig.EncodeTime = func(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
-		encoder.AppendString(time.Format("[" + "2006-01-02 15:04:05.000" + "]"))
-		//encoder.AppendString(time.Format("2006/01/02 15:04:05.000"))
+	default:
+		// 适合开发环境使用
+		config = zap.NewDevelopmentConfig()
+		fmt.Println("mode:devel")
 	}
 
 	l, err := config.Build()
@@ -47,6 +61,48 @@ func init() {
 	}
 
 	Logger = l
+	fmt.Println("zap初始化成功！！！")
+}
+
+func customConfig() zap.Config {
+	cfg := config2.GetZap()
+	//config := zap.NewDevelopmentConfig()
+	config := zap.Config{
+		Level:             lever[cfg.Level], //	日志级别
+		Development:       true,             //	是否是开发环境。如果是开发模式，对DPanicLevel进行堆栈跟踪
+		DisableCaller:     false,            //	不显示调用函数的文件名称和行号。默认情况下，所有日志都显示。
+		DisableStacktrace: true,             //	是否禁用堆栈跟踪捕获。默认对Warn级别以上和生产error级别以上的进行堆栈跟踪。
+		Sampling:          nil,              //	抽样策略。设置为nil禁用采样。
+		Encoding:          cfg.Encoding,     //	编码方式，支持json, console
+		EncoderConfig: zapcore.EncoderConfig{
+			MessageKey:     "msg",   //	输入信息的key名
+			LevelKey:       "level", //	输出日志级别的key名
+			TimeKey:        "time",  //	输出时间的key名
+			NameKey:        "name",
+			CallerKey:      "caller",
+			StacktraceKey:  "stacktrace",
+			LineEnding:     zapcore.DefaultLineEnding,     //	每行的分隔符。"\\n"
+			EncodeLevel:    customColorEncodeLevel,        //	将日志级别字符串转化为小写
+			EncodeTime:     formatTime[cfg.FormatTime],    //	输出的时间格式
+			EncodeDuration: zapcore.StringDurationEncoder, //	执行消耗的时间转化成浮点型的秒
+			EncodeCaller:   FileLength[cfg.FileLength],    //	以包/文件:行号 格式化调用堆栈
+			EncodeName:     zapcore.FullNameEncoder,       //	可选值。
+		},
+		OutputPaths:      []string{"stderr"},       //	可以配置多个输出路径，路径可以是文件路径和stdout（标准输出）
+		ErrorOutputPaths: []string{"stderr"},       //	错误输出路径（日志内部错误）
+		InitialFields:    map[string]interface{}{}, //	每条日志中都会输出这些值
+	}
+	return config
+}
+
+// 自定义时间格式
+func customTimeEncoder(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
+	encoder.AppendString(time.Format("[" + "2006-01-02 15:04:05.000" + "]"))
+}
+
+// 自定义时间格式
+func customTimeEncoderTwo(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
+	encoder.AppendString(time.Format("[" + "15:04:05.000" + "]"))
 }
 
 // 自定义颜色编码器
@@ -66,85 +122,5 @@ func customColorEncodeLevel(l zapcore.Level, enc zapcore.PrimitiveArrayEncoder) 
 		enc.AppendString("\x1b[31mPANIC\x1b[0m") // 红色
 	case zapcore.FatalLevel:
 		enc.AppendString("\x1b[31mFATAL\x1b[0m") // 红色
-	}
-}
-
-var Instance = &zapLogger{}
-
-var ErrRecordNotFound = errors.New("record not found")
-
-// ZapLogger zap日志配置
-type zapLogger struct {
-	logger.Writer
-	logger.Config
-	infoStr, warnStr, errStr            string
-	traceStr, traceErrStr, traceWarnStr string
-}
-
-// LogMode 配置日志模式
-func (l *zapLogger) LogMode(level logger.LogLevel) logger.Interface {
-	fmt.Println("level:", level)
-	newLogger := *l
-	newLogger.LogLevel = level
-	return &newLogger
-}
-
-// Info 配置info日志
-func (l *zapLogger) Info(ctx context.Context, msg string, data ...interface{}) {
-	if l.LogLevel >= logger.Info {
-		l.Printf(l.infoStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
-	}
-}
-
-// Warn 配置Warn日志
-func (l *zapLogger) Warn(ctx context.Context, msg string, data ...interface{}) {
-	if l.LogLevel >= logger.Warn {
-		l.Printf(l.warnStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
-	}
-}
-
-// Error 配置Error日志
-func (l *zapLogger) Error(ctx context.Context, msg string, data ...interface{}) {
-	if l.LogLevel >= logger.Error {
-		l.Printf(l.errStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)
-	}
-}
-
-// Trace 配置Trace日志
-func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
-	if l.LogLevel <= logger.Silent {
-		return
-	}
-
-	elapsed := time.Since(begin)
-	switch {
-	case err != nil && l.LogLevel >= logger.Error && (!errors.Is(err, ErrRecordNotFound) || !l.IgnoreRecordNotFoundError):
-		sql, rows := fc()
-		if rows == -1 {
-			Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
-			//Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
-		} else {
-			Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
-			//Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
-		}
-
-	case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= logger.Warn:
-		sql, rows := fc()
-		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
-		if rows == -1 {
-			Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
-		} else {
-			Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
-		}
-
-	case l.LogLevel == logger.Info:
-		sql, rows := fc()
-		if rows == -1 {
-			Logger.Info("Gorm", zap.String("sql", sql))
-			//Logger.Info(fmt.Sprintf("%v", sql))
-		} else {
-			Logger.Info("Gorm", zap.String("sql", sql))
-			//Logger.Info(fmt.Sprintf("%v", sql))
-		}
 	}
 }

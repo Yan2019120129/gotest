@@ -100,13 +100,10 @@ func TestGormFind() {
 	}
 	logs.Logger.Info("test", zap.Reflect("data", userList))
 
-	fmt.Printf("loggerInstanceOne:%p\n", logs.Logger)
-
 	userList1 := []*models.User{}
 	if result := database.DB.Model(userList1).Find(&userList1); result.Error != nil {
 		logs.Logger.Error(result.Error.Error())
 	}
-	fmt.Printf("loggerInstanceOne:%p\n", logs.Logger)
 	logs.Logger.Info("信息", zap.Reflect("用户数据", userList))
 }
 
