@@ -104,7 +104,7 @@ logs:
       # 时间格式
       format-time: "CustomTwo"
       # 文件输出长短 Full ，Short
-      file-length: "Short"
+      file-length: "Full"
       # 文件输出位置
       out-path:
         - ""

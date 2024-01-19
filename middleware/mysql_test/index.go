@@ -96,15 +96,15 @@ func TestUpdated() {
 func TestGormFind() {
 	userList := []*models.User{}
 	if result := database.DB.Where(0).Take(&userList); result.Error != nil {
-		logs.Logger.Error(result.Error.Error())
+		logs.Logger.Error("Gorm", zap.Error(result.Error))
 	}
-	logs.Logger.Info("test", zap.Reflect("data", userList))
+	logs.Logger.Info("Gorm", zap.Reflect("data", userList))
 
 	userList1 := []*models.User{}
 	if result := database.DB.Model(userList1).Find(&userList1); result.Error != nil {
-		logs.Logger.Error(result.Error.Error())
+		logs.Logger.Error("Gorm", zap.Error(result.Error))
 	}
-	logs.Logger.Info("信息", zap.Reflect("用户数据", userList))
+	logs.Logger.Info("Gorm", zap.Reflect("data", userList))
 }
 
 // TestSelectClient 测试子查询,使用sql条件判断
