@@ -45,3 +45,27 @@ func TestClimbStairsRecursionWithNegativeSteps(t *testing.T) {
 		t.Errorf("Expected 0, got %d", result)
 	}
 }
+
+// TestMaximumNumberOfStringPairs 获取取求反相同的字符串总数
+func TestMaximumNumberOfStringPairs(t *testing.T) {
+	//count := algorithm_test.MaximumNumberOfStringPairs([]string{"ab", "ba", "cc"})
+	//count := algorithm_test.MaximumNumberOfStringPairs([]string{"cd", "ac", "dc", "ca", "zz"})
+	count := algorithm_test.MaximumNumberOfStringPairs([]string{"aa", "ab"})
+	fmt.Println("count:", count)
+}
+
+// TestMaximumNumberOfStringPairsTwo 获取取求反相同的字符串总数
+func TestMaximumNumberOfStringPairsTwo(t *testing.T) {
+	count := algorithm_test.MaximumNumberOfStringPairsTow([]string{"ab", "ba", "cc"})
+	//count := algorithm_test.MaximumNumberOfStringPairsTow([]string{"cd", "ac", "dc", "ca", "zz"})
+	//count := algorithm_test.MaximumNumberOfStringPairsTow([]string{"aa", "ab"})
+	fmt.Println("count:", count)
+}
+
+// TestMaximumNumberOfStringPairsFrid 获取取求反相同的字符串总数
+func TestMaximumNumberOfStringPairsFrid(t *testing.T) {
+	count := algorithm_test.MaximumNumberOfStringPairsFrid([]string{"ab", "ba", "cc"})
+	//count := algorithm_test.MaximumNumberOfStringPairsFrid([]string{"cd", "ac", "dc", "ca", "zz"})
+	//count := algorithm_test.MaximumNumberOfStringPairsFrid([]string{"aa", "ab"})
+	fmt.Println("count:", count)
+}

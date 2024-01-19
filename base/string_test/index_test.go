@@ -3,6 +3,7 @@ package string_test_test
 import (
 	"fmt"
 	"gotest/base/string_test"
+	"strconv"
 	"testing"
 )
 
@@ -22,9 +23,29 @@ func TestScan(t *testing.T) {
 	fmt.Println("输入内容:", message)
 }
 
-// TestString 测试[]string 转换[]byte
-func TestString(t *testing.T) {
+func BenchmarkTypeConversion(b *testing.B) {
+	byteSlice := []byte("Hello")
 
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = string(byteSlice)
+	}
+}
+
+func BenchmarkStrconvFormatInt(b *testing.B) {
+	byteSlice := []byte("Hello")
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = strconv.FormatInt(int64(byteSlice[i%len(byteSlice)]), 10)
+	}
+}
+func TestStrconvFormatInt(t *testing.T) {
+	fmt.Println("BenchmarkTypeConversion:")
+	fmt.Println(testing.Benchmark(BenchmarkTypeConversion))
+
+	fmt.Println("\nBenchmarkStrconvFormatInt:")
+	fmt.Println(testing.Benchmark(BenchmarkStrconvFormatInt))
 }
 
 // TestStrconvFromInt 测试字符串转换十进制

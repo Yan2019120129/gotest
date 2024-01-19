@@ -8,7 +8,7 @@ import (
 	"gotest/common/config"
 	"gotest/common/module/gorm/database/mysql"
 	"gotest/common/module/gorm/database/postgresql"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"sync"
 )
 
@@ -39,7 +39,7 @@ func init() {
 				//Logger: logger.Default.LogMode(logger.Error), // 日志级别
 				//Logger: logger.Default.LogMode(logger.Warn), // 日志级别
 				//Logger: logger.Default.LogMode(logger.Info), // 日志级别
-				Logger: zap_log.Instance.LogMode(logger.Info), // 日志级别
+				Logger: logs.Instance.LogMode(logger.Info), // 日志级别
 			}); err != nil {
 				panic(err)
 			}
