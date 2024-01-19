@@ -29,7 +29,7 @@ var formatTime = map[string]func(time time.Time, encoder zapcore.PrimitiveArrayE
 	"Layout":      zapcore.TimeEncoderOfLayout(""),
 }
 
-var FileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder){
+var fileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder){
 	"Full":  zapcore.FullCallerEncoder,
 	"Short": zapcore.ShortCallerEncoder,
 }
@@ -75,17 +75,17 @@ func customConfig() zap.Config {
 		Sampling:          nil,              //	抽样策略。设置为nil禁用采样。
 		Encoding:          cfg.Encoding,     //	编码方式，支持json, console
 		EncoderConfig: zapcore.EncoderConfig{
-			MessageKey:     "msg",   //	输入信息的key名
-			LevelKey:       "level", //	输出日志级别的key名
-			TimeKey:        "time",  //	输出时间的key名
-			NameKey:        "name",
-			CallerKey:      "caller",
+			MessageKey: "msg",   //	输入信息的key名
+			LevelKey:   "level", //	输出日志级别的key名
+			TimeKey:    "time",  //	输出时间的key名
+			NameKey:    "name",
+			//CallerKey:      "caller",
 			StacktraceKey:  "stacktrace",
 			LineEnding:     zapcore.DefaultLineEnding,     //	每行的分隔符。"\\n"
 			EncodeLevel:    customColorEncodeLevel,        //	将日志级别字符串转化为小写
 			EncodeTime:     formatTime[cfg.FormatTime],    //	输出的时间格式
 			EncodeDuration: zapcore.StringDurationEncoder, //	执行消耗的时间转化成浮点型的秒
-			EncodeCaller:   FileLength[cfg.FileLength],    //	以包/文件:行号 格式化调用堆栈
+			EncodeCaller:   fileLength[cfg.FileLength],    //	以包/文件:行号 格式化调用堆栈
 			EncodeName:     zapcore.FullNameEncoder,       //	可选值。
 		},
 		OutputPaths:      []string{"stderr"},       //	可以配置多个输出路径，路径可以是文件路径和stdout（标准输出）

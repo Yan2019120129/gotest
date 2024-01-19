@@ -130,30 +130,28 @@ func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql s
 	case err != nil && l.LogLevel >= logger.Error && (!errors.Is(err, logger.ErrRecordNotFound) || !l.IgnoreRecordNotFoundError):
 		sql, rows := fc()
 		if rows == -1 {
-			logs.Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
-			//logs.Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
+			logs.Logger.WithOptions(zap.WithCaller(false), zap.()).Named(utils.FileWithLineNum()).Info("Gorm", zap.Error(err), zap.String("sql", sql))
 		} else {
-			logs.Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
-			//logs.Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.Error(err), zap.String("sql", sql))
 		}
 
 	case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= logger.Warn:
 		sql, rows := fc()
 		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
 		if rows == -1 {
-			logs.Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Warn("Gorm", zap.Error(errors.New(slowLog)), zap.String("sql", sql))
 		} else {
-			logs.Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Warn("Gorm", zap.Error(errors.New(slowLog)), zap.String("sql", sql))
 		}
 
 	case l.LogLevel == logger.Info:
 		sql, rows := fc()
 		if rows == -1 {
-			logs.Logger.Info("Gorm", zap.String("sql", sql))
-			//logs.Logger.Info(fmt.Sprintf("%v", sql))
+			//logs.Logger.WithOptions(zap.AddCaller()).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 		} else {
-			logs.Logger.Info("Gorm", zap.String("sql", sql))
-			//logs.Logger.Info(fmt.Sprintf("%v", sql))
+			//logs.Logger.WithOptions(zap.AddCaller()).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 		}
 	}
 }
