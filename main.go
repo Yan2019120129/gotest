@@ -1,17 +1,11 @@
 package main
 
-import (
-	"fmt"
-	"gotest/common/module/log/zap_log"
-)
+import "fmt"
 
 func main() {
-	message := ""
-	zap_log.Logger.Warn("test")
-	fmt.Print("等待输入：")
-	_, err := fmt.Scan(&message)
-	if err != nil {
-		fmt.Println("发生错误:", err)
+	message := "yanjiajie"
+	for i, v := range message {
+		fmt.Println("i:", i)
+		fmt.Println("v:", string(v))
 	}
-	fmt.Println("输入内容:", message)
 }

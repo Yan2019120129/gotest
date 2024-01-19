@@ -1,4 +1,4 @@
-package zap_log
+package logs
 
 import (
 	"context"
@@ -8,7 +8,6 @@ import (
 	"go.uber.org/zap/zapcore"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
-	"gotest/common/utils/color"
 	"time"
 )
 
@@ -34,7 +33,7 @@ func init() {
 	config.EncoderConfig.StacktraceKey = ""
 
 	// 添加调用位置信息添加全路径显示
-	config.EncoderConfig.EncodeCaller = zapcore.FullCallerEncoder
+	//config.EncoderConfig.EncodeCaller = zapcore.FullCallerEncoder
 
 	// 调整编码器默认配置
 	config.EncoderConfig.EncodeTime = func(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
@@ -48,7 +47,6 @@ func init() {
 	}
 
 	Logger = l
-	defer Logger.Sync()
 }
 
 // 自定义颜色编码器
@@ -123,24 +121,30 @@ func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql s
 	case err != nil && l.LogLevel >= logger.Error && (!errors.Is(err, ErrRecordNotFound) || !l.IgnoreRecordNotFoundError):
 		sql, rows := fc()
 		if rows == -1 {
-			Logger.Error(fmt.Sprintf("%v \n%v   %v", color.SetRed(err), color.SetRed(float64(elapsed.Nanoseconds())/1e6), "-"+sql))
+			Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
+			//Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
 		} else {
-			Logger.Error(fmt.Sprintf("%v \n[%v] [rows:%v]   %v", color.SetRed(err), color.SetRed(float64(elapsed.Nanoseconds())/1e6), color.SetRed(rows), sql))
+			Logger.Error("Gorm", zap.String("err", err.Error()), zap.String("sql", sql))
+			//Logger.Error(fmt.Sprintf("%v %v", color.SetRed(err), sql))
 		}
+
 	case elapsed > l.SlowThreshold && l.SlowThreshold != 0 && l.LogLevel >= logger.Warn:
 		sql, rows := fc()
 		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
 		if rows == -1 {
-			Logger.Warn(fmt.Sprintf("%v \n[%v]   %v", color.SetYellow(slowLog), color.SetYellow(float64(elapsed.Nanoseconds())/1e6), sql))
+			Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
 		} else {
-			Logger.Warn(fmt.Sprintf("%v \n[%v] [rows:%v]   %v", color.SetYellow(slowLog), color.SetYellow(float64(elapsed.Nanoseconds())/1e6), color.SetYellow(rows), sql))
+			Logger.Warn("Gorm", zap.String("err", slowLog), zap.String("sql", sql))
 		}
+
 	case l.LogLevel == logger.Info:
 		sql, rows := fc()
 		if rows == -1 {
-			Logger.Info(fmt.Sprintf("\n[%v] %v  %v", color.SetGreen(float64(elapsed.Nanoseconds())/1e6), "-", sql))
+			Logger.Info("Gorm", zap.String("sql", sql))
+			//Logger.Info(fmt.Sprintf("%v", sql))
 		} else {
-			Logger.Info(fmt.Sprintf("\n[%v] [rows:%v]  %v", color.SetGreen(float64(elapsed.Nanoseconds())/1e6), color.SetGreen(rows), sql))
+			Logger.Info("Gorm", zap.String("sql", sql))
+			//Logger.Info(fmt.Sprintf("%v", sql))
 		}
 	}
 }
