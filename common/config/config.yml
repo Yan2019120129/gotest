@@ -90,3 +90,22 @@ elasticsearch:
   response-header-timeout: 5
   # 建立连接的上下文和超时设置
   dialer-timeout: 5
+
+logs:
+  use-log: "zap"
+  instance:
+    zap:
+      # 自定义模式 custom，开发模式 devel ，生产模式 product，
+      mode: "custom"
+      # 日志级别 Debug,Info,Warn,Error,DPanic,Panic,Fatal,
+      level: "Info"
+      # 输出格式json，控制台 console
+      encoding: "console"
+      # 时间格式
+      format-time: "CustomTwo"
+      # 文件输出长短 Full ，Short
+      file-length: "Short"
+      # 文件输出位置
+      out-path:
+        - ""
+        - ""
