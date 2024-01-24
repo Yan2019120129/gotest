@@ -173,3 +173,13 @@ func TestGormInsert() {
 		}
 	}
 }
+
+// TestWhereEqConvIn 测试等于是否会转换为in
+func TestWhereEqConvIn() {
+	adminIds := []int{1, 2}
+	userList := &models.User{}
+	if result := database.DB.Where(adminIds).Find(userList); result.Error != nil {
+		logs.Logger.Error("gorm", zap.Error(result.Error))
+	}
+	logs.Logger.Info("gorm", zap.Reflect("data", userList))
+}

@@ -130,7 +130,7 @@ func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql s
 	case err != nil && l.LogLevel >= logger.Error && (!errors.Is(err, logger.ErrRecordNotFound) || !l.IgnoreRecordNotFoundError):
 		sql, rows := fc()
 		if rows == -1 {
-			logs.Logger.WithOptions(zap.WithCaller(false), zap.()).Named(utils.FileWithLineNum()).Info("Gorm", zap.Error(err), zap.String("sql", sql))
+			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.Error(err), zap.String("sql", sql))
 		} else {
 			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.Error(err), zap.String("sql", sql))
 		}
