@@ -53,3 +53,8 @@ func TestSelectClient(t *testing.T) {
 func TestGormInsert(t *testing.T) {
 	mysql_test.TestGormInsert()
 }
+
+// TestWhereEqConvIn 测试添加等于条件会不会转换为in条件
+func TestWhereEqConvIn(t *testing.T) {
+	mysql_test.TestWhereEqConvIn()
+}
