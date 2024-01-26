@@ -1,7 +1,6 @@
 package logs
 
 import (
-	"fmt"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	config2 "gotest/common/config"
@@ -39,20 +38,16 @@ func init() {
 	cfg := config2.GetZap()
 	config := zap.Config{}
 	switch cfg.Mode {
-	// 自定义环境
-	case "custom":
-		config = customConfig()
-		fmt.Println("mode:custom")
-		config.Level = lever[cfg.Level]
-	case "product":
-		// 适合在生产环境中使用
-		config = zap.NewProductionConfig()
-		fmt.Println("mode:product")
 
-	default:
-		// 适合开发环境使用
+	case "custom": // 自定义环境
+		config = customConfig()
+		config.Level = lever[cfg.Level]
+
+	case "product": // 适合在生产环境中使用
+		config = zap.NewProductionConfig()
+
+	default: // 适合开发环境使用
 		config = zap.NewDevelopmentConfig()
-		fmt.Println("mode:devel")
 	}
 
 	l, err := config.Build()
@@ -61,12 +56,10 @@ func init() {
 	}
 
 	Logger = l
-	fmt.Println("zap初始化成功！！！")
 }
 
 func customConfig() zap.Config {
 	cfg := config2.GetZap()
-	//config := zap.NewDevelopmentConfig()
 	config := zap.Config{
 		Level:             lever[cfg.Level], //	日志级别
 		Development:       true,             //	是否是开发环境。如果是开发模式，对DPanicLevel进行堆栈跟踪
@@ -75,11 +68,11 @@ func customConfig() zap.Config {
 		Sampling:          nil,              //	抽样策略。设置为nil禁用采样。
 		Encoding:          cfg.Encoding,     //	编码方式，支持json, console
 		EncoderConfig: zapcore.EncoderConfig{
-			MessageKey: "msg",   //	输入信息的key名
-			LevelKey:   "level", //	输出日志级别的key名
-			TimeKey:    "time",  //	输出时间的key名
-			NameKey:    "name",
-			//CallerKey:      "caller",
+			MessageKey:     "msg",   //	输入信息的key名
+			LevelKey:       "level", //	输出日志级别的key名
+			TimeKey:        "time",  //	输出时间的key名
+			NameKey:        "name",
+			CallerKey:      "caller",
 			StacktraceKey:  "stacktrace",
 			LineEnding:     zapcore.DefaultLineEnding,     //	每行的分隔符。"\\n"
 			EncodeLevel:    customColorEncodeLevel,        //	将日志级别字符串转化为小写
@@ -122,5 +115,8 @@ func customColorEncodeLevel(l zapcore.Level, enc zapcore.PrimitiveArrayEncoder) 
 		enc.AppendString("\x1b[31mPANIC\x1b[0m") // 红色
 	case zapcore.FatalLevel:
 		enc.AppendString("\x1b[31mFATAL\x1b[0m") // 红色
+	default:
+		enc.AppendString("\x1b[37mDEFAULT\x1b[0m")
+
 	}
 }

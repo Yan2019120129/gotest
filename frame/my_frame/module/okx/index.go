@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 	"gotest/frame/my_frame/module/cache"
-	"gotest/frame/my_frame/module/logger"
+	"gotest/frame/my_frame/module/logs"
 	"gotest/frame/my_frame/utils"
 	"strconv"
 	"sync"
@@ -90,7 +90,7 @@ type okxInstance struct {
 // ConnectWS 连接okx websocket。
 func (instance *okxInstance) ConnectWS() (err error) {
 	if instance.serverAddr == "" {
-		logger.Logger.Error("服务地址不能为空！！！")
+		logs.Logger.Error("服务地址不能为空！！！")
 	}
 	instance.conn, _, err = websocket.DefaultDialer.Dial(instance.serverAddr, nil)
 	if err != nil {
@@ -109,7 +109,7 @@ func (instance *okxInstance) ConnectWS() (err error) {
 
 // SendMessages 发送消息。
 func (instance *okxInstance) SendMessages() {
-	defer logger.Logger.Info("关闭发送方法")
+	defer logs.Logger.Info("关闭发送方法")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	if err := instance.conn.WriteMessage(websocket.TextMessage, instance.message); err != nil {
 		panic(err)
@@ -119,28 +119,28 @@ func (instance *okxInstance) SendMessages() {
 
 // ReadMessages 读取消息。
 func (instance *okxInstance) ReadMessages() {
-	defer logger.Logger.Info("读取信息关闭")
+	defer logs.Logger.Info("读取信息关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	for {
 		_, message, err := instance.conn.ReadMessage()
 		if err != nil {
-			logger.Logger.Error("读取信息失败:" + err.Error())
+			logs.Logger.Error("读取信息失败:" + err.Error())
 			go instance.heartbeatMessage()
 			instance.wg.Add(1)
 			break
 		}
-		logger.Logger.Info("读取到的消息:", zap.String("tickers：", string(message)))
+		logs.Logger.Info("读取到的消息:", zap.String("tickers：", string(message)))
 		instance.data <- message
 	}
 }
 
 // HandleMessages 处理收到的信息。
 func (instance *okxInstance) handleMessages() {
-	defer logger.Logger.Info("处理信息关闭")
+	defer logs.Logger.Info("处理信息关闭")
 	defer instance.wg.Done() // 在函数退出时递减计数器
 	for {
 		message := <-instance.data
-		logger.Logger.Info("tickers：" + string(message))
+		logs.Logger.Info("tickers：" + string(message))
 		data := &Message{}
 		utils.ByteListToObj(message, data)
 		cache.Publish(data.Arg.Channel+"-"+data.Arg.InstId, utils.ObjToByteList(data.Data))
@@ -149,7 +149,7 @@ func (instance *okxInstance) handleMessages() {
 
 // heartbeatMessage 测试websocket心跳。
 func (instance *okxInstance) heartbeatMessage() {
-	defer logger.Logger.Info("关闭okx心跳")
+	defer logs.Logger.Info("关闭okx心跳")
 	for {
 		// 发送心跳消息
 		err := instance.conn.WriteMessage(websocket.TextMessage, []byte("ping"))
@@ -158,7 +158,7 @@ func (instance *okxInstance) heartbeatMessage() {
 			for i := 0; i < instance.maxReconnect; i++ {
 				instance.maxReconnect--
 
-				logger.Logger.Info("重新连接:" + strconv.Itoa(instance.maxReconnect))
+				logs.Logger.Info("重新连接:" + strconv.Itoa(instance.maxReconnect))
 
 				if err := instance.ConnectWS(); err != nil {
 					continue
