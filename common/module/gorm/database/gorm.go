@@ -50,18 +50,15 @@ func init() {
 					SingularTable: cfg.SingularTable, // 单表去复数s
 				},
 				QueryFields: cfg.QueryFields, // 是否全字段映射
-				//Logger:      logger.Default.LogMode(logger.Silent), // 日志级别
-				//Logger: logger.Default.LogMode(logger.Error), // 日志级别
-				//Logger: logger.Default.LogMode(logger.Warn), // 日志级别
 				//Logger: logger.Default.LogMode(logger.Info), // 日志级别
 				Logger: Instance.LogMode(lever[config.GetZap().Level]), // 日志级别
 			}); err != nil {
-				panic(err)
+				logs.Logger.Error("gorm", zap.String("method", "init"), zap.Error(err))
 			}
-			fmt.Printf("内存地址：%p----->Gorm.DB实例创建成功！！！\n", DB)
+			logs.Logger.Info("gorm", zap.String("method", "init"), zap.String("instance", fmt.Sprintf("%p", DB)))
 		})
 	} else {
-		fmt.Println("已经存在DB实例")
+		logs.Logger.Info("gorm", zap.String("method", "init"), zap.String("instance existed", fmt.Sprintf("%p", DB)))
 	}
 }
 
@@ -92,7 +89,6 @@ type zapLogger struct {
 
 // LogMode 配置日志模式
 func (l *zapLogger) LogMode(level logger.LogLevel) logger.Interface {
-	fmt.Println("level:", level)
 	newLogger := *l
 	newLogger.LogLevel = level
 	return &newLogger
@@ -147,10 +143,8 @@ func (l *zapLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql s
 	case l.LogLevel == logger.Info:
 		sql, rows := fc()
 		if rows == -1 {
-			//logs.Logger.WithOptions(zap.AddCaller()).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 		} else {
-			//logs.Logger.WithOptions(zap.AddCaller()).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 			logs.Logger.WithOptions(zap.WithCaller(false)).Named(utils.FileWithLineNum()).Info("Gorm", zap.String("sql", sql))
 		}
 	}

@@ -3,7 +3,7 @@ package test
 import (
 	"context"
 	"fmt"
-	"gotest/my_frame/module/elasticsearch"
+	esearch "gotest/frame/my_frame/module/elasticsearch"
 	"testing"
 )
 

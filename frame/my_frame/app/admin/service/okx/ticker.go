@@ -2,7 +2,7 @@ package okxserver
 
 import (
 	"github.com/gorilla/websocket"
-	"gotest/frame/my_frame/module/logger"
+	"gotest/frame/my_frame/module/logs"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ var upgrader = websocket.Upgrader{
 func TickerIndex(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logger.Logger.Error(err.Error())
+		logs.Logger.Error(err.Error())
 	}
 	defer conn.Close()
 
@@ -35,7 +35,7 @@ func TickerIndex(w http.ResponseWriter, r *http.Request) {
 		}
 		// 向客户端发送消息
 		if err := conn.WriteMessage(websocket.TextMessage, message); err != nil {
-			logger.Logger.Error(err.Error())
+			logs.Logger.Error(err.Error())
 		}
 
 		//switch v := rdsConn.Receive().(type) {

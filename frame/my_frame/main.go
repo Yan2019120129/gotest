@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gotest/frame/my_frame/app/admin/router"
 	"gotest/frame/my_frame/config"
-	"gotest/frame/my_frame/module/logger"
+	"gotest/frame/my_frame/module/logs"
 )
 
 func main() {
@@ -21,6 +21,6 @@ func main() {
 	//_ = okx.OkxInstance.ConnectWS()
 
 	if err := engin.Run(cfg.Port); err != nil {
-		logger.Logger.Error(err.Error())
+		logs.Logger.Error(err.Error())
 	}
 }

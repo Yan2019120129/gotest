@@ -20,8 +20,8 @@ var GenMdoe = map[string]interface{}{
 }
 
 const (
-	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/my_frame/config/config.yml"
-	//FilePath = "/Users/taozi/Documents/Golang/gotest/my_frame/config/config.yml"
+	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/common/config/config.yml"
+	//FilePath = "/Users/taozi/Documents/Golang/gotest/common/config/config.yml"
 )
 
 type Config struct {
@@ -29,6 +29,7 @@ type Config struct {
 	Gin           GinConfig           `yaml:"gin"`
 	Redis         RedisConfig         `yaml:"redis"`
 	Elasticsearch ElasticsearchConfig `yaml:"elasticsearch"`
+	Logs          LogConfig           `yaml:"logs"`
 }
 
 // ElasticsearchConfig 配置参数。
@@ -99,6 +100,27 @@ type RedisPoolConfig struct {
 	Wait            bool   `yaml:"wait"`               // 如果超时最大连接数是否等待
 }
 
+// LogConfig 日志配置
+type LogConfig struct {
+	UseLog   string      `yaml:"use-log"`  // 使用哪个日志
+	Instance LogInstance `yaml:"instance"` // 日志实例
+}
+
+// LogInstance 日志实例
+type LogInstance struct {
+	Zap ZapConfig `yaml:"zap"` // zap 日志
+}
+
+// ZapConfig zap 日志配置
+type ZapConfig struct {
+	Mode       string   `yaml:"mode"`        // 日志模式，自定义模式custom，开发模式Devel ，生产模式product，
+	Level      string   `yaml:"level"`       // 日志级别Debug,Info,WarnLevel,Error,DPanic,Panic,Fatal,
+	Encoding   string   `yaml:"encoding"`    // 日志级输出格式# 输出格式json，控制台 console
+	FormatTime string   `yaml:"format-time"` // 选择格式化日期
+	FileLength string   `yaml:"file-length"` // 文件地址类型
+	OutPath    []string `yaml:"out-path"`    // 日志输出路径
+}
+
 // once 用于初始化config变量，并保证只初始化一次
 var _once sync.Once
 
@@ -148,12 +170,22 @@ func GetGin() *GinConfig {
 	return &cfg.Gin
 }
 
-// GetRedisConfig  获取redis 配置
-func GetRedisConfig() *RedisConfig {
+// GetRedis  获取redis 配置
+func GetRedis() *RedisConfig {
 	return &cfg.Redis
 }
 
 // GetElasticsearch  获取elasticsearch 配置
 func GetElasticsearch() *ElasticsearchConfig {
 	return &cfg.Elasticsearch
+}
+
+// GetLog 获取日志配置
+func GetLog() *LogConfig {
+	return &cfg.Logs
+}
+
+// GetZap 获取zap 日志配置
+func GetZap() *ZapConfig {
+	return &cfg.Logs.Instance.Zap
 }
