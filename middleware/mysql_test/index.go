@@ -185,6 +185,21 @@ func TestWhereEqConvIn() {
 	logs.Logger.Info("gorm", zap.Reflect("data", userList))
 }
 
+// TestWhere 测试where 各种写法
+func TestWhere() {
+	userInfo := make([]*models.User, 0)
+	database.DB.Where("username = ? OR telephone = ?", "ceshi1", "15577098754").Find(&userInfo)
+	logs.Logger.Info("mysql", zap.Reflect("userInfo", userInfo))
+
+	userInfoTwo := &models.User{}
+	database.DB.Where("username = ? AND telephone = ?", "ceshi2", "15577098754").Take(userInfoTwo)
+	logs.Logger.Info("mysql", zap.Reflect("userInfoTwo", userInfoTwo))
+
+	userInfoThree := &models.User{}
+	database.DB.Where(models.User{UserName: "ceshi2", Telephone: ""}).Take(userInfoThree)
+	logs.Logger.Info("mysql", zap.Reflect("userInfoThree", userInfoThree))
+}
+
 // TestInsertMysql 100w 插入一百万的数据
 func TestInsertMysql() {
 	for i := 0; i < 100000; i++ {
