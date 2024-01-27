@@ -4,7 +4,11 @@ import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"gorm.io/gen"
+	"log"
 	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
 	"sync"
 )
 
@@ -13,16 +17,12 @@ const (
 	DatabaseTypePostgresql = "postgresql"
 )
 
-var GenMdoe = map[string]interface{}{
+// GenMode gorm gen 生成模式
+var GenMode = map[string]interface{}{
 	"WithoutContext":     gen.WithoutContext,
 	"WithDefaultQuery":   gen.WithDefaultQuery,
 	"WithQueryInterface": gen.WithQueryInterface,
 }
-
-const (
-	FilePath = "/home/programmer-yan/Documents/GoFile/gotest/common/config/config.yml"
-	//FilePath = "/Users/taozi/Documents/Golang/gotest/common/config/config.yml"
-)
 
 type Config struct {
 	Gorm          GormConfig          `yaml:"gorm"`
@@ -131,18 +131,36 @@ func init() {
 	if cfg == nil {
 		_once.Do(
 			func() {
-				configByte, err := os.ReadFile(FilePath)
+				path := GetConfigPath()
+				fmt.Println("path:", path)
+				configByte, err := os.ReadFile(path)
 				if err != nil {
-					fmt.Printf("内存地址：%p----->配置文件初始化成功！！！\n", cfg)
+					log.Print("config init err:", err)
 				}
 				if err = yaml.Unmarshal(configByte, &cfg); err != nil {
-					panic(err)
+					log.Print("config  unmarshal err：", err)
 				}
 			},
 		)
 	} else {
-		fmt.Println("配置文件实例已存在！！！")
+		log.Print("config  already exists！！！")
 	}
+}
+
+// GetConfigPath 获取配置文件路径
+func GetConfigPath() string {
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Print("get config Caller path err！！！")
+	}
+	// 获取绝对路径
+	absolutePath, err := filepath.Abs(file)
+	if err != nil {
+		log.Print("get config abs path err:", err)
+	}
+
+	// 修改为配置文件路径并返回
+	return strings.ReplaceAll(absolutePath, ".go", ".yml")
 }
 
 // GetGorm  获取gorm 配置
