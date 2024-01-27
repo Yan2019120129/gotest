@@ -2,7 +2,7 @@ package models
 
 // User 用户表
 type User struct {
-	Id          int     `gorm:"type:int unsigned primary key;autoincrement:1000;comment:主键;"`
+	Id          int     `gorm:"type:int unsigned primary key;comment:主键;"`
 	AdminId     int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
 	ParentId    int     `gorm:"type:int unsigned not null;comment:父级ID"`
 	UserName    string  `gorm:"column:username;uniqueIndex;type:varchar(60) not null;comment:用户名"`
