@@ -59,6 +59,11 @@ func TestWhereEqConvIn(t *testing.T) {
 	mysql_test.TestWhereEqConvIn()
 }
 
+// TestWhere  测试where各种写法
+func TestWhere(t *testing.T) {
+	mysql_test.TestWhere()
+}
+
 // TestInsertMysql 插入10000 数据
 func TestInsertMysql(t *testing.T) {
 	mysql_test.TestInsertMysql()
