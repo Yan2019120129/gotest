@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"gotest/common/models"
 	"gotest/common/module/gorm/database"
 	"gotest/common/module/logs"
@@ -182,4 +183,88 @@ func TestWhereEqConvIn() {
 		logs.Logger.Error("gorm", zap.Error(result.Error))
 	}
 	logs.Logger.Info("gorm", zap.Reflect("data", userList))
+}
+
+// TestInsertMysql 100w 插入一百万的数据
+func TestInsertMysql() {
+	for i := 0; i < 100000; i++ {
+		if err := database.DB.Transaction(func(tx *gorm.DB) error {
+			// 插入管理员数据
+			adminInfo := &models.AdminUser{
+				ParentId:    gofakeit.Number(1, 100),
+				UserName:    gofakeit.Name(),
+				NickName:    gofakeit.Name(),
+				Email:       gofakeit.Email(),
+				Avatar:      gofakeit.ImageURL(200, 100),
+				Password:    gofakeit.Password(true, true, true, false, false, 10),
+				SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
+				Money:       gofakeit.Float64Range(100, 100000),
+				Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
+				Data:        gofakeit.Letter(),
+				Domains:     gofakeit.Letter(),
+			}
+			if result := tx.Create(adminInfo); result.Error != nil {
+				logs.Logger.Error("mysql", zap.Error(result.Error))
+				return result.Error
+			}
+
+			// 插入用户数据
+			userInfo := &models.User{
+				AdminId:     gofakeit.Number(1, 100),
+				ParentId:    gofakeit.Number(1, 100),
+				UserName:    gofakeit.Name(),
+				NickName:    gofakeit.Name(),
+				Email:       gofakeit.Email(),
+				Telephone:   gofakeit.Phone(),
+				Avatar:      gofakeit.ImageURL(200, 100),
+				Sex:         gofakeit.RandomInt([]int{1, 2}),
+				Password:    gofakeit.Password(true, true, true, false, false, 10),
+				SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
+				Money:       gofakeit.Float64Range(100, 100000),
+				Type:        gofakeit.RandomInt([]int{1, 11, 21}),
+				Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
+				Data:        gofakeit.Sentence(10),
+				Desc:        gofakeit.Sentence(20),
+			}
+
+			if result := tx.Create(userInfo); result.Error != nil {
+			}
+
+			// 插入用户资产
+			userAssetsInfo := &models.WalletUserAssets{
+				AdminId:        gofakeit.Number(1, 100),
+				UserId:         gofakeit.Number(1, 100),
+				WalletAssetsId: gofakeit.Number(1, 100),
+				Money:          gofakeit.Float64Range(100, 100000),
+				Status:         gofakeit.RandomInt([]int{-2, -1, 10}),
+				Data:           gofakeit.Sentence(10),
+			}
+			if result := tx.Create(userAssetsInfo); result.Error != nil {
+				return result.Error
+			}
+
+			// 插入钱包订单
+			walletOrderInfo := &models.WalletOrder{
+				AdminId:  gofakeit.Number(1, 100),
+				UserId:   gofakeit.Number(1, 100),
+				AssetsId: gofakeit.Number(1, 100),
+				SourceId: gofakeit.RandomInt([]int{1, 2, 11, 12, 20}),
+				Type:     gofakeit.RandomInt([]int{1, 2, 11, 12}),
+				OrderSn:  utils.NewRandom().OrderSn(),
+				Money:    gofakeit.Float64Range(100, 100000),
+				Voucher:  gofakeit.ImageURL(200, 100),
+				Fee:      gofakeit.Float64Range(0.1, 1),
+				Status:   gofakeit.RandomInt([]int{-2, -1, 10}),
+				Data:     gofakeit.Sentence(10),
+			}
+			if result := tx.Create(walletOrderInfo); result.Error != nil {
+				return result.Error
+			}
+			logs.Logger.Info("mysql", zap.String("result", "Finish"))
+			return nil
+		}); err != nil {
+			logs.Logger.Error("mysql", zap.String("result", "fail"), zap.Error(err))
+		}
+
+	}
 }

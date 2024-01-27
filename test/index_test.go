@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 	"gotest/common/models"
 	"gotest/common/module/gorm/database"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"gotest/common/utils"
 	"math/rand"
 	"strconv"
@@ -24,22 +24,22 @@ func TestRandom(t *testing.T) {
 	for i := 0; i < len(array); i++ {
 		key := array[i]
 		if testMap[key] != "" {
-			zap_log.Logger.Debug("出现重复键:" + key + "-" + strconv.Itoa(i))
+			logs.Logger.Debug("出现重复键:" + key + "-" + strconv.Itoa(i))
 			return
 		}
 		testMap[key] = strconv.Itoa(i)
-		zap_log.Logger.Debug("key:" + key)
+		logs.Logger.Debug("key:" + key)
 	}
-	zap_log.Logger.Debug("完成")
+	logs.Logger.Debug("完成")
 }
 
 // TestTime 测试时间
 func TestTime(t *testing.T) {
 	nowTime := time.Now()
-	zap_log.Logger.Debug(strconv.Itoa(int(nowTime.Unix())))
-	zap_log.Logger.Debug(strconv.Itoa(int(nowTime.UnixMilli())))
-	zap_log.Logger.Debug(strconv.Itoa(int(nowTime.UnixNano())))
-	zap_log.Logger.Debug(strconv.Itoa(int(nowTime.UnixMicro())))
+	logs.Logger.Debug(strconv.Itoa(int(nowTime.Unix())))
+	logs.Logger.Debug(strconv.Itoa(int(nowTime.UnixMilli())))
+	logs.Logger.Debug(strconv.Itoa(int(nowTime.UnixNano())))
+	logs.Logger.Debug(strconv.Itoa(int(nowTime.UnixMicro())))
 }
 
 // TestTime 测试时间
@@ -71,7 +71,7 @@ func TestAutoTime(t *testing.T) {
 // TestUUID	 测试UUID
 func TestUUID(t *testing.T) {
 	newUUID := uuid.New().ID()
-	zap_log.Logger.Debug(strconv.Itoa(int(newUUID)))
+	logs.Logger.Debug(strconv.Itoa(int(newUUID)))
 	uuidArray := []uint32{}
 	for i := 0; i < 1000; i++ {
 		uuidArray = append(uuidArray, uuid.New().ID())
@@ -80,13 +80,13 @@ func TestUUID(t *testing.T) {
 	for i := 0; i < len(uuidArray); i++ {
 		key := uuidArray[i]
 		if testMap[key] != "" {
-			zap_log.Logger.Debug("出现重复键:" + strconv.Itoa(int(key)) + "-" + strconv.Itoa(i))
+			logs.Logger.Debug("出现重复键:" + strconv.Itoa(int(key)) + "-" + strconv.Itoa(i))
 			return
 		}
 		testMap[key] = strconv.Itoa(i)
-		zap_log.Logger.Debug("key:" + strconv.Itoa(int(key)))
+		logs.Logger.Debug("key:" + strconv.Itoa(int(key)))
 	}
-	zap_log.Logger.Debug("完成")
+	logs.Logger.Debug("完成")
 }
 
 // TestRandomPrice 随机单价

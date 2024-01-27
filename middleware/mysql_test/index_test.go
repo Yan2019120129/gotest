@@ -58,3 +58,8 @@ func TestGormInsert(t *testing.T) {
 func TestWhereEqConvIn(t *testing.T) {
 	mysql_test.TestWhereEqConvIn()
 }
+
+// TestInsertMysql 插入10000 数据
+func TestInsertMysql(t *testing.T) {
+	mysql_test.TestInsertMysql()
+}
