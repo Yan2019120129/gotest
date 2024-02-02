@@ -187,6 +187,11 @@ func TestWhereEqConvIn() {
 
 // TestWhere 测试where 各种写法
 func TestWhere() {
+	var userIds []int
+	database.DB.Model(&models.User{}).Pluck("id", &userIds)
+	logs.Logger.Info("mysql", zap.Reflect("userIds", userIds))
+	logs.Logger.Info("mysql", zap.Reflect("Len(userIds)", len(userIds)))
+
 	userInfo := make([]*models.User, 0)
 	database.DB.Where("username = ? OR telephone = ?", "ceshi1", "15577098754").Find(&userInfo)
 	logs.Logger.Info("mysql", zap.Reflect("userInfo", userInfo))

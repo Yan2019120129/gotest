@@ -3,29 +3,39 @@ package logs
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	config2 "gotest/common/config"
+	"gotest/common/config"
 	"time"
 )
 
 var Logger *zap.Logger
 
-var lever = map[string]zap.AtomicLevel{
-	"Debug":  zap.NewAtomicLevelAt(zapcore.DebugLevel),
-	"Info":   zap.NewAtomicLevelAt(zapcore.InfoLevel),
-	"Warn":   zap.NewAtomicLevelAt(zapcore.WarnLevel),
-	"Error":  zap.NewAtomicLevelAt(zapcore.ErrorLevel),
-	"DPanic": zap.NewAtomicLevelAt(zapcore.DPanicLevel),
-	"Panic":  zap.NewAtomicLevelAt(zapcore.PanicLevel),
-	"Fatal":  zap.NewAtomicLevelAt(zapcore.FatalLevel),
+const (
+	LogMsgFiber    = "fiber"
+	LogMsgGorm     = "gorm"
+	LogMsgApp      = "app"
+	LogMsgOkx      = "okx"
+	LogModeCustom  = "custom"
+	LogModeProduct = "product"
+	LogModeDevel   = "devel"
+)
+
+var Lever = map[string]zapcore.Level{
+	"debug":  zapcore.DebugLevel,
+	"info":   zapcore.InfoLevel,
+	"warn":   zapcore.WarnLevel,
+	"error":  zapcore.ErrorLevel,
+	"dpanic": zapcore.DPanicLevel,
+	"panic":  zapcore.PanicLevel,
+	"fatal":  zapcore.FatalLevel,
 }
 
+// 时间格式
 var formatTime = map[string]func(time time.Time, encoder zapcore.PrimitiveArrayEncoder){
-	"CustomOne":   customTimeEncoder,
-	"CustomTwo":   customTimeEncoderTwo,
-	"ISO8601":     zapcore.ISO8601TimeEncoder,
-	"RFC3339":     zapcore.RFC3339TimeEncoder,
-	"RFC3339Nano": zapcore.RFC3339NanoTimeEncoder,
-	"Layout":      zapcore.TimeEncoderOfLayout(""),
+	"long":        longTimeEncoder,
+	"short":       shortTimeEncoder,
+	"iso8601":     zapcore.ISO8601TimeEncoder,
+	"rfc3339":     zapcore.RFC3339TimeEncoder,
+	"rfc3339nano": zapcore.RFC3339NanoTimeEncoder,
 }
 
 var fileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder){
@@ -35,19 +45,20 @@ var fileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.Primiti
 
 // init 初始化zap日志
 func init() {
-	cfg := config2.GetZap()
+	cfg := config.GetZap()
 	config := zap.Config{}
 	switch cfg.Mode {
 
-	case "custom": // 自定义环境
-		config = customConfig()
-		config.Level = lever[cfg.Level]
+	case LogModeCustom: // 自定义环境
+		config = customConfig(cfg)
 
-	case "product": // 适合在生产环境中使用
+	case LogModeProduct: // 适合在生产环境中使用
 		config = zap.NewProductionConfig()
+		SetConfig(config, cfg)
 
 	default: // 适合开发环境使用
 		config = zap.NewDevelopmentConfig()
+		SetConfig(config, cfg)
 	}
 
 	l, err := config.Build()
@@ -58,15 +69,30 @@ func init() {
 	Logger = l
 }
 
-func customConfig() zap.Config {
-	cfg := config2.GetZap()
+// SetConfig  设置配置
+func SetConfig(zapConf zap.Config, cfg *config.ZapConfig) {
+	// 日志文件输出为位置
+	zapConf.OutputPaths = cfg.OutPath
+	// 日志内部错误位置
+	zapConf.ErrorOutputPaths = cfg.ErrOutPath
+	// 日志等级
+	zapConf.Level = zap.NewAtomicLevelAt(Lever[cfg.Level])
+	// 编码方式，支持json, console
+	zapConf.Encoding = cfg.Encoding
+	// 输出的时间格式
+	zapConf.EncoderConfig.EncodeTime = formatTime[cfg.FormatTime]
+	// 文件路径格式，绝对路径和相对路径
+	zapConf.EncoderConfig.EncodeCaller = fileLength[cfg.FileLength]
+}
+
+func customConfig(cfg *config.ZapConfig) zap.Config {
 	config := zap.Config{
-		Level:             lever[cfg.Level], //	日志级别
-		Development:       true,             //	是否是开发环境。如果是开发模式，对DPanicLevel进行堆栈跟踪
-		DisableCaller:     false,            //	不显示调用函数的文件名称和行号。默认情况下，所有日志都显示。
-		DisableStacktrace: true,             //	是否禁用堆栈跟踪捕获。默认对Warn级别以上和生产error级别以上的进行堆栈跟踪。
-		Sampling:          nil,              //	抽样策略。设置为nil禁用采样。
-		Encoding:          cfg.Encoding,     //	编码方式，支持json, console
+		Level:             zap.NewAtomicLevelAt(Lever[cfg.Level]), //	日志级别
+		Development:       true,                                   //	是否是开发环境。如果是开发模式，对DPanicLevel进行堆栈跟踪
+		DisableCaller:     false,                                  //	不显示调用函数的文件名称和行号。默认情况下，所有日志都显示。
+		DisableStacktrace: true,                                   //	是否禁用堆栈跟踪捕获。默认对Warn级别以上和生产error级别以上的进行堆栈跟踪。
+		Sampling:          nil,                                    //	抽样策略。设置为nil禁用采样。
+		Encoding:          cfg.Encoding,                           //	编码方式，支持json, console
 		EncoderConfig: zapcore.EncoderConfig{
 			MessageKey:     "msg",   //	输入信息的key名
 			LevelKey:       "level", //	输出日志级别的key名
@@ -81,20 +107,20 @@ func customConfig() zap.Config {
 			EncodeCaller:   fileLength[cfg.FileLength],    //	以包/文件:行号 格式化调用堆栈
 			EncodeName:     zapcore.FullNameEncoder,       //	可选值。
 		},
-		OutputPaths:      []string{"stderr"},       //	可以配置多个输出路径，路径可以是文件路径和stdout（标准输出）
-		ErrorOutputPaths: []string{"stderr"},       //	错误输出路径（日志内部错误）
+		OutputPaths:      cfg.OutPath,              //	可以配置多个输出路径，路径可以是文件路径和stdout（标准输出）
+		ErrorOutputPaths: cfg.ErrOutPath,           //	错误输出路径（日志内部错误）
 		InitialFields:    map[string]interface{}{}, //	每条日志中都会输出这些值
 	}
 	return config
 }
 
 // 自定义时间格式
-func customTimeEncoder(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
+func longTimeEncoder(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 	encoder.AppendString(time.Format("[" + "2006-01-02 15:04:05.000" + "]"))
 }
 
 // 自定义时间格式
-func customTimeEncoderTwo(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
+func shortTimeEncoder(time time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 	encoder.AppendString(time.Format("[" + "15:04:05.000" + "]"))
 }
 
