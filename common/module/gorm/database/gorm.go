@@ -36,7 +36,7 @@ func init() {
 					SingularTable: cfg.SingularTable, // 单表去复数s
 				},
 				QueryFields: cfg.QueryFields, // 是否全字段映射
-				//Logger: logger.Default.LogMode(logger.Info), // 日志级别
+				//Logger:      logger.Default.LogMode(logger.Info), // 日志级别
 				Logger: logs.Instance.LogMode(logs.LeverGorm[config.GetZap().Level]), // 日志级别
 			}); err != nil {
 				logs.Logger.Error("gorm", zap.String("method", "init"), zap.Error(err))
