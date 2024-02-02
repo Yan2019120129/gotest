@@ -11,6 +11,7 @@ import (
 	"gotest/common/module/logs"
 	"gotest/common/utils"
 	"gotest/middleware/mysql_test/dto"
+	"reflect"
 	"time"
 )
 
@@ -200,9 +201,45 @@ func TestWhere() {
 	database.DB.Where("username = ? AND telephone = ?", "ceshi2", "15577098754").Take(userInfoTwo)
 	logs.Logger.Info("mysql", zap.Reflect("userInfoTwo", userInfoTwo))
 
+	var userId int
+	result := database.DB.Model(&models.User{}).Select("id").Where(1).Scan(&userId)
+	logs.Logger.Info("mysql", zap.Reflect("Scan.Error", result.Error))
+	logs.Logger.Info("mysql", zap.Reflect("Scan.RowsAffected", result.RowsAffected))
+	logs.Logger.Info("mysql", zap.Reflect("userId", userId))
+
 	userInfoThree := &models.User{}
 	database.DB.Where(models.User{UserName: "ceshi2", Telephone: ""}).Take(userInfoThree)
 	logs.Logger.Info("mysql", zap.Reflect("userInfoThree", userInfoThree))
+
+	userInfoFourth := &models.User{}
+	type Test struct {
+		Model *gorm.DB
+	}
+
+	test := Test{database.DB.Where(24588)}
+	database.DB.Where(test.Model).Where("admin_id = ?", 2).Take(userInfoTwo)
+	logs.Logger.Info("mysql", zap.Reflect("userInfoFourth", userInfoFourth))
+
+	userMap := map[string]interface{}{}
+	database.DB.Model(&models.User{}).Where(24590).Take(&userMap)
+	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
+
+	delete(userMap, "")
+	userMap["id"] = 0
+	userMap["username"] = gofakeit.Name()
+	userMap["email"] = gofakeit.Email()
+	userMap["telephone"] = gofakeit.Phone()
+	database.DB.Model(&models.User{}).Create(&userMap)
+	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
+	logs.Logger.Info("mysql", zap.Reflect("userId", userMap["id"]))
+
+	var userReflect interface{}
+	userReflect = &models.User{}
+	structType := reflect.TypeOf(userReflect)
+	structInstance := reflect.New(structType)
+	userInstance := structInstance.Type()
+	database.DB.Find(&userInstance)
+	logs.Logger.Info("mysql", zap.Reflect("structType", structType))
 }
 
 // TestInsertMysql 100w 插入一百万的数据
@@ -285,6 +322,27 @@ func TestInsertMysql() {
 		}); err != nil {
 			logs.Logger.Error("mysql", zap.String("result", "fail"), zap.Error(err))
 		}
-
 	}
+}
+
+// InsertData 插入数据
+func InsertData() {
+	userInfo := &models.User{
+		AdminId:     gofakeit.Number(1, 100),
+		ParentId:    gofakeit.Number(1, 100),
+		UserName:    gofakeit.Name(),
+		NickName:    gofakeit.Name(),
+		Email:       gofakeit.Email(),
+		Telephone:   gofakeit.Phone(),
+		Avatar:      gofakeit.ImageURL(200, 100),
+		Sex:         gofakeit.RandomInt([]int{1, 2}),
+		Password:    gofakeit.Password(true, true, true, false, false, 10),
+		SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
+		Money:       gofakeit.Float64Range(100, 100000),
+		Type:        gofakeit.RandomInt([]int{1, 11, 21}),
+		Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
+		Data:        gofakeit.Sentence(10),
+		Desc:        gofakeit.Sentence(20),
+	}
+	database.DB.Create(userInfo)
 }

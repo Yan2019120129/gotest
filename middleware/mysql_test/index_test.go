@@ -68,3 +68,8 @@ func TestWhere(t *testing.T) {
 func TestInsertMysql(t *testing.T) {
 	mysql_test.TestInsertMysql()
 }
+
+// TestInsert 测试插入数据
+func TestInsert(t *testing.T) {
+	mysql_test.InsertData()
+}
