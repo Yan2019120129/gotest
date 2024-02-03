@@ -220,19 +220,6 @@ func TestWhere() {
 	database.DB.Where(test.Model).Where("admin_id = ?", 2).Take(userInfoTwo)
 	logs.Logger.Info("mysql", zap.Reflect("userInfoFourth", userInfoFourth))
 
-	userMap := map[string]interface{}{}
-	database.DB.Model(&models.User{}).Where(24590).Take(&userMap)
-	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
-
-	delete(userMap, "")
-	userMap["id"] = 0
-	userMap["username"] = gofakeit.Name()
-	userMap["email"] = gofakeit.Email()
-	userMap["telephone"] = gofakeit.Phone()
-	database.DB.Model(&models.User{}).Create(&userMap)
-	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
-	logs.Logger.Info("mysql", zap.Reflect("userId", userMap["id"]))
-
 	var userReflect interface{}
 	userReflect = &models.User{}
 	structType := reflect.TypeOf(userReflect)
@@ -345,4 +332,17 @@ func InsertData() {
 		Desc:        gofakeit.Sentence(20),
 	}
 	database.DB.Create(userInfo)
+
+	userMap := map[string]interface{}{}
+	database.DB.Model(&models.User{}).Where(24590).Take(&userMap)
+	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
+
+	delete(userMap, "")
+	userMap["id"] = 0
+	userMap["username"] = gofakeit.Name()
+	userMap["email"] = gofakeit.Email()
+	userMap["telephone"] = gofakeit.Phone()
+	database.DB.Model(&models.User{}).Create(&userMap)
+	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
+	logs.Logger.Info("mysql", zap.Reflect("userId", userMap["id"]))
 }
