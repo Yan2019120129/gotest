@@ -1,0 +1,402 @@
+[11:11:38.760]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000394a80"}
+[11:11:38.761]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.939417[0m] rows:[12] SELECT `id` FROM `user`
+[11:11:38.762]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[11:11:38.762]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[11:11:38.763]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m0.873333[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[11:11:38.763]	[32mINFO[0m	mysql	{"userInfo": []}
+[11:11:38.763]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.735667[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[11:11:38.763]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[11:11:38.764]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.508958[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[11:11:38.764]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[11:11:38.764]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[11:11:38.764]	[32mINFO[0m	mysql	{"userId": 0}
+[11:11:38.765]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m1.090083[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[11:11:38.765]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[11:11:38.766]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.604417[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[11:11:38.766]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[11:11:38.767]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m1.304[0m] rows:[0] SELECT * FROM `rtype`
+[11:11:38.767]	[32mINFO[0m	mysql	{"structType": {}}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:50:08.930]","msg":"/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 \u001b[31mfailed to initialize database, got error %v\u001b[0m [dial tcp 127.0.0.1:3306: connect: connection refused]","stacktrace":"gotest/common/module/logs.(*zapLogger).Error\n\t/Users/taozi/Documents/Golang/gotest/common/module/logs/gorm.go:76\ngorm.io/gorm.Open\n\t/Users/taozi/go/pkg/mod/gorm.io/gorm@v1.25.5/gorm.go:211\ngotest/common/module/gorm/database.init.0.func1\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34\nsync.(*Once).doSlow\n\t/usr/local/go/src/sync/once.go:74\nsync.(*Once).Do\n\t/usr/local/go/src/sync/once.go:65\ngotest/common/module/gorm/database.init.0\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30\nruntime.doInit1\n\t/usr/local/go/src/runtime/proc.go:6740\nruntime.doInit\n\t/usr/local/go/src/runtime/proc.go:6707\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:249"}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:50:08.931]","msg":"gorm","method":"init","error":"dial tcp 127.0.0.1:3306: connect: connection refused","stacktrace":"gotest/common/module/gorm/database.init.0.func1\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42\nsync.(*Once).doSlow\n\t/usr/local/go/src/sync/once.go:74\nsync.(*Once).Do\n\t/usr/local/go/src/sync/once.go:65\ngotest/common/module/gorm/database.init.0\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30\nruntime.doInit1\n\t/usr/local/go/src/runtime/proc.go:6740\nruntime.doInit\n\t/usr/local/go/src/runtime/proc.go:6707\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:249"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:50:08.931]","msg":"gorm","method":"init","instance":"0x1400038cab0","stacktrace":"gotest/common/module/gorm/database.init.0.func1\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:44\nsync.(*Once).doSlow\n\t/usr/local/go/src/sync/once.go:74\nsync.(*Once).Do\n\t/usr/local/go/src/sync/once.go:65\ngotest/common/module/gorm/database.init.0\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30\nruntime.doInit1\n\t/usr/local/go/src/runtime/proc.go:6740\nruntime.doInit\n\t/usr/local/go/src/runtime/proc.go:6707\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:249"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:50:08.932]","msg":"mysql","userIds":null,"stacktrace":"gotest/middleware/mysql_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:193\ngotest/middleware/mysql_test_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index_test.go:64\ntesting.tRunner\n\t/usr/local/go/src/testing/testing.go:1595"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:50:08.932]","msg":"mysql","Len(userIds)":0,"stacktrace":"gotest/middleware/mysql_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:194\ngotest/middleware/mysql_test_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index_test.go:64\ntesting.tRunner\n\t/usr/local/go/src/testing/testing.go:1595"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:50:08.932]","msg":"mysql","userInfo":[],"stacktrace":"gotest/middleware/mysql_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:198\ngotest/middleware/mysql_test_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index_test.go:64\ntesting.tRunner\n\t/usr/local/go/src/testing/testing.go:1595"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:50:08.932]","msg":"mysql","userInfoTwo":{"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0},"stacktrace":"gotest/middleware/mysql_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:202\ngotest/middleware/mysql_test_test.TestWhere\n\t/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index_test.go:64\ntesting.tRunner\n\t/usr/local/go/src/testing/testing.go:1595"}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:51:13.759]","msg":"/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 \u001b[31mfailed to initialize database, got error %v\u001b[0m [dial tcp 127.0.0.1:3306: connect: connection refused]","stacktrace":"gotest/common/module/logs.(*zapLogger).Error\n\t/Users/taozi/Documents/Golang/gotest/common/module/logs/gorm.go:76\ngorm.io/gorm.Open\n\t/Users/taozi/go/pkg/mod/gorm.io/gorm@v1.25.5/gorm.go:211\ngotest/common/module/gorm/database.init.0.func1\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34\nsync.(*Once).doSlow\n\t/usr/local/go/src/sync/once.go:74\nsync.(*Once).Do\n\t/usr/local/go/src/sync/once.go:65\ngotest/common/module/gorm/database.init.0\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30\nruntime.doInit1\n\t/usr/local/go/src/runtime/proc.go:6740\nruntime.doInit\n\t/usr/local/go/src/runtime/proc.go:6707\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:249"}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:51:13.759]","msg":"gorm","method":"init","error":"dial tcp 127.0.0.1:3306: connect: connection refused","stacktrace":"gotest/common/module/gorm/database.init.0.func1\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42\nsync.(*Once).doSlow\n\t/usr/local/go/src/sync/once.go:74\nsync.(*Once).Do\n\t/usr/local/go/src/sync/once.go:65\ngotest/common/module/gorm/database.init.0\n\t/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30\nruntime.doInit1\n\t/usr/local/go/src/runtime/proc.go:6740\nruntime.doInit\n\t/usr/local/go/src/runtime/proc.go:6707\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:249"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:51:13.759]","msg":"gorm","method":"init","instance":"0x1400031cab0"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:51:13.759]","msg":"mysql","userIds":null}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:51:13.759]","msg":"mysql","Len(userIds)":0}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:51:13.759]","msg":"mysql","userInfo":[]}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:51:13.759]","msg":"mysql","userInfoTwo":{"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:52:16.503]","msg":"/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 \u001b[31mfailed to initialize database, got error %v\u001b[0m [dial tcp 127.0.0.1:3306: connect: connection refused]"}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[15:52:16.503]","msg":"gorm","method":"init","error":"dial tcp 127.0.0.1:3306: connect: connection refused"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:52:16.503]","msg":"gorm","method":"init","instance":"0x14000314ab0"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:52:16.504]","msg":"mysql","userIds":null}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:52:16.504]","msg":"mysql","Len(userIds)":0}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:52:16.504]","msg":"mysql","userInfo":[]}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:52:16.504]","msg":"mysql","userInfoTwo":{"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[16:27:49.582]","msg":"/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 \u001b[31mfailed to initialize database, got error %v\u001b[0m [dial tcp 127.0.0.1:3306: connect: connection refused]"}
+{"level":"\u001b[31mERROR\u001b[0m","time":"[16:27:49.582]","msg":"gorm","method":"init","error":"dial tcp 127.0.0.1:3306: connect: connection refused"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[16:27:49.582]","msg":"gorm","method":"init","instance":"0x14000394ab0"}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[16:27:49.583]","msg":"mysql","userIds":null}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[16:27:49.583]","msg":"mysql","Len(userIds)":0}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[16:27:49.583]","msg":"mysql","userInfo":[]}
+{"level":"\u001b[32mINFO\u001b[0m","time":"[16:27:49.583]","msg":"mysql","userInfoTwo":{"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:20:35.536]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 [31mfailed to initialize database, got error %v[0m [dial tcp 127.0.0.1:3306: connect: connection refused]
+gotest/common/module/logs.(*zapLogger).Error
+	/Users/taozi/Documents/Golang/gotest/common/module/logs/gorm.go:76
+gorm.io/gorm.Open
+	/Users/taozi/go/pkg/mod/gorm.io/gorm@v1.25.5/gorm.go:211
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:20:35.536]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42	gorm	{"method": "init", "error": "dial tcp 127.0.0.1:3306: connect: connection refused"}
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:20:35.536]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:44	gorm	{"method": "init", "instance": "0x14000314a80"}
+[17:20:35.536]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:193	mysql	{"userIds": null}
+[17:20:35.536]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:194	mysql	{"Len(userIds)": 0}
+[17:20:35.536]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:198	mysql	{"userInfo": []}
+[17:20:35.537]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:202	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:21:35.011]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 [31mfailed to initialize database, got error %v[0m [dial tcp 127.0.0.1:3306: connect: connection refused]
+gotest/common/module/logs.(*zapLogger).Error
+	/Users/taozi/Documents/Golang/gotest/common/module/logs/gorm.go:76
+gorm.io/gorm.Open
+	/Users/taozi/go/pkg/mod/gorm.io/gorm@v1.25.5/gorm.go:211
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:21:35.011]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42	gorm	{"method": "init", "error": "dial tcp 127.0.0.1:3306: connect: connection refused"}
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:21:35.011]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:44	gorm	{"method": "init", "instance": "0x14000316a80"}
+[17:21:35.012]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:193	mysql	{"userIds": null}
+[17:21:35.012]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:194	mysql	{"Len(userIds)": 0}
+[17:21:35.012]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:198	mysql	{"userInfo": []}
+[17:21:35.012]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:202	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:25:45.146]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 [31mfailed to initialize database, got error %v[0m [dial tcp 127.0.0.1:3306: connect: connection refused]
+gotest/common/module/logs.(*zapLogger).Error
+	/Users/taozi/Documents/Golang/gotest/common/module/logs/gorm.go:76
+gorm.io/gorm.Open
+	/Users/taozi/go/pkg/mod/gorm.io/gorm@v1.25.5/gorm.go:211
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:25:45.147]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42	gorm	{"method": "init", "error": "dial tcp 127.0.0.1:3306: connect: connection refused"}
+gotest/common/module/gorm/database.init.0.func1
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:42
+sync.(*Once).doSlow
+	/usr/local/go/src/sync/once.go:74
+sync.(*Once).Do
+	/usr/local/go/src/sync/once.go:65
+gotest/common/module/gorm/database.init.0
+	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:30
+runtime.doInit1
+	/usr/local/go/src/runtime/proc.go:6740
+runtime.doInit
+	/usr/local/go/src/runtime/proc.go:6707
+runtime.main
+	/usr/local/go/src/runtime/proc.go:249
+[17:25:45.147]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:44	gorm	{"method": "init", "instance": "0x14000314a80"}
+[17:25:45.147]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:193	mysql	{"userIds": null}
+[17:25:45.147]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:194	mysql	{"Len(userIds)": 0}
+[17:25:45.147]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:198	mysql	{"userInfo": []}
+[17:25:45.147]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:202	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:28:08.842]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:34 [31mfailed to initialize database, got error %v[0m [dial tcp 127.0.0.1:3306: connect: connection refused]
+[17:28:08.842]	[31mERROR[0m	gorm	{"method": "init", "error": "dial tcp 127.0.0.1:3306: connect: connection refused"}
+[17:28:08.842]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000314a80"}
+[17:28:08.842]	[32mINFO[0m	mysql	{"userIds": null}
+[17:28:08.843]	[32mINFO[0m	mysql	{"Len(userIds)": 0}
+[17:28:08.843]	[32mINFO[0m	mysql	{"userInfo": []}
+[17:28:08.843]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:30:49.981]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x1400031ca80"}
+[17:30:49.990]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m8.299291[0m] rows:[12] SELECT `id` FROM `user`
+[17:30:49.990]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[17:30:49.990]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[17:30:49.994]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m4.829583[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[17:30:49.994]	[32mINFO[0m	mysql	{"userInfo": []}
+[17:30:49.995]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.596208[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[17:30:49.995]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:30:49.996]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.699334[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[17:30:49.996]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[17:30:49.996]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[17:30:49.996]	[32mINFO[0m	mysql	{"userId": 0}
+[17:30:49.997]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.6195[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[17:30:49.997]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:30:49.997]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.69175[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[17:30:49.997]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[17:30:49.998]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m0.592417[0m] rows:[0] SELECT * FROM `rtype`
+[17:30:49.998]	[32mINFO[0m	mysql	{"structType": {}}
+[18:10:00.596]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000394a80"}
+[18:10:00.598]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.617292[0m] rows:[12] SELECT `id` FROM `user`
+[18:10:00.598]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:10:00.598]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:10:00.598]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m0.818833[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:10:00.598]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:10:00.599]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.667958[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:10:00.599]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:00.600]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.573875[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:10:00.600]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:10:00.600]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:10:00.600]	[32mINFO[0m	mysql	{"userId": 0}
+[18:10:00.600]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.642083[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:10:00.600]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:00.602]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m1.153583[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:10:00.602]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:00.603]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m0.780959[0m] rows:[0] SELECT * FROM `rtype`
+[18:10:00.603]	[32mINFO[0m	mysql	{"structType": {}}
+[18:10:52.646]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000394a80"}
+[18:10:52.647]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.545541[0m] rows:[12] SELECT `id` FROM `user`
+[18:10:52.647]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:10:52.647]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:10:52.649]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m1.256792[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:10:52.649]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:10:52.650]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.797125[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:10:52.650]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:52.651]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.855625[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:10:52.651]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:10:52.651]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:10:52.651]	[32mINFO[0m	mysql	{"userId": 0}
+[18:10:52.651]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.7025[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:10:52.651]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:52.652]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.991625[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:10:52.652]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:10:52.653]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m0.513916[0m] rows:[0] SELECT * FROM `rtype`
+[18:10:52.653]	[32mINFO[0m	mysql	{"structType": {}}
+[18:11:44.935]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x140002dea80"}
+[18:11:44.937]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.89925[0m] rows:[12] SELECT `id` FROM `user`
+[18:11:44.937]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:11:44.937]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:11:44.938]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m0.86225[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:11:44.938]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:11:44.939]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.8045[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:11:44.939]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:44.940]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m1.03375[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:11:44.940]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:11:44.940]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:11:44.940]	[32mINFO[0m	mysql	{"userId": 0}
+[18:11:44.941]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.799666[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:11:44.941]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:44.941]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.713709[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:11:44.941]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:44.942]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m0.725333[0m] rows:[0] SELECT * FROM `rtype`
+[18:11:44.942]	[32mINFO[0m	mysql	{"structType": {}}
+[18:11:56.135]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000394a80"}
+[18:11:56.137]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.761792[0m] rows:[12] SELECT `id` FROM `user`
+[18:11:56.137]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:11:56.137]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:11:56.138]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m0.9225[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:11:56.138]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:11:56.139]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.871208[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:11:56.139]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:56.140]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.657458[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:11:56.140]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:11:56.140]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:11:56.140]	[32mINFO[0m	mysql	{"userId": 0}
+[18:11:56.140]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.642542[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:11:56.141]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:56.141]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.70075[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:11:56.141]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:11:56.142]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m1.182458[0m] rows:[0] SELECT * FROM `rtype`
+[18:11:56.142]	[32mINFO[0m	mysql	{"structType": {}}
+[18:12:50.232]	[34mINFO[0m	gorm	{"method": "init", "instance": "0x14000314a80"}
+[18:12:50.233]	[34mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.681917[0m] rows:[12] SELECT `id` FROM `user`
+[18:12:50.233]	[34mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:12:50.233]	[34mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:12:50.235]	[34mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m1.367542[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:12:50.235]	[34mINFO[0m	mysql	{"userInfo": []}
+[18:12:50.236]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.751041[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:12:50.236]	[34mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:12:50.236]	[34mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.708333[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:12:50.236]	[34mINFO[0m	mysql	{"Scan.Error": null}
+[18:12:50.236]	[34mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:12:50.236]	[34mINFO[0m	mysql	{"userId": 0}
+[18:12:50.237]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.671666[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:12:50.237]	[34mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:12:50.238]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.727042[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:12:50.238]	[34mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:12:50.239]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m0.526916[0m] rows:[0] SELECT * FROM `rtype`
+[18:12:50.239]	[34mINFO[0m	mysql	{"structType": {}}
+[18:13:38.154]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x1400031ca80"}
+[18:13:38.156]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.872791[0m] rows:[12] SELECT `id` FROM `user`
+[18:13:38.156]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:13:38.156]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:13:38.157]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m1.211542[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:13:38.157]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:13:38.158]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.659084[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:13:38.158]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:13:38.159]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m1.140584[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:13:38.159]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:13:38.159]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:13:38.159]	[32mINFO[0m	mysql	{"userId": 0}
+[18:13:38.161]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m1.487375[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:13:38.161]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:13:38.161]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.756292[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:13:38.161]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:13:38.163]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m1.177125[0m] rows:[0] SELECT * FROM `rtype`
+[18:13:38.163]	[32mINFO[0m	mysql	{"structType": {}}
+[18:14:34.995]	[32mINFO[0m	gorm	{"method": "init", "instance": "0x14000394a80"}
+[18:14:34.996]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.577[0m] rows:[12] SELECT `id` FROM `user`
+[18:14:34.996]	[32mINFO[0m	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:14:34.997]	[32mINFO[0m	mysql	{"Len(userIds)": 12}
+[18:14:34.997]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m0.809541[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:14:34.997]	[32mINFO[0m	mysql	{"userInfo": []}
+[18:14:34.998]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.551625[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:14:34.998]	[32mINFO[0m	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:14:34.999]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.549833[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:14:34.999]	[32mINFO[0m	mysql	{"Scan.Error": null}
+[18:14:34.999]	[32mINFO[0m	mysql	{"Scan.RowsAffected": 0}
+[18:14:34.999]	[32mINFO[0m	mysql	{"userId": 0}
+[18:14:34.999]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.580375[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:14:34.999]	[32mINFO[0m	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:14:35.001]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m1.490792[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:14:35.001]	[32mINFO[0m	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:14:35.002]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m1.612167[0m] rows:[0] SELECT * FROM `rtype`
+[18:14:35.002]	[32mINFO[0m	mysql	{"structType": {}}
+[18:15:01.121]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/common/module/gorm/database/gorm.go:44	gorm	{"method": "init", "instance": "0x1400032ea80"}
+[18:15:01.123]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:192 
+spend:[[32m0.823625[0m] rows:[12] SELECT `id` FROM `user`
+[18:15:01.123]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:193	mysql	{"userIds": [24590,24596,24602,24587,24592,24598,24591,24589,24600,24599,24601,24597]}
+[18:15:01.123]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:194	mysql	{"Len(userIds)": 12}
+[18:15:01.124]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:197 
+spend:[[32m1.25925[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi1' OR telephone = '15577098754'
+[18:15:01.124]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:198	mysql	{"userInfo": []}
+[18:15:01.125]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:201 [31mrecord not found[0m 
+spend:[[32m0.583[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE username = 'ceshi2' AND telephone = '15577098754' LIMIT 1
+[18:15:01.125]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:202	mysql	{"userInfoTwo": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:15:01.126]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:205 
+spend:[[32m0.547916[0m] rows:[0] SELECT `id` FROM `user` WHERE `user`.`id` = 1
+[18:15:01.126]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:206	mysql	{"Scan.Error": null}
+[18:15:01.126]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:207	mysql	{"Scan.RowsAffected": 0}
+[18:15:01.126]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:208	mysql	{"userId": 0}
+[18:15:01.126]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:211 [31mrecord not found[0m 
+spend:[[32m0.661084[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`username` = 'ceshi2' LIMIT 1
+[18:15:01.127]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:212	mysql	{"userInfoThree": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:15:01.127]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:220 [31mrecord not found[0m 
+spend:[[32m0.716917[0m] rows:[0] SELECT `user`.`id`,`user`.`admin_id`,`user`.`parent_id`,`user`.`username`,`user`.`nickname`,`user`.`email`,`user`.`telephone`,`user`.`avatar`,`user`.`sex`,`user`.`birthday`,`user`.`password`,`user`.`security_key`,`user`.`money`,`user`.`type`,`user`.`status`,`user`.`data`,`user`.`desc`,`user`.`updated_at`,`user`.`created_at` FROM `user` WHERE `user`.`id` = 24588 AND admin_id = 2 LIMIT 1
+[18:15:01.127]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:221	mysql	{"userInfoFourth": {"Id":0,"AdminId":0,"ParentId":0,"UserName":"","NickName":"","Email":"","Telephone":"","Avatar":"","Sex":0,"Birthday":0,"Password":"","SecurityKey":"","Money":0,"Type":0,"Status":0,"Data":"","Desc":"","UpdatedAt":0,"CreatedAt":0}}
+[18:15:01.129]	[31mERROR[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:228 [31mError 1146 (42S02): Table 'my_frame.rtype' doesn't exist[0m 
+spend:[[32m1.560292[0m] rows:[0] SELECT * FROM `rtype`
+[18:15:01.129]	[32mINFO[0m	/Users/taozi/Documents/Golang/gotest/middleware/mysql_test/index.go:229	mysql	{"structType": {}}

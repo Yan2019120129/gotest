@@ -4,6 +4,22 @@ import (
 	"fmt"
 )
 
+type Test struct {
+	OnMessage func(msg string) string
+	gMessage  func(msg string)
+}
+
+var Instance = &Test{
+	OnMessage: nil,
+	gMessage:  nil,
+}
+
+func (t *Test) ForMessage(msg ...string) {
+	for _, v := range msg {
+		t.OnMessage(v)
+	}
+}
+
 // IntSum 查找中间值
 func IntSum() {
 	a := 301
