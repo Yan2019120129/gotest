@@ -121,6 +121,6 @@ logs:
       # 保留旧文件的最大天数
       max-age: 10
       # 是否压缩/归档旧文件
-      IsCompress: true
+      is-compress: true
       # 是否使用本地时间
       Is-local-time: true
