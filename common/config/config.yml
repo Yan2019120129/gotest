@@ -114,3 +114,13 @@ logs:
       out-path:
         - "stderr"
         - "/Users/taozi/Documents/Golang/gotest/common/file/logs/app.log"
+      # 最大文件分割大小10m（byte）
+      max-size: 104796160
+      # 保留旧文件的最大个数
+      max-backups: 10
+      # 保留旧文件的最大天数
+      max-age: 10
+      # 是否压缩/归档旧文件
+      IsCompress: true
+      # 是否使用本地时间
+      Is-local-time: true

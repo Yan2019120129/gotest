@@ -227,6 +227,8 @@ func TestWhere() {
 	userInstance := structInstance.Type()
 	database.DB.Find(&userInstance)
 	logs.Logger.Info("mysql", zap.Reflect("structType", structType))
+
+	logs.Logger.Fatal("fatal", zap.String(logs.LogMsgApp, "test"))
 }
 
 // TestInsertMysql 100w 插入一百万的数据
