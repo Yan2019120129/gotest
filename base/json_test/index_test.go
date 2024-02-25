@@ -14,3 +14,8 @@ func TestTestJson(t *testing.T) {
 func TestStringToJson(t *testing.T) {
 	json_test.StringToJson()
 }
+
+// TestInterfaceToObj interface转Obj
+func TestInterfaceToObj(t *testing.T) {
+	json_test.InterfaceToObj()
+}
