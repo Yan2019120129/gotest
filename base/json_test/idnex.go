@@ -98,3 +98,42 @@ func StringToJson() {
 		break
 	}
 }
+
+// Message 消息体
+type Message struct {
+	Op   string      `json:"op"`   //	方法名称
+	Data interface{} `json:"data"` //	方法参数
+}
+
+// SubscribeMessage 订阅消息
+type SubscribeMessage struct {
+	Channel string `json:"channel"` //	订阅通道
+	Arg     string `json:"arg"`     //	订阅标识
+}
+
+// InterfaceToObj 测试结构体转
+func InterfaceToObj() {
+	msg := []byte(`{
+	"op": "subscribe",
+	"data": [
+		{
+			"channel": "tickers",
+			"arg": "LTC-BTC"
+		}
+	]
+}`)
+
+	temp := Message{}
+	_ = json.Unmarshal(msg, &temp)
+
+	fmt.Printf("%T", msg)
+	fmt.Println("msg", msg)
+	fmt.Printf("%T", temp)
+	fmt.Println("temp", temp)
+
+	dateTemp, _ := json.Marshal(temp.Data)
+	subscribeMessageTemp := make([]SubscribeMessage, 0)
+	_ = json.Unmarshal(dateTemp, &subscribeMessageTemp)
+	fmt.Printf("%T", subscribeMessageTemp)
+	fmt.Println("temp", subscribeMessageTemp)
+}

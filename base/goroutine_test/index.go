@@ -17,19 +17,14 @@ type Test struct {
 func (i *Test) test1() {
 	fmt.Println("test1开启")
 	defer fmt.Println("test1关闭")
-	msg := ""
-	select {
-	case msg = <-i.Message:
-		fmt.Println("test1 message:", msg)
-		if msg == "break" {
-			fmt.Println("test1 break")
-			break
+	for {
+		select {
+		case msg, isClose := <-i.Message:
+			if !isClose {
+				return
+			}
+			fmt.Println("test1 msg:", msg)
 		}
-		if msg == "return" {
-			fmt.Println("test1 return")
-			return
-		}
-		fmt.Println("test1 msg:", msg)
 	}
 }
 
@@ -37,19 +32,15 @@ func (i *Test) test1() {
 func (i *Test) test2() {
 	fmt.Println("test2开启")
 	defer fmt.Println("test2关闭")
-	msg := ""
-	select {
-	case msg = <-i.Message:
-		fmt.Println("test2 message:", msg)
-		if msg == "break" {
-			fmt.Println("test2 break")
-			break
+	for {
+		select {
+		case msg, isClose := <-i.Message:
+			if !isClose {
+				return
+			}
+
+			fmt.Println("test2 msg:", msg)
 		}
-		if msg == "return" {
-			fmt.Println("test2 return")
-			return
-		}
-		fmt.Println("test2 msg:", msg)
 	}
 }
 
@@ -57,22 +48,16 @@ func (i *Test) test2() {
 func (i *Test) test3() {
 	fmt.Println("test3开启")
 	defer fmt.Println("test3关闭")
-	msg := ""
-	select {
-	case msg = <-i.Message:
-		fmt.Println("test3 message:", msg)
-		if msg == "break" {
-			fmt.Println("test3 break")
-			break
+	for {
+		select {
+		case msg, isClose := <-i.Message:
+			if !isClose {
+				return
+			}
+			fmt.Println("test3 msg:", msg)
 		}
-		if msg == "return" {
-			fmt.Println("test3 return")
-			return
-		}
-		fmt.Println("test3 msg:", msg)
-	default:
-		fmt.Printf("no communication\n")
 	}
+
 }
 
 // test4 测试 for 获取通道数据方式
@@ -116,6 +101,9 @@ func (i *Test) Main() {
 		}
 
 		Instanct.Message <- message
+		if message == "close" {
+			close(i.Message)
+		}
 	}
 }
 
@@ -135,6 +123,6 @@ func (i *Test) Main1() {
 }
 
 func main() {
-	//Instanct.Main()
-	Instanct.Main1()
+	Instanct.Main()
+	//Instanct.Main1()
 }

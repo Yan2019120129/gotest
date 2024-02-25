@@ -15,15 +15,22 @@ func TestMap() {
 // TestForMap 测试map for 遍历
 func TestForMap() {
 	mapData := map[string]interface{}{"age": 18, "name": "yan", "sex": "man"}
+	// k为键，v为值
 	for k, v := range mapData {
 		fmt.Println("k:", k)
 		fmt.Println("v:", v)
+	}
+
+	// i 输出的是键
+	for i := range mapData {
+		fmt.Println("i:", i)
 	}
 }
 
 // TestIfMap 测试map for 遍历
 func TestIfMap() {
 	mapData := map[string]interface{}{"age": 18, "name": "yan", "sex": "man"}
+	// v为值，ok判断是否存在，存在为true，否为false
 	if v, ok := mapData["age"]; ok {
 		fmt.Println("ok:", ok)
 		fmt.Println("v:", v)
