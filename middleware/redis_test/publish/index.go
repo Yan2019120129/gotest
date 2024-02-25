@@ -1,9 +1,9 @@
-package main
+package publish
 
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"log"
+	"gotest/common/module/cache"
 )
 
 func main() {
@@ -12,14 +12,11 @@ func main() {
 
 // connect 连接redis
 func connect() {
-	conn, err := redis.Dial("tcp", "127.0.0.1:6379")
+	conn := cache.RdsPool.Get()
 	defer conn.Close()
-	if err != nil {
-		log.Println("redis dial failed.")
-	}
 	var message string
 	for {
-		_, err = fmt.Scan(&message)
+		_, err := fmt.Scan(&message)
 		if err != nil {
 			return
 		}

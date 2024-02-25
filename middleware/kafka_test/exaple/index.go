@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"go.uber.org/zap"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"time"
 )
 
@@ -27,11 +27,11 @@ func Topic() {
 	// 创建 Kafka AdminClient
 	adminClient, err := kafka.NewAdminClient(config)
 	if err != nil {
-		zap_log.Logger.Warn(err.Error())
+		logs.Logger.Warn(err.Error())
 	}
 
 	adminName := adminClient.String()
-	zap_log.Logger.Info("连接成功：" + adminName)
+	logs.Logger.Info("连接成功：" + adminName)
 
 	// 上下文超时设置，超出时间关闭程序
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -46,15 +46,15 @@ func Topic() {
 		},
 	})
 	if err != nil {
-		zap_log.Logger.Warn(err.Error())
+		logs.Logger.Warn(err.Error())
 	}
 
 	// 检查创建 Topic 的结果
 	for _, result := range results {
 		if result.Error.IsTimeout() {
-			zap_log.Logger.Warn(err.Error())
+			logs.Logger.Warn(err.Error())
 		}
-		zap_log.Logger.Info(result.Topic)
+		logs.Logger.Info(result.Topic)
 	}
 
 	// 关闭 Kafka AdminClient
@@ -65,7 +65,7 @@ func Topic() {
 func Producer() {
 	p, err := kafka.NewProducer(config)
 	if err != nil {
-		zap_log.Logger.Warn("错误信息：", zap.Error(err))
+		logs.Logger.Warn("错误信息：", zap.Error(err))
 	}
 	defer p.Close()
 
@@ -75,9 +75,9 @@ func Producer() {
 			switch ev := e.(type) {
 			case *kafka.Message:
 				if ev.TopicPartition.Error != nil {
-					zap_log.Logger.Warn("错误信息：", zap.Error(ev.TopicPartition.Error))
+					logs.Logger.Warn("错误信息：", zap.Error(ev.TopicPartition.Error))
 				} else {
-					zap_log.Logger.Info("发送信息：", zap.Reflect("Delivered message to", ev))
+					logs.Logger.Info("发送信息：", zap.Reflect("Delivered message to", ev))
 				}
 			}
 		}
@@ -88,13 +88,13 @@ func Producer() {
 		message := ""
 		fmt.Print("请输入信息：")
 		if _, err = fmt.Scan(&message); err != nil {
-			zap_log.Logger.Warn("错误信息：", zap.Error(err))
+			logs.Logger.Warn("错误信息：", zap.Error(err))
 		}
 		if err = p.Produce(&kafka.Message{
 			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
 			Value:          []byte(message),
 		}, nil); err != nil {
-			zap_log.Logger.Warn("错误信息：", zap.Error(err))
+			logs.Logger.Warn("错误信息：", zap.Error(err))
 			return
 		}
 	}
@@ -110,20 +110,20 @@ func Consumer() {
 		"auto.offset.reset": "earliest",
 	})
 	if err != nil {
-		zap_log.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
+		logs.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
 	}
 	defer c.Close()
 
 	if err = c.SubscribeTopics([]string{topic}, nil); err != nil {
-		zap_log.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
+		logs.Logger.Warn("错误信息：", zap.String("subscribes", err.Error()))
 	}
 
 	for {
 		msg, err := c.ReadMessage(time.Second)
 		if err == nil {
-			zap_log.Logger.Info("信息：", zap.ByteString("Message", msg.Value))
+			logs.Logger.Info("信息：", zap.ByteString("Message", msg.Value))
 		} else if !err.(kafka.Error).IsTimeout() {
-			zap_log.Logger.Debug("错误信息：", zap.String("error", err.Error()), zap.Reflect("error", msg))
+			logs.Logger.Debug("错误信息：", zap.String("error", err.Error()), zap.Reflect("error", msg))
 			return
 		}
 	}

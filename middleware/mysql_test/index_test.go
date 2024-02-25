@@ -73,3 +73,13 @@ func TestInsertMysql(t *testing.T) {
 func TestInsert(t *testing.T) {
 	mysql_test.InsertData()
 }
+
+// TestInsert 测试插入数据
+func TestSelect(t *testing.T) {
+	mysql_test.TestSelect()
+}
+
+// TestGoroutineGorm 测试插入数据
+func TestGoroutineGorm(t *testing.T) {
+	mysql_test.TestGoroutineGorm()
+}
