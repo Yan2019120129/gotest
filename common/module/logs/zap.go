@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gotest/common/config"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -73,6 +74,7 @@ func SetInstance(cfg *config.ZapConfig, encoderConfig zapcore.EncoderConfig) {
 			core = append(core, zapcore.NewCore(zapcore.NewConsoleEncoder(encoderConfig), zapcore.AddSync(os.Stdout), Lever[cfg.Level]))
 			continue
 		}
+		log.Println(v, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge, cfg.IsLocalTime, cfg.IsCompress, Lever[cfg.Level])
 		core = append(core, zapcore.NewCore(zapcore.NewJSONEncoder(encoderConfig), getLogWriter(v, cfg.MaxSize, cfg.MaxBackups, time.Duration(cfg.MaxAge), cfg.IsLocalTime, cfg.IsCompress), Lever[cfg.Level]))
 	}
 	// 自定义一个zap不存在的值，为了实现不打印错误信息堆栈

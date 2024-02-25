@@ -21,7 +21,7 @@ gorm:
       # 服务地址
       host: "127.0.0.1"
       # 数据库名
-      db-name: "my_frame"
+      db-name: "exchange"
       # 用户名
       user: "root"
       # 密码
@@ -114,13 +114,13 @@ logs:
       out-path:
         - "stderr"
         - "/Users/taozi/Documents/Golang/gotest/common/file/logs/app.log"
-      # 最大文件分割大小10m（byte）
-      max-size: 104796160
+      # 最大文件分割大小10m（10485760 byte）
+      max-size: 10485760
       # 保留旧文件的最大个数
       max-backups: 10
       # 保留旧文件的最大天数
       max-age: 10
       # 是否压缩/归档旧文件
-      is-compress: true
+      is-compress: false
       # 是否使用本地时间
-      Is-local-time: true
+      is-local-time: true
