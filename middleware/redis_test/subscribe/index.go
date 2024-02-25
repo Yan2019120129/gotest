@@ -1,20 +1,16 @@
-package main
+package subscribe
 
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"log"
+	"gotest/common/module/cache"
 )
 
-// sub 订阅通道数据
-func main() {
-	conn, err := redis.Dial("tcp", "127.0.0.1:6379")
-	defer conn.Close()
-	if err != nil {
-		log.Println("redis dial failed.")
-	}
-
+// subscribe 订阅通道数据
+func subscribe() {
 	// 创建订阅者连接
+	conn := cache.RdsPool.Get()
+	defer conn.Close()
 	psc := redis.PubSubConn{Conn: conn}
 
 	// 订阅频道 "example_channel"

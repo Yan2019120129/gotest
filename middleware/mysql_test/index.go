@@ -348,3 +348,38 @@ func InsertData() {
 	logs.Logger.Info("mysql", zap.Reflect("userMap", userMap))
 	logs.Logger.Info("mysql", zap.Reflect("userId", userMap["id"]))
 }
+
+// TestSelect 测试select
+func TestSelect() {
+	type Test struct {
+		Id  int    `json:"id"`
+		Key string `json:"key"`
+	}
+	test := &Test{}
+	database.DB.Model(&models.User{}).Select("id", "username as 'Key'").Where(24587).Find(test)
+	logs.Logger.Info("mysql", zap.Reflect("user", test))
+}
+
+// TestGoroutineGorm 测试多协程情况下连接问题
+func TestGoroutineGorm() {
+	for i := 0; i < 50; i++ {
+		go TestCrontabSelect(1 * time.Second)
+	}
+	time.Sleep(100 * time.Second)
+}
+
+// TestCrontabSelect 测试select
+func TestCrontabSelect(second time.Duration) {
+	ch := time.NewTicker(second)
+	for {
+		type Test struct {
+			Id  int    `json:"id"`
+			Key string `json:"key"`
+		}
+		test := make([]*Test, 0)
+		database.DB.Model(&models.User{}).Select("id", "username as 'Key'").Find(&test)
+		logs.Logger.Info("mysql", zap.Reflect("user", test))
+		<-ch.C
+	}
+
+}

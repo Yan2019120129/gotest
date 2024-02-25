@@ -9,3 +9,8 @@ import (
 func TestNewLumberjack(t *testing.T) {
 	lumberjack_test.NewLumberjack()
 }
+
+// TestNewLumberjackAndZap 测试lumberjack包
+func TestNewLumberjackAndZap(t *testing.T) {
+	lumberjack_test.NewLumberjackAndZap()
+}
