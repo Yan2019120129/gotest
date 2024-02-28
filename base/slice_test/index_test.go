@@ -9,3 +9,8 @@ import (
 func TestTestSliceForDelete(t *testing.T) {
 	slice_test.TestSliceForDelete()
 }
+
+// TestSliceForDeleteOne 测试使用复制的方式删除切片内容
+func TestSliceForDeleteOne(t *testing.T) {
+	slice_test.SliceForDeleteOne()
+}
