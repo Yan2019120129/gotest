@@ -3,7 +3,7 @@ package okex
 import (
 	"go.uber.org/zap"
 	"gotest/common/module/gorm/database"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"gotest/practice/okex/dto"
 	"strings"
 )
@@ -29,7 +29,7 @@ func (_OkexStruct *OkexStruct) SubscribeTickers() *OkexStruct {
 
 	productList := make([]*dto.ProductData, 0)
 	if result := database.DB.Model(&dto.Product{}).Select("name", "id").Where("type = ?", dto.ProductTypeOkex).Find(&productList); result.Error != nil {
-		zap_log.Logger.Warn("warn", zap.Error(result.Error))
+		logs.Logger.Warn("warn", zap.Error(result.Error))
 	}
 	for _, v := range productList {
 		v.Name = strings.ReplaceAll(v.Name, "/", "-")

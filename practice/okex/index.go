@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"gotest/common/module/cache"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"gotest/practice/okex/dto"
 	"gotest/practice/okex/utils"
 	"io"
@@ -105,7 +105,7 @@ func (_OkexStruct *OkexStruct) Reader() {
 	for {
 		_, messageData, err := _OkexStruct.conn.ReadMessage()
 		if err != nil {
-			zap_log.Logger.Debug("okex ====> 连接已关闭~  5s后进行重新连接....", zap.String("data", err.Error()))
+			logs.Logger.Debug("okex ====> 连接已关闭~  5s后进行重新连接....", zap.String("data", err.Error()))
 
 			//	重新连接
 			_OkexStruct.ReconnectOkex()
@@ -135,7 +135,7 @@ func (_OkexStruct *OkexStruct) Reader() {
 					})
 				}
 			}
-			zap_log.Logger.Info("info", zap.Reflect("okx:", data))
+			logs.Logger.Info("info", zap.Reflect("okx:", data))
 			Socket.WriterAllClient(data)
 		}
 	}
@@ -160,7 +160,7 @@ func (_OkexStruct *OkexStruct) Colse() {
 // Writer 订阅数据
 func (_OkexStruct *OkexStruct) Subscribe(msg *Subscribe) {
 	if _OkexStruct.conn != nil {
-		zap_log.Logger.Info("info", zap.Reflect("message", msg))
+		logs.Logger.Info("info", zap.Reflect("message", msg))
 		_ = _OkexStruct.conn.WriteJSON(msg)
 	}
 }
@@ -188,8 +188,8 @@ func (_OkexStruct *OkexStruct) TickerUpdatePrice() {
 	_OkexStruct.sync.RLock()
 	for symbol, ticker := range _OkexStruct.CurrentTickers {
 		tickerBytes, _ := json.Marshal(ticker)
-		zap_log.Logger.Info("info", zap.Reflect("update", symbol))
-		zap_log.Logger.Info("info", zap.Reflect("TickerData", tickerBytes))
+		logs.Logger.Info("info", zap.Reflect("update", symbol))
+		logs.Logger.Info("info", zap.Reflect("TickerData", tickerBytes))
 		//symbol = strings.ReplaceAll(symbol, "-", "/")
 		//if result := database.DB.Where("type = ?", dto.ProductTypeOkex).Where("name = ?").Update("data", string(tickerBytes)); result.Error != nil {
 		//	logger.Logger.Warn("warn", zap.Error(result.Error))

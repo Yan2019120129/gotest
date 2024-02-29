@@ -2,7 +2,7 @@ package okex
 
 import (
 	"go.uber.org/zap"
-	"gotest/common/module/log/zap_log"
+	"gotest/common/module/logs"
 	"testing"
 	"time"
 )
@@ -15,9 +15,9 @@ func TestOkex(t *testing.T) {
 	for {
 		time.Sleep(3 * time.Second)
 		BTC_USDT := instance.GetTicker("BTC-USDT")
-		zap_log.Logger.Info("BTC_USDT", zap.Reflect("ticker", BTC_USDT))
+		logs.Logger.Info("BTC_USDT", zap.Reflect("ticker", BTC_USDT))
 		ADA_USDT := instance.GetTicker("ADA-USDT")
-		zap_log.Logger.Info("ADA_USDT", zap.Reflect("ticker", ADA_USDT))
+		logs.Logger.Info("ADA_USDT", zap.Reflect("ticker", ADA_USDT))
 		//instance.TickerUpdatePrice()
 		//fmt.Println("TickerUpdatePrice updated")
 	}
