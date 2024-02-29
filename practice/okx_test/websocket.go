@@ -1,159 +1,105 @@
-package okx_test
+package okx
 
 import (
-	"fmt"
+	"basic/models"
+	"basic/module/cache"
+	"basic/module/database"
+	"basic/module/logger"
+	"basic/module/socket"
+	"basic/utils"
+	"github.com/fasthttp/websocket"
 	"github.com/goccy/go-json"
 	"github.com/gomodule/redigo/redis"
-	"github.com/gorilla/websocket"
-	"gotest/common/module/cache"
-	"gotest/common/module/gorm/database"
-	"gotest/common/utils"
-	"gotest/frame/my-fiber/models"
-	"log"
-	"strconv"
+	"go.uber.org/zap"
 	"strings"
 	"time"
 )
 
-// ServerOkxAddr 产品行情地址。
-const (
-	// ServerOkxAddr okx 行情websocket 地址
-	//ServerOkxAddr = "wss://ws.okx.com:8443/ws/v5/public"
-	ServerOkxAddr = "wss://ws.okx.com:8443/ws/v5/public"
-
-	// ServerCandleAndTradeAddr okx 行业websocket 地址
-	ServerCandleAndTradeAddr = "wss://ws.okx.com:8443/ws/v5/business"
-
-	// OpSubscribe 订阅
-	OpSubscribe = "subscribe"
-
-	// OpUnsubscribe 取消订阅
-	OpUnsubscribe = "unsubscribe"
-
-	// ChannelTicker 行情频道
-	ChannelTicker = "tickers"
-
-	// ChannelBooks 深度频道
-	ChannelBooks = "books"
-
-	// ChannelBooks5 深度频道
-	ChannelBooks5 = "books5"
-
-	// ChannelBooksL2Tbt 深度频道
-	ChannelBooksL2Tbt = "books-l2-tbt"
-
-	// ChannelBooks50L2Tbt 深度频道
-	ChannelBooks50L2Tbt = "books50-l2-tbt"
-
-	// ChannelTrades 交易频道
-	ChannelTrades = "trades"
-)
-
-// Instance 行情 websocket 实例
-var Instance = &WsInstance{
-	Conn:         new(websocket.Conn),    // websocket 实例
-	MaxReconnect: 5,                      // 最大重连次数
-	ServerAddr:   ServerOkxAddr,          // 订阅的通道，用于使用指定的连接地址
-	data:         make(chan string, 100), // 数据传输通道，用户接收处理数据
-}
-
 // WsInstance websocket实例。
 type WsInstance struct {
-	Conn         *websocket.Conn
-	MaxReconnect int         // 设置最大重连次数
-	ServerAddr   string      // 连接地址
-	data         chan string // 用于接收，处理数据。
+	Conn             *websocket.Conn // websocket 实例
+	MaxReconnect     int             // 设置最大重连次数
+	ServerAddr       string          // 连接地址
+	SubscribeChannel []Channel       // 订阅通道
+	isClose          chan bool       // 用于关闭协程
+	data             chan string     // 用于接收，处理数据。
 }
 
-// TickerParams 发送参数。
-type TickerParams struct {
+// OkxParams 发送参数。
+type OkxParams struct {
 	Op   string `json:"op"`   // 操作，subscribe unsubscribe
-	Args []*arg `json:"args"` // 请求订阅的频道列表
-}
-
-// tickerData 返回的推送数据
-type tickerData struct {
-	Arg  arg          `json:"arg"`
-	Data []TickerData `json:"data"`
-}
-
-// tradesData 返回的推送数据
-type tradesData struct {
-	Arg  arg          `json:"arg"`
-	Data []TradesData `json:"data"`
-}
-
-// booksData 返回的推送数据
-type booksData struct {
-	Arg    arg         `json:"arg"`
-	Action string      `json:"action"`
-	Data   []BooksData `json:"data"`
+	Args []*Arg `json:"args"` // 请求订阅的频道列表
 }
 
 // Arg 币种订阅频道。
-type arg struct {
-	Channel string `json:"channel"` // 订阅的通道
-	InstID  string `json:"instId"`  // 货币类型
+type Arg struct {
+	Channel Channel `json:"channel"` // 订阅的通道
+	InstID  string  `json:"instId"`  // 货币类型
 }
 
-// TickerData 行情推送的数据
-type TickerData struct {
-	InstType  string `json:"instType"`
-	InstId    string `json:"instId"`
-	Last      string `json:"last"`
-	LastSz    string `json:"lastSz"`
-	AskPx     string `json:"askPx"`
-	AskSz     string `json:"askSz"`
-	BidPx     string `json:"bidPx"`
-	BidSz     string `json:"bidSz"`
-	Open24h   string `json:"open24h"`
-	High24h   string `json:"high24h"`
-	Low24h    string `json:"low24h"`
-	VolCcy24h string `json:"volCcy24h"`
-	Vol24h    string `json:"vol24h"`
-	SodUtc0   string `json:"sodUtc0"`
-	SodUtc8   string `json:"sodUtc8"`
-	Ts        string `json:"ts"`
+// SubscribeData 订阅Okx数据
+type SubscribeData struct {
+	Arg  Arg           `json:"Arg"`
+	Data []interface{} `json:"data"`
 }
 
-// TickerRdsData 用于存储到rds
-type TickerRdsData struct {
-	InstId    string `json:"instId"`
-	Last      string `json:"last"`
-	LastSz    string `json:"lastSz"`
-	Open24h   string `json:"open24h"`
-	High24h   string `json:"high24h"`
-	Low24h    string `json:"low24h"`
-	VolCcy24h string `json:"volCcy24h"`
-	Vol24h    string `json:"vol24h"`
-	Ts        string `json:"ts"`
+// Data 返回给客户端的数据
+type Data struct {
+	Arg
+	Data interface{} `json:"data"`
 }
 
-// TradesData 交易推送内部数据
-type TradesData struct {
-	InstId  string `json:"instId"`
-	TradeId string `json:"tradeId"`
-	Px      string `json:"px"`
-	Sz      string `json:"sz"`
-	Side    string `json:"side"`
-	Ts      string `json:"ts"`
-	Count   string `json:"count"`
+// NewOkx 创建okx 实例
+func NewOkx() *WsInstance {
+	instance := &WsInstance{
+		Conn:             new(websocket.Conn), // websocket 实例
+		MaxReconnect:     5,                   // 最大重连次数
+		ServerAddr:       ServerOkxAddr,       // 订阅的通道，用于使用指定的连接地址
+		SubscribeChannel: make([]Channel, 0),
+		isClose:          make(chan bool),        // 用于关闭协程
+		data:             make(chan string, 100), // 数据传输通道，用户接收处理数据
+	}
+	return instance
 }
 
-// BooksData 深度内部数据
-type BooksData struct {
-	Asks      [][]string `json:"asks"`
-	Bids      [][]string `json:"bids"`
-	Ts        string     `json:"ts"`
-	Checksum  int        `json:"checksum"`
-	PrevSeqId int        `json:"prevSeqId"`
-	SeqId     int        `json:"seqId"`
+// Run 启动websocket
+func (ws *WsInstance) Run() {
+	// 链接websocket
+	if err := ws.connect(); err != nil {
+		logger.Logger.Info("run close")
+		logger.Logger.Warn(logger.LogMsgOkx, zap.Error(err))
+		return
+	}
+
+	// 发送测试数据
+	ws.sendMessage()
+
+	// 心跳检测
+	go ws.heartbeat()
+
+	// 读取信息
+	go ws.read()
+
+	// 订阅信息
+	go ws.subscribe()
+
+	// 处理并发送信息
+	go ws.publish()
+
+	logger.Logger.Info("okx run")
 }
 
-// ProductData 产品数据
-type ProductData struct {
-	Id   int    // 产品id
-	Name string // 产品名
+// Close 关闭链接
+func (ws *WsInstance) Close() {
+	defer logger.Logger.Info("okx close")
+	//ws.closeMsg <- "close"
+	//close(ws.isClose)
+	close(ws.data)
+	// 关闭链接
+	if err := ws.Conn.Close(); err != nil {
+		logger.Logger.Warn("Close", zap.Error(err))
+		return
+	}
 }
 
 // ConnectWS 连接okx websocket。
@@ -161,246 +107,277 @@ func (ws *WsInstance) connect() (err error) {
 	// 添加协程使用WaitGroup管理线程状态
 	ws.Conn, _, err = websocket.DefaultDialer.Dial(ws.ServerAddr, nil)
 	if err != nil {
-		log.Fatal("WebSocket连接错误:", err)
+		logger.Logger.Warn(logger.LogMsgOkx, zap.Error(err))
 		return err
 	}
 
+	logger.Logger.Info(logger.LogMsgOkx, zap.String("connect", "Connection completed"))
 	return nil
 }
 
-// Run 启动websocket
-func (ws *WsInstance) Run() {
-	// 链接websocket
-	if err := ws.connect(); err != nil {
-		return
-	}
-
-	// 发送测试数据
-	ws.send()
-
-	// 心跳检测
-	go ws.heartbeat()
-
-	// 读取信息
-	go ws.readMessages()
-
-	// 处理并发送信息
-	go ws.handlePublish()
-
-	// 订阅信息
-	go ws.subscribeMessages()
-
-	ws.GetTicker("BTC-USDT")
-
-	//// 定时15秒后关闭
-	//go ws.Close()
-}
-
-// Close 关闭链接
-func (ws *WsInstance) Close() {
-	if err := ws.Conn.Close(); err != nil {
-		log.Println("okx warn:", err)
-		return
-	}
-	log.Println("okx cloned。")
-}
-
-// sendMessages 发送消息。
-func (ws *WsInstance) sendMessages(message []byte) {
+// SendMessage 发送消息。
+func (ws *WsInstance) SendMessage(message []byte) {
 	if err := ws.Conn.WriteMessage(websocket.TextMessage, message); err != nil {
-		log.Println("Write error", err)
+		logger.Logger.Warn(logger.LogMsgOkx, zap.Error(err))
 	}
 }
 
-// ReadMessages 读取消息。
-func (ws *WsInstance) readMessages() {
-	defer fmt.Println("关闭：readMessages")
+// read 读取消息。
+func (ws *WsInstance) read() {
+	logger.Logger.Info("read run")
+	defer logger.Logger.Info("read close")
 	for {
-		// 当读取消息发送错误，则重新连接
-		_, message, err := ws.Conn.ReadMessage()
-		if err != nil {
-			log.Println("reading error", err)
-			ws.reconnect()
-			continue
-		}
-		ws.data <- string(message)
-	}
-}
-
-// handlePublish 处理发布信息。
-func (ws *WsInstance) handlePublish() {
-	rdsConn := cache.RdsPool.Get()
-	defer rdsConn.Close()
-	defer fmt.Println("关闭：handlePublish")
-	for {
-		message := <-ws.data
-		// 映射到指定的频道
-		tickerMessage, tradesMessage, bookMessage := new(tickerData), new(tradesData), new(booksData)
-		switch {
-		// 将行情数据发布到redis tickers 通道
-		case strings.Contains(message, ChannelTicker) && strings.Contains(message, "data"):
-			if err := json.Unmarshal([]byte(message), &tickerMessage); err == nil {
-				_, _ = rdsConn.Do("PUBLISH", tickerMessage.Arg.Channel, tickerMessage.Data)
-				data := &TickerRdsData{
-					InstId:    tickerMessage.Data[0].InstId,
-					Last:      tickerMessage.Data[0].Last,
-					LastSz:    tickerMessage.Data[0].LastSz,
-					Open24h:   tickerMessage.Data[0].Open24h,
-					High24h:   tickerMessage.Data[0].High24h,
-					Low24h:    tickerMessage.Data[0].Low24h,
-					VolCcy24h: tickerMessage.Data[0].VolCcy24h,
-					Vol24h:    tickerMessage.Data[0].Vol24h,
-					Ts:        tickerMessage.Data[0].Ts,
-				}
-
-				reply, err := rdsConn.Do("HSET", ChannelTicker, tickerMessage.Data[0].InstId, utils.ObjToByteList(data))
-				if err != nil {
-					log.Println("错误", err)
-				}
-				log.Println("setRdsData", data)
-				log.Println("setRds", reply)
-			}
-
-		// 将行情数据发布到redis books 通道
-		case (strings.Contains(message, ChannelBooks) || strings.Contains(message, ChannelBooks5) || strings.Contains(message, ChannelBooksL2Tbt) || strings.Contains(message, ChannelBooks50L2Tbt)) && strings.Contains(message, "data"):
-			if err := json.Unmarshal([]byte(message), &bookMessage); err == nil {
-				_, _ = rdsConn.Do("PUBLISH", bookMessage.Arg.Channel, bookMessage.Data)
-			}
-
-		// 将行情数据发布到redis trades 通道
-		case strings.Contains(message, ChannelTrades) && strings.Contains(message, "data"):
-			if err := json.Unmarshal([]byte(message), &tradesMessage); err == nil {
-				_, _ = rdsConn.Do("PUBLISH", tradesMessage.Arg.Channel, tradesMessage.Data)
-			}
-
-		// 打印错误信息
-		case strings.Contains(message, "error") && strings.Contains(message, "msg"):
-			log.Println("error", message)
-
-		// 打印其他返回信息
+		select {
+		// 当关闭通道的时候退出协程
+		case <-ws.isClose:
+			return
 		default:
-			log.Println("other", message)
+			// 当读取消息发送错误，则重新连接
+			_, message, err := ws.Conn.ReadMessage()
+			if err != nil {
+				logger.Logger.Error(logger.LogMsgOkx, zap.Error(err))
+				ws.reconnect()
+				continue
+			}
+			ws.data <- string(message)
 		}
 	}
 }
 
-// HandleMessages 每个几秒尝试发送连接消息，检测连接心跳
-func (ws *WsInstance) heartbeat() {
-	defer fmt.Println("关闭：heartbeat")
+// publish 处理发布信息。
+func (ws *WsInstance) publish() {
+	logger.Logger.Info("publish run")
+	defer logger.Logger.Info("publish close")
+	rds := cache.Rds.Get()
+	defer func(rds redis.Conn) {
+		if err := rds.Close(); err != nil {
+			return
+		}
+	}(rds)
 	for {
+		select {
+		// 当关闭通道的时候退出协程
+		case <-ws.isClose:
+			return
+		default:
+			message := <-ws.data
+			if strings.Contains(message, "error") && strings.Contains(message, "msg") {
+				logger.Logger.Error(logger.LogMsgOkx, zap.String("message", message))
+				continue
+			}
 
-		// 发送心跳消息
-		ws.sendMessages([]byte("ping"))
+			subscribeData := SubscribeData{}
+			if err := json.Unmarshal([]byte(message), &subscribeData); err == nil {
+				if subscribeData.Data != nil {
+					cache.Instance.Publish(string(subscribeData.Arg.Channel), utils.JsonToBytes(&Data{
+						Arg: Arg{
+							Channel: subscribeData.Arg.Channel,
+							InstID:  subscribeData.Arg.InstID,
+						},
+						Data: subscribeData.Data[0],
+					}))
+					//logger.Logger.Info(logger.LogMsgOkx, zap.Any("channel", subscribeData.Arg.Channel), zap.String("instType", subscribeData.Arg.InstID), zap.Any("data", subscribeData.Data[0]))
+					_, err = rds.Do("HSET", subscribeData.Arg.Channel, subscribeData.Arg.InstID, utils.JsonToBytes(subscribeData.Data[0]))
+					if err != nil {
+						logger.Logger.Error(logger.LogMsgOkx, zap.Error(err))
+					}
+				}
+				continue
+			}
+			logger.Logger.Warn(logger.LogMsgOkx, zap.String("message", message))
+		}
+	}
+}
 
-		// 每隔三秒发送消息
-		time.Sleep(5 * time.Second)
+// heartbeat 每个几秒尝试发送连接消息，检测连接心跳
+func (ws *WsInstance) heartbeat() {
+	logger.Logger.Info("heartbeat run")
+	defer logger.Logger.Info("heartbeat close")
+	for {
+		select {
+		// 当关闭通道的时候退出协程
+		case <-ws.isClose:
+			return
+		default:
+
+			// 发送心跳消息
+			ws.SendMessage([]byte("ping"))
+
+			// 每隔三秒发送消息
+			time.Sleep(5 * time.Second)
+		}
 	}
 }
 
 // reconnect 重新连接
 func (ws *WsInstance) reconnect() {
 	// 根觉最大的连接次数，断开连接的时候重新连接
+	defer logger.Logger.Info("reconnect close")
 	for i := 0; i < ws.MaxReconnect; i++ {
-		log.Println("重新连接:", strconv.Itoa(ws.MaxReconnect))
+		logger.Logger.Warn(logger.LogMsgOkx, zap.Int("reconnectNum", ws.MaxReconnect))
 
 		if err := ws.connect(); err != nil {
+			// 进行MaxReconnect次连接之后仍然不成功则退出所有协程
+			ws.MaxReconnect--
+			logger.Logger.Error(logger.LogMsgOkx, zap.Int("reconnectNum", ws.MaxReconnect), zap.Error(err))
 			continue
 		}
-		ws.send()
+
+		ws.sendMessage()
 		return
 	}
+	ws.Close()
 }
 
-// subscribeMessages 订阅消息。
-func (ws *WsInstance) subscribeMessages() {
-	rdsConn := cache.RdsPubSubConn
-	defer rdsConn.Close()
-	defer log.Println("关闭：subscribeMessages")
+// subscribe 订阅消息。
+func (ws *WsInstance) subscribe() {
+	defer logger.Logger.Info("subscribe close")
 	for {
-		if err := rdsConn.PSubscribe(ChannelTicker, func(data []byte) {
-			log.Println(ChannelTicker, string(data))
-		}); err != nil {
-			log.Println("cache error:"+ChannelTicker, err)
-		}
-
-		if err := rdsConn.Subscribe(ChannelBooks, func(data []byte) {
-			log.Println(ChannelBooks, string(data))
-		}); err != nil {
-			log.Println("cache error:"+ChannelBooks, err)
-		}
-
-		if err := rdsConn.Subscribe(ChannelTrades, func(data []byte) {
-			log.Println(ChannelTrades, string(data))
-		}); err != nil {
-			log.Println("cache error:"+ChannelTicker, err)
-		}
-
-		// 打印错误
-		if err := rdsConn.Subscribe("error", func(data []byte) {
-			log.Println("error", string(data))
-		}); err != nil {
-			log.Println("cache error: error", err)
-		}
-
-		// 打印其他信息，
-		if err := rdsConn.Subscribe("other", func(data []byte) {
-			log.Println("other:", string(data))
-		}); err != nil {
-			log.Println("cache error: other", err)
+		select {
+		// 当关闭通道的时候退出协程
+		case <-ws.isClose:
+			return
+		default:
+			for _, channel := range ws.SubscribeChannel {
+				ws.SetSubscribe(channel)
+			}
 		}
 	}
 }
 
-// send 发送测试数据
-func (ws *WsInstance) send() {
-	tickerMessage := &TickerParams{Args: make([]*arg, 0), Op: OpSubscribe}
-	tradesMessage := &TickerParams{Args: make([]*arg, 0), Op: OpSubscribe}
-	bookMessage := &TickerParams{Args: make([]*arg, 0), Op: OpSubscribe}
+// SetSubscribe 设置订阅
+func (ws *WsInstance) SetSubscribe(SubscribeChannel Channel) {
+	// 启动订阅模式
+	channelMessageFunc := func(data []byte) {
+		// 获取订阅该频道的uuid
+		uuidList := socket.Instance.GetSubscribes(string(SubscribeChannel))
 
-	productList := ws.getSendMessage()
-	for _, v := range productList {
-		v.Name = strings.ReplaceAll(v.Name, "/", "-")
-		tickerMessage.Args = append(tickerMessage.Args, &arg{
-			Channel: ChannelTicker,
-			InstID:  v.Name,
-		})
-		tradesMessage.Args = append(tradesMessage.Args, &arg{
-			Channel: ChannelTrades,
-			InstID:  v.Name,
-		})
-		bookMessage.Args = append(bookMessage.Args, &arg{
-			Channel: ChannelBooks,
-			InstID:  v.Name,
-		})
+		msg := Data{}
+		if err := json.Unmarshal(data, &msg); err != nil {
+			logger.Logger.Error(logger.LogMsgOkx, zap.Error(err))
+			return
+		}
+		for uuid, subscribe := range uuidList {
+			for _, instType := range subscribe.Args {
+				if msg.Arg.Channel == SubscribeChannel && instType == msg.Arg.InstID {
+					logger.Logger.Info(logger.LogMsgOkx, zap.String("UUID", uuid), zap.Any("channel", msg.Arg.Channel), zap.String("instType", msg.Arg.InstID), zap.Reflect("data", msg.Data))
+					_ = socket.Instance.WriteJSON(uuid, msg)
+				}
+			}
+		}
 	}
-	ws.sendMessages(utils.ObjToByteList(tickerMessage))
-	ws.sendMessages(utils.ObjToByteList(tradesMessage))
-	ws.sendMessages(utils.ObjToByteList(bookMessage))
+
+	_ = cache.Instance.Subscribe(string(SubscribeChannel), channelMessageFunc)
 }
 
-// getSendMessage 获取需要订阅的消息。
-func (ws *WsInstance) getSendMessage() []*ProductData {
-	productList := make([]*ProductData, 0)
-	if result := database.DB.Model(&models.Product{}).
-		Select("id", "name").
+// sendTickerAll 发送订阅okx的信息
+func (ws *WsInstance) sendMessage() {
+	instIds := ws.getInstIds()
+	for _, v := range ws.SubscribeChannel {
+		ws.SendStructMessage(OpSubscribe, v, instIds)
+	}
+}
+
+// SendStructMessage 发送信息
+func (ws *WsInstance) SendStructMessage(op string, channel Channel, instIds []string) {
+	message := &OkxParams{Args: make([]*Arg, 0), Op: op}
+	for _, v := range instIds {
+		message.Args = append(message.Args, &Arg{
+			Channel: channel,
+			InstID:  v,
+		})
+	}
+
+	ws.SendMessage(utils.JsonToBytes(message))
+}
+
+// getInstIds 获取需要订阅的消息。
+func (ws *WsInstance) getInstIds() []string {
+	var instIds []string
+	if result := database.Db.Model(&models.Product{}).
+		Where("admin_id = ?", models.SuperAdminId).
 		Where("type = ?", models.ProductTypeOkex).
 		Where("status = ?", models.ProductStatusActivate).
-		Find(&productList); result.Error != nil {
+		Pluck("symbol", &instIds); result.Error != nil {
+		logger.Logger.Error(logger.LogMsgOkx, zap.String("method", "getInstIds"), zap.Error(result.Error))
 		return nil
 	}
-	return productList
+	return instIds
 }
 
-// GetTicker 获取行情数据
-func (ws *WsInstance) GetTicker(instId string) (*TickerRdsData, error) {
-	rdsConn := cache.RdsPool.Get()
-	defer rdsConn.Close()
-	result, err := redis.Bytes(rdsConn.Do("HGET", ChannelTicker, instId))
-	if err != nil {
-		log.Println("rdsResultErr:", err)
+// GetMaxReconnect 获取重连次数
+func (ws *WsInstance) GetMaxReconnect() int {
+	return ws.MaxReconnect
+}
+
+// SetMaxReconnect 设置重连次数
+func (ws *WsInstance) SetMaxReconnect(MaxReconnect int) *WsInstance {
+	ws.MaxReconnect = MaxReconnect
+	return ws
+}
+
+// GetServerAddr 获取服务地址
+func (ws *WsInstance) GetServerAddr() string {
+	return ws.ServerAddr
+}
+
+// SetServerAddr 设置服务地址
+func (ws *WsInstance) SetServerAddr(ServerAddr string) *WsInstance {
+	ws.ServerAddr = ServerAddr
+	return ws
+}
+
+// GetSubscribeChannel 获取订阅通道
+func (ws *WsInstance) GetSubscribeChannel() []Channel {
+	return ws.SubscribeChannel
+}
+
+// SetSubscribeChannel 添加订阅的通道
+func (ws *WsInstance) SetSubscribeChannel(SubscribeChannel ...Channel) *WsInstance {
+	temp := make(map[Channel]Channel)
+	for _, v := range ws.SubscribeChannel {
+		temp[v] = v
 	}
-	tickerRdsData := &TickerRdsData{}
-	_ = json.Unmarshal(result, &tickerRdsData)
-	log.Println("rdsResult:", tickerRdsData)
-	return tickerRdsData, nil
+	for _, channel := range SubscribeChannel {
+		if _, ok := temp[channel]; !ok {
+			ws.SubscribeChannel = append(ws.SubscribeChannel, channel)
+		}
+	}
+	return ws
+}
+
+// GetSubscribeKlineChannel 获取 Kline 通道
+func (ws *WsInstance) GetSubscribeKlineChannel() []Channel {
+	channelKlineList := make([]Channel, 0)
+	for k, _ := range ChannelKlineMap {
+		channelKlineList = append(channelKlineList, k)
+	}
+	return channelKlineList
+}
+
+// SetSubscribeKlineChannel 设置 Kline 通道
+func (ws *WsInstance) SetSubscribeKlineChannel() *WsInstance {
+	channelKlineList := make([]Channel, 0)
+	for k, _ := range ChannelKlineMap {
+		channelKlineList = append(channelKlineList, k)
+	}
+	ws.SubscribeChannel = channelKlineList
+	return ws
+}
+
+// SetSubscribeDefaultChannel 设置 默认 通道
+func (ws *WsInstance) SetSubscribeDefaultChannel() *WsInstance {
+	channelDefaultList := make([]Channel, 0)
+	for k, _ := range ChannelMap {
+		channelDefaultList = append(channelDefaultList, k)
+	}
+	ws.SubscribeChannel = channelDefaultList
+
+	return ws
+}
+
+// ClearSubscribeChannel 获取订阅通道
+func (ws *WsInstance) ClearSubscribeChannel() *WsInstance {
+	ws.SubscribeChannel = []Channel{}
+	return ws
 }
