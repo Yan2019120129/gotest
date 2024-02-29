@@ -91,7 +91,6 @@ func (i *Test) test3() {
 				return
 			}
 			fmt.Println("test3 msg:", msg)
-
 		}
 	}
 }
@@ -177,6 +176,7 @@ func Main1() {
 
 		if message == "close" {
 			i.Close()
+			i.ctx.Deadline()
 		}
 
 		if message == "run" {
