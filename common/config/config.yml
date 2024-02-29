@@ -113,7 +113,7 @@ logs:
       # 日志输出位置：stderr 控制台, common/file/logs/app.log 项目日志文件路径
       out-path:
         - "stderr"
-        - "./gotest/common/file/logs/app.log"
+        - ".logs/app.log"
 #        - "/Users/taozi/Documents/Golang/gotest/common/file/logs/app.log"
       # 最大文件分割大小10m（10485760 byte）
       max-size: 10485760

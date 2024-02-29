@@ -1,9 +1,9 @@
-package third
+package main
 
 import (
 	"github.com/google/uuid"
-	"testing"
-	"time"
+	"gotest/middleware/websocket_test/third/index"
+	"sync"
 )
 
 const (
@@ -14,12 +14,13 @@ const (
 	ServerCandleAndTradeAddr = "wss://ws.okx.com:8443/ws/v5/business"
 )
 
-// TestWebSocket 测试websocket
-func TestWebSocket(t *testing.T) {
-	uuidValue := uuid.NewString()
+var wg sync.WaitGroup
 
-	Instance.NewWs(uuidValue, ServerOkxAddr).
+func main() {
+	uuidValue := uuid.NewString()
+	index.Instance.NewWs(uuidValue, ServerOkxAddr).
 		SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}")).
 		Run()
-	time.Sleep(30 * time.Second)
+	wg.Add(1)
+	wg.Wait()
 }

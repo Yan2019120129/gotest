@@ -67,8 +67,12 @@ func MapGoroutine() {
 			//if _, ok := mapData[key]; !ok {
 			//	mapData[key] = gofakeit.Name()
 			//}
-			if _, ok := mapData[key]; ok {
-				fmt.Println(mapData[key])
+			//if _, ok := mapData[key]; ok {
+			//	fmt.Println(mapData[key])
+			//}
+
+			if mapData[key] == nil {
+				mapData[key] = gofakeit.Name()
 			}
 			time.Sleep(500 * time.Millisecond)
 		}
