@@ -1,9 +1,12 @@
-package interface_test
+package index
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/fasthttp/websocket"
 	"strconv"
+	"time"
 )
 
 var message = []byte(`{
@@ -121,5 +124,89 @@ func InterfaceToStruct() {
 	}
 
 	fmt.Println("data", tempData)
+
+}
+
+// Ctx 用于管理上下文
+type Ctx struct {
+	instance context.Context
+	close    context.CancelFunc
+}
+
+// Ws websocket 实例
+type Ws struct {
+	ctx         *Ctx            // 上下文实例，管理协程
+	instance    *websocket.Conn // 用于关闭协程
+	pulse       time.Duration   // 设置脉搏，单位秒（多少秒跳动一次）（多少秒发送一次信息）
+	serverAdder string          // 服务器地址
+	nor         int             // 重连次数
+	Manage      Manage
+	onMessage   func(msgType int, data []byte) // 服务获取到的信息，用于给用户处理
+	read        func()                         // 读取服务器信息
+	heartbeat   func()                         // 检测连接心跳
+	close       func()                         // 关闭服务方法
+}
+
+type ManageData struct {
+	status          int           // 状态：停止，开启，
+	isPersistence   bool          // 是否持久化
+	PersistenceData []interface{} // 持久化数据
+	isCleanUp       bool          // 是否过期清理
+	Expiration      time.Duration // 过期时间
+}
+type Manage interface {
+	ManageMessage // 管理信息
+	ManageStatus  // 管理状态
+}
+
+// ManageStatus 资源管理接口
+type ManageStatus interface {
+	connect(instance *websocket.Conn)
+	status(id string, status int) // 状态管理方法
+	read()                        // 读取消息
+	heartbeat()                   // 心跳检测
+	close(id string)              // 关闭方法
+}
+
+// ManageMessage 数据处理方法
+type ManageMessage interface {
+	OnMessage(msgType int, data []byte)                   // 处理消息
+	Persistence(id string, persistenceData []interface{}) // 持久化方法
+}
+
+type ManageInstance struct {
+}
+
+// status 状态管理方法
+func (m *ManageInstance) connect(instance *websocket.Conn) {
+
+}
+
+// status 状态管理方法
+func (m *ManageInstance) status(id string, status int) {
+}
+
+// read 状态管理方法
+func (m *ManageInstance) read() {
+
+}
+
+// heartbeat 状态管理方法
+func (m *ManageInstance) heartbeat() {
+
+}
+
+// close 状态管理方法
+func (m *ManageInstance) close(id string) {
+
+}
+
+// OnMessage 状态管理方法
+func (m *ManageInstance) OnMessage(msgType int, data []byte) {
+
+}
+
+// Persistence 状态管理方法
+func (m *ManageInstance) Persistence(id string, persistenceData []interface{}) {
 
 }

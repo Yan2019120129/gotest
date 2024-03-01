@@ -20,7 +20,7 @@ func main() {
 	uuidValue := uuid.NewString()
 	index.Instance.NewWs(uuidValue, ServerOkxAddr).
 		SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}")).
-		Run()
+		Run(uuidValue)
 	wg.Add(1)
 	wg.Wait()
 }
