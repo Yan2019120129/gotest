@@ -17,9 +17,6 @@ const (
 // TestWebSocket 测试websocket
 func TestWebSocket(t *testing.T) {
 	uuidValue := uuid.NewString()
-
-	Instance.NewWs(uuidValue, ServerOkxAddr).
-		SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}")).
-		Run()
+	Instance.NewWs(uuidValue, ServerOkxAddr).Run().SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}"))
 	time.Sleep(30 * time.Second)
 }
