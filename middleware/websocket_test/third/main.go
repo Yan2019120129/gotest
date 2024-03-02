@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/google/uuid"
+	"go.uber.org/zap"
+	"gotest/common/module/logs"
 	"gotest/middleware/websocket_test/third/index"
 	"sync"
 )
@@ -17,10 +19,16 @@ const (
 var wg sync.WaitGroup
 
 func main() {
-	uuidValue := uuid.NewString()
-	index.Instance.NewWs(uuidValue, ServerOkxAddr).
-		SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}")).
-		Run(uuidValue)
+	data := []string{
+		"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}",
+		"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}",
+	}
+
+	for i, v := range data {
+		uuidValue := uuid.NewString()
+		logs.Logger.Info("run", zap.Int(uuidValue, i))
+		index.Instance.SetWs(uuidValue, index.NewWs(ServerOkxAddr, 5, 5)).Run(uuidValue).SendMessage(uuidValue, []byte(v))
+	}
 	wg.Add(1)
 	wg.Wait()
 }

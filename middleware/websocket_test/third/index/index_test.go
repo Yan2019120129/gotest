@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"testing"
 	"time"
@@ -17,6 +18,9 @@ const (
 // TestWebSocket 测试websocket
 func TestWebSocket(t *testing.T) {
 	uuidValue := uuid.NewString()
-	Instance.NewWs(uuidValue, ServerOkxAddr).Run().SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}"))
+	Instance.NewWs(uuidValue, ServerOkxAddr).Run(uuidValue).SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}"))
+	uuidTwo := uuid.NewString()
+	Instance.NewWs(uuidTwo, ServerOkxAddr).Run(uuidTwo).SendMessage(uuidTwo, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}"))
+	fmt.Println(uuidValue, uuidTwo)
 	time.Sleep(30 * time.Second)
 }
