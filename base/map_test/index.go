@@ -10,7 +10,7 @@ import (
 // Map 测试map键值输入输出
 func Map() {
 	data := map[int]int{2: 1, 5: 7}
-	fmt.Println("data:", data[2])
+	fmt.Println("Data:", data[2])
 	if p, ok := data[5]; ok {
 		fmt.Println("p:", p)
 		fmt.Println("ok:", ok)
@@ -81,5 +81,18 @@ func MapGoroutine() {
 	for i := 0; i < 50; i++ {
 		go findMap()
 	}
+}
 
+var Instance = &MapInstance{
+	Data: make(map[string]string),
+}
+
+type MapInstance struct {
+	Data map[string]string
+}
+
+// SetMapValue 设置map 数据
+func (m *MapInstance) SetMapValue(id, value string) *MapInstance {
+	m.Data[id] = value
+	return m
 }
