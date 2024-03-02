@@ -2,6 +2,7 @@ package index
 
 import (
 	"context"
+	"fmt"
 	"github.com/fasthttp/websocket"
 	"go.uber.org/zap"
 	"gotest/common/module/logs"
@@ -36,6 +37,7 @@ func NewWs(addr string, pulse time.Duration, nor int) *Ws {
 		logs.Logger.Error(err.Error())
 		return nil
 	}
+	fmt.Println(addr, "run")
 	ctx, off := context.WithCancel(context.Background())
 	return &Ws{
 		ctx: &Ctx{
@@ -52,7 +54,8 @@ func NewWs(addr string, pulse time.Duration, nor int) *Ws {
 
 // close 关闭通道和实例
 func (w *Ws) close() {
-	defer logs.Logger.Info("close ")
+	logs.Logger.Info("close run")
+	defer logs.Logger.Info("close")
 	w.ctx.close()
 	if err := w.instance.Close(); err != nil {
 		logs.Logger.Error(err.Error())
@@ -69,49 +72,70 @@ func (w *Ws) SendMessage(msg []byte) {
 
 // read 读取消息
 func (w *Ws) read() {
+	logs.Logger.Info("read run")
+	defer logs.Logger.Info("read close")
+	i := 0
 	for {
 		select {
 		case <-w.ctx.instance.Done():
-			logs.Logger.Info("read close")
 			return
 		default:
 			msgType, msg, err := w.instance.ReadMessage()
 			if err != nil {
-				e := err.Error()
-				logs.Logger.Error(e)
+				logs.Logger.Error(err.Error())
+				w.connect()
+			}
+			if i == 8 {
+				err = w.instance.Close()
+				if err != nil {
+					logs.Logger.Error(err.Error())
+					return
+				}
+			}
+			if i == 10 {
+				w.close()
 			}
 			w.OnMessage(msgType, msg)
+			i++
 		}
 	}
 }
 
 // heartbeat 心脏跳动，固定时间发送请求连接
 func (w *Ws) heartbeat() {
-	defer logs.Logger.Info("heartbeat close ")
-	ch := time.NewTicker(w.pulse * time.Second)
+	logs.Logger.Info("heartbeat run")
+	defer logs.Logger.Info("heartbeat close")
+	//ch := time.NewTicker(w.pulse * time.Second)
 	for {
 		select {
 		case <-w.ctx.instance.Done():
-			logs.Logger.Info("heartbeat close ")
 			return
 		default:
 			if err := w.instance.WriteMessage(websocket.TextMessage, []byte("ping")); err != nil {
 				logs.Logger.Error(err.Error())
 				return
 			}
-			<-ch.C
+			time.Sleep(w.pulse * time.Second)
+			//<-ch.C
 		}
 	}
 }
 
 // connect 重新连接
 func (w *Ws) connect() {
-	logs.Logger.Info("heartbeat run")
-	var err error
-	w.instance, _, err = websocket.DefaultDialer.Dial(w.serverAdder, nil)
-	if err != nil {
-		logs.Logger.Error(err.Error())
-		panic(err)
+	logs.Logger.Info("connect run")
+	defer logs.Logger.Info("connect close")
+	for i := 0; i < w.nor; i++ {
+		var err error
+		w.instance, _, err = websocket.DefaultDialer.Dial(w.serverAdder, nil)
+		if err != nil {
+			logs.Logger.Error("websocket", zap.Int("connect", i), zap.Error(err))
+			continue
+		}
+		logs.Logger.Info("websocket", zap.Int("connect", i))
+		if i == w.nor-1 {
+			w.close()
+		}
 	}
 }
 

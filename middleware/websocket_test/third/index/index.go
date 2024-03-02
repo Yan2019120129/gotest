@@ -22,7 +22,7 @@ var Instance = &WsInstance{
 	WsConnMap: make(map[string]*Ws),
 	statusMap: make(map[string]*ManageData),
 	lock:      sync.Mutex{},
-	once:      sync.Once{},
+	Interval:  2,
 }
 
 // Ctx 用于管理上下文
@@ -41,15 +41,17 @@ type ManageData struct {
 
 // WsInstance websocket 实例
 type WsInstance struct {
-	once      sync.Once
-	lock      sync.Mutex             // websocket 实例读写锁
-	statusMap map[string]*ManageData // 实例状态：启动，关闭
-	WsConnMap map[string]*Ws         // 存储 websocket 实例
+	statusMonitorFun func()
+	lock             sync.Mutex             // websocket 实例读写锁
+	Interval         time.Duration          // 间隔多少秒检查websocket 状态
+	statusMap        map[string]*ManageData // 实例状态：启动，关闭
+	WsConnMap        map[string]*Ws         // 存储 websocket 实例
 }
 
 // NewWs 新建websocket 实例
 func (i *WsInstance) NewWs(uuid, addr string) *WsInstance {
 	if _, ok := i.WsConnMap[uuid]; !ok {
+		logs.Logger.Info("NewWs run")
 		i.WsConnMap[uuid] = NewWs(addr, 5, 5)
 		i.statusMap[uuid] = &ManageData{
 			status:          -1,
@@ -59,6 +61,7 @@ func (i *WsInstance) NewWs(uuid, addr string) *WsInstance {
 			Expiration:      0,
 		}
 	}
+	//i.StatusMonitor()
 	return i
 }
 
@@ -67,6 +70,9 @@ func (i *WsInstance) Run(uuids ...string) *WsInstance {
 	// 不传参数则启动全部实例
 	if len(uuids) < 1 {
 		for k, v := range i.WsConnMap {
+			if i.statusMap[k].status == WsStatusStart {
+				continue
+			}
 			v.Run()
 			i.statusMap[k].status = WsStatusStart
 		}
@@ -75,12 +81,49 @@ func (i *WsInstance) Run(uuids ...string) *WsInstance {
 	// 启动指定实例
 	for _, v := range uuids {
 		if p, ok := i.WsConnMap[v]; ok {
+			if i.statusMap[v].status == WsStatusStart {
+				continue
+			}
 			p.Run()
 			i.statusMap[v].status = WsStatusStart
 		} else {
 			logs.Logger.Error("could not find " + v)
 		}
 		logs.Logger.Info("websocket", zap.String(v, "run"))
+	}
+	return i
+}
+
+func (i *WsInstance) StatusMonitor() {
+	logs.Logger.Info("StatusMonitor run")
+	if i.statusMonitorFun == nil {
+		i.statusMonitorFun = func() {
+			ch := time.NewTicker(i.Interval * time.Second)
+			for {
+				for k, v := range i.WsConnMap {
+					if err := v.ctx.instance.Err(); err != nil {
+						logs.Logger.Error("websocket", zap.String(k, "close"))
+					}
+				}
+				<-ch.C
+			}
+		}
+		go i.statusMonitorFun()
+	}
+}
+
+// SetWs 设置 websocket。
+func (i *WsInstance) SetWs(uuid string, ws *Ws) *WsInstance {
+	// 添加协程使用WaitGroup管理线程状态
+	if _, ok := i.WsConnMap[uuid]; ok {
+		i.WsConnMap[uuid] = ws
+		i.statusMap[uuid] = &ManageData{
+			status:          -1,
+			isPersistence:   false,
+			PersistenceData: nil,
+			isCleanUp:       false,
+			Expiration:      0,
+		}
 	}
 	return i
 }
@@ -136,6 +179,13 @@ func (i *WsInstance) SetServerAddr(uuid, addr string) *WsInstance {
 func (i *WsInstance) setWsConn(uuid string, conn *websocket.Conn) {
 	if _, ok := i.WsConnMap[uuid]; !ok {
 		i.WsConnMap[uuid].instance = conn
+		i.statusMap[uuid] = &ManageData{
+			status:          -1,
+			isPersistence:   false,
+			PersistenceData: nil,
+			isCleanUp:       false,
+			Expiration:      0,
+		}
 	}
 }
 
