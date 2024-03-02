@@ -27,7 +27,11 @@ func main() {
 	for i, v := range data {
 		uuidValue := uuid.NewString()
 		logs.Logger.Info("run", zap.Int(uuidValue, i))
-		index.Instance.SetWs(uuidValue, index.NewWs(ServerOkxAddr, 5, 5)).Run(uuidValue).SendMessage(uuidValue, []byte(v))
+		index.Instance.SetWs(uuidValue, index.NewWs(&index.Config{ConnId: uuidValue, Addr: ServerOkxAddr, Pulse: 5, Nor: 5})).Run(uuidValue).SendMessage(&index.Massage{
+			Id:   uuidValue,
+			Type: index.WsMessageTypeSub,
+			Data: []byte(v),
+		})
 	}
 	wg.Add(1)
 	wg.Wait()

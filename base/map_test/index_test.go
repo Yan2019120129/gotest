@@ -1,6 +1,7 @@
 package map_test_test
 
 import (
+	"github.com/brianvoe/gofakeit/v6"
 	"gotest/base/map_test"
 	"testing"
 	"time"
@@ -30,4 +31,9 @@ func TestCopyMap(t *testing.T) {
 func TestMapGoroutine(t *testing.T) {
 	map_test.MapGoroutine()
 	time.Sleep(50 * time.Second)
+}
+
+// TestSetMap 测试同一实例写入数据会不会存在读写错误
+func TestSetMap(t *testing.T) {
+	map_test.Instance.SetMapValue(gofakeit.Name(), gofakeit.LastName()).SetMapValue(gofakeit.Name(), gofakeit.LastName()).SetMapValue(gofakeit.Name(), gofakeit.LastName()).SetMapValue(gofakeit.Name(), gofakeit.LastName())
 }
