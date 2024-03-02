@@ -17,10 +17,27 @@ const (
 
 // TestWebSocket 测试websocket
 func TestWebSocket(t *testing.T) {
+	// 为什么这一部分没有执行
 	uuidValue := uuid.NewString()
-	Instance.NewWs(uuidValue, ServerOkxAddr).Run(uuidValue).SendMessage(uuidValue, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}"))
 	uuidTwo := uuid.NewString()
-	Instance.NewWs(uuidTwo, ServerOkxAddr).Run(uuidTwo).SendMessage(uuidTwo, []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}"))
+	Instance.NewWs(uuidValue, ServerOkxAddr).
+		Run().
+		SendMessage(&Massage{
+			Id:   uuidValue,
+			Type: WsMessageTypeSub,
+			Data: []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}"),
+		})
+	//Instance.NewWs(uuidTwo, ServerOkxAddr).
+	//	NewWs(uuidValue, ServerOkxAddr).Run().
+	//	SendMessage(&Massage{
+	//		Id:   uuidValue,
+	//		Type: WsMessageTypeSub,
+	//		Data: []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}"),
+	//	}, &Massage{
+	//		Id:   uuidTwo,
+	//		Type: WsMessageTypeSub,
+	//		Data: []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-USDT\"\n    }]\n}"),
+	//	})
 	fmt.Println(uuidValue, uuidTwo)
 	time.Sleep(30 * time.Second)
 }

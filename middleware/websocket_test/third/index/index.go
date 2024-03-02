@@ -23,45 +23,55 @@ var Instance = &WsInstance{
 	statusMap: make(map[string]*ManageData),
 	lock:      sync.Mutex{},
 	Interval:  2,
-}
-
-// Ctx 用于管理上下文
-type Ctx struct {
-	instance context.Context
-	close    context.CancelFunc
+	once:      sync.Once{},
 }
 
 type ManageData struct {
-	status          int           // 状态：停止，开启，
-	isPersistence   bool          // 是否持久化
-	PersistenceData []interface{} // 持久化数据
-	isCleanUp       bool          // 是否过期清理
-	Expiration      time.Duration // 过期时间
+	status        int           // 状态：停止，开启，
+	isPersistence bool          // 是否持久化
+	isCleanUp     bool          // 是否过期清理
+	Expiration    time.Duration // 过期时间
 }
 
 // WsInstance websocket 实例
 type WsInstance struct {
-	statusMonitorFun func()
-	lock             sync.Mutex             // websocket 实例读写锁
-	Interval         time.Duration          // 间隔多少秒检查websocket 状态
-	statusMap        map[string]*ManageData // 实例状态：启动，关闭
-	WsConnMap        map[string]*Ws         // 存储 websocket 实例
+	once      sync.Once              // 保证状态检测只运行一次
+	lock      sync.Mutex             // websocket 实例读写锁
+	Interval  time.Duration          // 间隔多少秒检查websocket 状态
+	statusMap map[string]*ManageData // 实例状态：启动，关闭
+	WsConnMap map[string]*Ws         // 存储 websocket 实例
+}
+
+// Massage 发送的消息
+type Massage struct {
+	Id   string // 实例Id
+	Type int    // 数据类型（在启动时会发送订阅类型数据）:订阅类型，默认通知类型
+	Data []byte // 数据
 }
 
 // NewWs 新建websocket 实例
 func (i *WsInstance) NewWs(uuid, addr string) *WsInstance {
 	if _, ok := i.WsConnMap[uuid]; !ok {
 		logs.Logger.Info("NewWs run")
-		i.WsConnMap[uuid] = NewWs(addr, 5, 5)
+		// 创建实例
+		i.WsConnMap[uuid] = NewWs(&Config{
+			addr:   addr,
+			connId: uuid,
+			pulse:  5,
+			nor:    5,
+		})
+
+		// 设置状态
 		i.statusMap[uuid] = &ManageData{
-			status:          -1,
-			isPersistence:   false,
-			PersistenceData: nil,
-			isCleanUp:       false,
-			Expiration:      0,
+			status:        WsStatusStop,
+			isPersistence: false,
+			isCleanUp:     false,
+			Expiration:    0,
 		}
 	}
-	//i.StatusMonitor()
+	i.once.Do(func() {
+		i.StatusMonitor()
+	})
 	return i
 }
 
@@ -85,7 +95,6 @@ func (i *WsInstance) Run(uuids ...string) *WsInstance {
 				continue
 			}
 			p.Run()
-			i.statusMap[v].status = WsStatusStart
 		} else {
 			logs.Logger.Error("could not find " + v)
 		}
@@ -96,20 +105,19 @@ func (i *WsInstance) Run(uuids ...string) *WsInstance {
 
 func (i *WsInstance) StatusMonitor() {
 	logs.Logger.Info("StatusMonitor run")
-	if i.statusMonitorFun == nil {
-		i.statusMonitorFun = func() {
-			ch := time.NewTicker(i.Interval * time.Second)
-			for {
-				for k, v := range i.WsConnMap {
-					if err := v.ctx.instance.Err(); err != nil {
-						logs.Logger.Error("websocket", zap.String(k, "close"))
-					}
+	go func() {
+		ch := time.NewTicker(i.Interval * time.Second)
+		for {
+			for k, v := range i.WsConnMap {
+				if err := v.ctx.instance.Err(); err != nil {
+					logs.Logger.Error("websocket", zap.String(k, "close"))
 				}
-				<-ch.C
+				// 状态修改为停止
+				i.statusMap[k].status = WsStatusStop
 			}
+			<-ch.C
 		}
-		go i.statusMonitorFun()
-	}
+	}()
 }
 
 // SetWs 设置 websocket。
@@ -118,11 +126,10 @@ func (i *WsInstance) SetWs(uuid string, ws *Ws) *WsInstance {
 	if _, ok := i.WsConnMap[uuid]; ok {
 		i.WsConnMap[uuid] = ws
 		i.statusMap[uuid] = &ManageData{
-			status:          -1,
-			isPersistence:   false,
-			PersistenceData: nil,
-			isCleanUp:       false,
-			Expiration:      0,
+			status:        WsStatusStop,
+			isPersistence: false,
+			isCleanUp:     false,
+			Expiration:    0,
 		}
 	}
 	return i
@@ -142,11 +149,23 @@ func (i *WsInstance) connect(uuid string) (err error) {
 }
 
 // SendMessage 发送数据
-func (i *WsInstance) SendMessage(uuid string, msg []byte) *WsInstance {
-	i.lock.Lock()
-	defer i.lock.Lock()
-	if p, ok := i.WsConnMap[uuid]; ok {
-		p.SendMessage(msg)
+func (i *WsInstance) SendMessage(msg ...*Massage) *WsInstance {
+	logs.Logger.Info("SendMessage run")
+	for _, v := range msg {
+		if p, ok := i.WsConnMap[v.Id]; ok {
+			p.SendMessage(*v)
+		}
+	}
+	return i
+}
+
+// SendMessageJson 发送数据
+func (i *WsInstance) SendMessageJson(msg ...*Massage) *WsInstance {
+	logs.Logger.Info("SendMessage run")
+	for _, v := range msg {
+		if p, ok := i.WsConnMap[v.Id]; ok {
+			p.SendMessageJson(*v)
+		}
 	}
 	return i
 }
@@ -180,11 +199,10 @@ func (i *WsInstance) setWsConn(uuid string, conn *websocket.Conn) {
 	if _, ok := i.WsConnMap[uuid]; !ok {
 		i.WsConnMap[uuid].instance = conn
 		i.statusMap[uuid] = &ManageData{
-			status:          -1,
-			isPersistence:   false,
-			PersistenceData: nil,
-			isCleanUp:       false,
-			Expiration:      0,
+			status:        -1,
+			isPersistence: false,
+			isCleanUp:     false,
+			Expiration:    0,
 		}
 	}
 }
