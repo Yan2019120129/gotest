@@ -1,0 +1,1 @@
+{"level":"\u001b[32mINFO\u001b[0m","time":"[15:32:32.882]","caller":"/Users/taozi/Documents/Golang/gotest/frame/my-frame/module/gorm/database/gorm.go:59","msg":"gorm","method":"init","instance":"0x140002475c0"}
