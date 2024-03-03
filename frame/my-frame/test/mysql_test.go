@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
 	"gorm.io/gorm"
-	"gotest/frame/my_frame/models"
-	"gotest/frame/my_frame/module/gorm/database"
 	"log"
+	"my-frame/models"
+	"my-frame/module/gorm/database"
 	"testing"
 	"time"
 )

@@ -2,8 +2,8 @@ package index
 
 import (
 	"github.com/gin-gonic/gin"
-	"gotest/frame/my_frame/app/admin/service/dto"
-	"gotest/frame/my_frame/app/admin/service/index"
+	"my-frame/app/admin/service/dto"
+	indexserver "my-frame/app/admin/service/index"
 )
 
 // Rds 测试redis

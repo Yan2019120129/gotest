@@ -2,7 +2,7 @@ package okxserver
 
 import (
 	"github.com/gorilla/websocket"
-	"gotest/frame/my_frame/module/logs"
+	"my-frame/module/logs"
 	"net/http"
 )
 
