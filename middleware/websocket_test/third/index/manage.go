@@ -10,26 +10,41 @@ import (
 
 const (
 	storagePath = "./data/message.json"
+
+	// ServerDefaultAddr okx 行情websocket 地址
+	ServerDefaultAddr = "wss://ws.okx.com:8443/ws/v5/public"
+
+	// ServerDefaultCandleAndTradeAddr okx 行业websocket 地址
+	ServerDefaultCandleAndTradeAddr = "wss://ws.okx.com:8443/ws/v5/business"
 )
+
+// Massage 发送的消息
+type Massage struct {
+	Id   string        // 实例Id
+	Type WsMessageType // 数据类型（在启动时会发送订阅类型数据）:订阅类型，默认通知类型
+	Addr string        // 服务器地址
+	Data []byte        // 数据
+}
 
 // ManageMessage 数据处理方法
 type ManageMessage interface {
-	DealWithMessage(msgType int, data []byte)        // 处理消息
-	Persistence(msg ...Massage)                      // 持久化方法
-	GetPersistence(id string, msgType int) []Massage // 获取持久化数据
+	DealWithMessage(msgType int, data []byte)                  // 处理消息
+	Persistence(msg ...Massage)                                // 持久化方法
+	GetPersistence(id string, msgType WsMessageType) []Massage // 获取持久化数据
 }
 
-type ManageInstance struct {
+// DefaultManage 默认额管理
+type DefaultManage struct {
 	data []Massage
 }
 
 // DealWithMessage 处理消息方法
-func (m *ManageInstance) DealWithMessage(msgType int, data []byte) {
+func (m *DefaultManage) DealWithMessage(msgType int, data []byte) {
 	logs.Logger.Info("websocket", zap.Int("type", msgType), zap.String("data", string(data)))
 }
 
 // Persistence 数据持久化
-func (m *ManageInstance) Persistence(msg ...Massage) {
+func (m *DefaultManage) Persistence(msg ...Massage) {
 	logs.Logger.Info("Persistence run")
 	// 判断路径是否存在,不存在则创建
 	if isPathExist(storagePath) {
@@ -60,7 +75,7 @@ func (m *ManageInstance) Persistence(msg ...Massage) {
 }
 
 // GetPersistence 获取持久化数据
-func (m *ManageInstance) GetPersistence(id string, msgType int) []Massage {
+func (m *DefaultManage) GetPersistence(id string, msgType WsMessageType) []Massage {
 	logs.Logger.Info("GetPersistence run")
 	if !isPathExist(storagePath) {
 		return nil

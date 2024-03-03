@@ -18,11 +18,13 @@ const (
 	MsgTypeClose  = websocket.CloseMessage
 )
 
+type WsMessageType int
+
 const (
-	WsStatusStop         = -1
-	WsStatusStart        = 1
-	WsMessageTypeDefault = iota // 不存储
-	WsMessageTypeSub            // 进行持久化，在重连的时候发送到服务器
+	WsStatusStop                       = -1
+	WsStatusStart                      = 1
+	WsMessageTypeDefault WsMessageType = iota // 不存储
+	WsMessageTypeSub                          // 进行持久化，在重连的时候发送到服务器
 )
 
 // Ctx 用于管理上下文
@@ -36,6 +38,7 @@ type Config struct {
 	ConnId string        // 服务id
 	Pulse  time.Duration // 脉搏
 	Nor    int           // 重连次数
+	ManageMessage
 }
 
 // Ws websocket 实例
@@ -55,10 +58,16 @@ func NewWs(cfg *Config) *Ws {
 	// 默认配置
 	if cfg == nil {
 		cfg = &Config{
-			ConnId: uuid.NewString(),
-			Pulse:  5,
-			Nor:    5,
+			ConnId:        uuid.NewString(),
+			Pulse:         5,
+			Nor:           5,
+			ManageMessage: &DefaultManage{},
 		}
+	}
+
+	// 如果没有创建自定义接口则使用默认持久化接口
+	if cfg.ManageMessage != nil {
+		cfg.ManageMessage = &DefaultManage{}
 	}
 
 	// 设置上下文
@@ -76,8 +85,9 @@ func NewWs(cfg *Config) *Ws {
 		pulse:         cfg.Pulse,
 		serverAdder:   cfg.Addr,
 		nor:           cfg.Nor,
-		ManageMessage: &ManageInstance{},
+		ManageMessage: cfg.ManageMessage,
 	}
+
 	return ws
 }
 
