@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -31,7 +31,7 @@ func main() {
 
 func startServer() {
 	gin.SetMode(gin.ReleaseMode)
-	gin.DefaultWriter = ioutil.Discard
+	gin.DefaultWriter = io.Discard
 
 	r := gin.Default()
 
@@ -45,7 +45,7 @@ func startServer() {
 		panic(err)
 	}
 
-	r.Static("/uploads", "./uploads")
+	r.Static("/public/uploads", "./public/uploads")
 
 	eng.HTML("GET", "/admin", pages.GetDashBoard)
 	eng.HTMLFile("GET", "/admin/hello", "./html/hello.tmpl", map[string]interface{}{

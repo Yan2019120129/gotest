@@ -35,13 +35,6 @@ type WsManage struct {
 	WsConnMap map[string]*Ws       // 存储 websocket 实例
 }
 
-// Massage 发送的消息
-type Massage struct {
-	Id   string // 实例Id
-	Type int    // 数据类型（在启动时会发送订阅类型数据）:订阅类型，默认通知类型
-	Data []byte // 数据
-}
-
 // NewWsManage 新建websocket 管理实例
 func NewWsManage(Interval time.Duration) *WsManage {
 	return &WsManage{

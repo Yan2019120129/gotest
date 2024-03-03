@@ -17,8 +17,8 @@
 	"prefix": "admin",
 	"theme": "sword",
 	"store": {
-		"path": "./uploads",
-		"prefix": "uploads"
+		"path": "/Users/taozi/Documents/Golang/gotest/frame/my-admin/public/uoloads",
+		"prefix": "public/uploads"
 	},
 	"title": "GoAdmin",
 	"logo": "\u003cb\u003eGo\u003c/b\u003eAdmin",
