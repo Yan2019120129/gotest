@@ -27,17 +27,17 @@
 	"login_url": "/login",
 	"debug": true,
 	"env": "local",
-	"info_log": "/home/programmer-yan/Documents/GoFile/gotest/frame/logs/info.log",
-	"error_log": "/home/programmer-yan/Documents/GoFile/gotest/frame/logs/error.log",
-	"access_log": "/home/programmer-yan/Documents/GoFile/gotest/frame/logs/access.log",
+	"info_log": "./logs/info.log",
+	"error_log": "./logs/error.log",
+	"access_log": "./logs/access.log",
 	"session_life_time": 7200,
 	"file_upload_engine": {
 		"name": "local"
 	},
 	"login_title": "GoAdmin",
 	"auth_user_table": "goadmin_users",
-	"bootstrap_file_path": "/home/programmer-yan/Documents/GoFile/gotest/frame/bootstrap.go",
-	"go_mod_file_path": "/home/programmer-yan/Documents/GoFile/gotest/frame/go.mod",
+	"bootstrap_file_path": "./bootstrap.go",
+	"go_mod_file_path": "./go.mod",
 	"asset_root_path": "./public/",
 	"url_format": {
 		"info": "/info/:__prefix",
