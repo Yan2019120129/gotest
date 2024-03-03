@@ -3,8 +3,8 @@ package cache
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"gotest/frame/my_frame/config"
 	"log"
+	"my-frame/config"
 	"sync"
 	"time"
 )
@@ -24,7 +24,7 @@ var RdsPubSubConn *redis.PubSubConn
 func init() {
 	if RdsPool == nil {
 		_once.Do(func() {
-			var cfg = config.GetRedisConfig()
+			var cfg = config.GetRedis()
 			RdsPool = &redis.Pool{
 				MaxIdle:     cfg.Pool.MaxIdleConn,
 				MaxActive:   cfg.Pool.MaxOpenConn,

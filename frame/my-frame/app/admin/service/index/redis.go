@@ -2,8 +2,8 @@ package indexserver
 
 import (
 	"github.com/gomodule/redigo/redis"
-	"gotest/frame/my_frame/app/admin/service/dto"
-	"gotest/frame/my_frame/module/cache"
+	"my-frame/app/admin/service/dto"
+	"my-frame/module/cache"
 )
 
 // Rds 设置参数

@@ -2,7 +2,7 @@ package indexserver
 
 import (
 	"encoding/json"
-	ws "gotest/frame/my_frame/module/websocket"
+	ws "my-frame/module/websocket"
 	"net/http"
 )
 

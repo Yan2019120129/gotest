@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v3"
 	"gorm.io/gen"
 	"log"
@@ -15,6 +14,8 @@ import (
 const (
 	DatabaseTypeMysql      = "mysql"
 	DatabaseTypePostgresql = "postgresql"
+	// LogPath 日志输出位置
+	LogPath = "/Users/taozi/Documents/Golang/gotest/common/file/logs/app.log"
 )
 
 // GenMode gorm gen 生成模式
@@ -113,12 +114,17 @@ type LogInstance struct {
 
 // ZapConfig zap 日志配置
 type ZapConfig struct {
-	Mode       string   `yaml:"mode"`        // 日志模式，自定义模式custom，开发模式Devel ，生产模式product，
-	Level      string   `yaml:"level"`       // 日志级别Debug,Info,WarnLevel,Error,DPanic,Panic,Fatal,
-	Encoding   string   `yaml:"encoding"`    // 日志级输出格式# 输出格式json，控制台 console
-	FormatTime string   `yaml:"format-time"` // 选择格式化日期
-	FileLength string   `yaml:"file-length"` // 文件地址类型
-	OutPath    []string `yaml:"out-path"`    // 日志输出路径
+	Mode        string   `yaml:"mode"`          // 日志模式，自定义模式custom，开发模式Devel ，生产模式product，
+	Level       string   `yaml:"level"`         // 日志级别Debug,Info,WarnLevel,Error,DPanic,Panic,Fatal,
+	Encoding    string   `yaml:"encoding"`      // 日志级输出格式# 输出格式json，控制台 console
+	FormatTime  string   `yaml:"format-time"`   // 选择格式化日期
+	FileLength  string   `yaml:"file-length"`   // 文件地址类型
+	OutPath     []string `yaml:"out-path"`      // 日志输出路径
+	MaxSize     int64    `yaml:"max-size"`      // 文件分割大小单位字节
+	MaxBackups  int      `yaml:"max-backups"`   // 保留旧文件的最大个数
+	MaxAge      int      `yaml:"max-age"`       // 保留旧文件的最大天数
+	IsLocalTime bool     `yaml:"is-local-time"` // 是否使用本地时间
+	IsCompress  bool     `yaml:"is-compress"`   // 是否压缩归档旧文件
 }
 
 // once 用于初始化config变量，并保证只初始化一次
@@ -132,7 +138,6 @@ func init() {
 		_once.Do(
 			func() {
 				path := GetConfigPath()
-				fmt.Println("path:", path)
 				configByte, err := os.ReadFile(path)
 				if err != nil {
 					log.Print("config init err:", err)

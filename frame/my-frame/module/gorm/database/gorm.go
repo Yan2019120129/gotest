@@ -9,10 +9,11 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"gorm.io/gorm/utils"
-	"gotest/frame/my_frame/config"
-	"gotest/frame/my_frame/module/gorm/database/mysql"
-	"gotest/frame/my_frame/module/gorm/database/postgresql"
-	"gotest/frame/my_frame/module/logs"
+	"my-frame/config"
+	"my-frame/module/gorm/database/mysql"
+	"my-frame/module/gorm/database/postgresql"
+	"my-frame/module/logs"
+
 	"sync"
 	"time"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gotest/frame/my_frame/config"
+	"my-frame/config"
 )
 
 var _open gorm.Dialector

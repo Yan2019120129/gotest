@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"gotest/frame/my_frame/app/admin/service/dto"
-	"gotest/frame/my_frame/module/cache"
+	"my-frame/app/admin/service/dto"
+	"my-frame/module/cache"
 )
 
 // SubRds 订阅信息
