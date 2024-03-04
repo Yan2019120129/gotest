@@ -1,9 +1,6 @@
 package main
 
 import (
-	"github.com/google/uuid"
-	"go.uber.org/zap"
-	"gotest/common/module/logs"
 	"gotest/middleware/websocket_test/third/index"
 	"sync"
 )
@@ -12,6 +9,9 @@ const (
 	// ServerOkxAddr okx 行情websocket 地址
 	ServerOkxAddr = "wss://ws.okx.com:8443/ws/v5/public"
 
+	// ServerAddrEH 易汇数据
+	ServerAddrEH = "wss://stream.talkfx.co/dconsumer/arrge"
+
 	// ServerCandleAndTradeAddr okx 行业websocket 地址
 	ServerCandleAndTradeAddr = "wss://ws.okx.com:8443/ws/v5/business"
 )
@@ -19,20 +19,21 @@ const (
 var wg sync.WaitGroup
 
 func main() {
-	data := []string{
-		"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}",
-		"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}",
-	}
+	//data := []string{
+	//	"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"XRP-BTC\"\n    }]\n}",
+	//	"{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}",
+	//}
 
-	for i, v := range data {
-		uuidValue := uuid.NewString()
-		logs.Logger.Info("run", zap.Int(uuidValue, i))
-		index.Instance.SetWs(uuidValue, index.NewWs(&index.Config{ConnId: uuidValue, Addr: ServerOkxAddr, Pulse: 5, Nor: 5})).Run(uuidValue).SendMessage(&index.Massage{
-			Id:   uuidValue,
-			Type: index.WsMessageTypeSub,
-			Data: []byte(v),
-		})
-	}
+	//for i, v := range data {
+	index.NewDefaultWs(ServerAddrEH).
+		//SetSubMessage("connected").
+		SetPulse(5).
+		Run()
+	//index.NewDefaultWs(ServerOkxAddr).
+	//	SetSubMessage(data...).
+	//	SetPulse(5).
+	//	Run()
+	//}
 	wg.Add(1)
 	wg.Wait()
 }

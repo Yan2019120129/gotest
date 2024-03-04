@@ -5,7 +5,6 @@ import (
 	"go.uber.org/zap"
 	"gotest/common/module/logs"
 	"os"
-	"strings"
 )
 
 const (
@@ -28,9 +27,12 @@ type Massage struct {
 
 // ManageMessage 数据处理方法
 type ManageMessage interface {
-	DealWithMessage(msgType int, data []byte)                  // 处理消息
-	Persistence(msg ...Massage)                                // 持久化方法
-	GetPersistence(id string, msgType WsMessageType) []Massage // 获取持久化数据
+	DealWithMessage(msgType int, data []byte) // 处理消息
+}
+
+type Persistence interface {
+	Set(configs ...WsManageConfig)       // 持久化方法
+	Get(ids ...string) []*WsManageConfig // 获取持久化数据
 }
 
 // DefaultManage 默认额管理
@@ -114,20 +116,20 @@ func (m *DefaultManage) GetPersistence(id string, msgType WsMessageType) []Massa
 	return nil
 }
 
-func isPathExist(path string) bool {
-	index := strings.LastIndex(path, "/")
-	path = path[:index]
-	_, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		if err = os.MkdirAll(path, os.ModePerm); err != nil {
-			logs.Logger.Error("Error creating directory:" + err.Error())
-			return false
-		}
-		logs.Logger.Info("Directory created successfully:" + path)
-		return true
-	} else if err != nil {
-		logs.Logger.Error("Error creating directory:" + err.Error())
-		return false
-	}
-	return true
-}
+//func isPathExist(path string) bool {
+//	index := strings.LastIndex(path, "/")
+//	path = path[:index]
+//	_, err := os.Stat(path)
+//	if os.IsNotExist(err) {
+//		if err = os.MkdirAll(path, os.ModePerm); err != nil {
+//			logs.Logger.Error("Error creating directory:" + err.Error())
+//			return false
+//		}
+//		logs.Logger.Info("Directory created successfully:" + path)
+//		return true
+//	} else if err != nil {
+//		logs.Logger.Error("Error creating directory:" + err.Error())
+//		return false
+//	}
+//	return true
+//}

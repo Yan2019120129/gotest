@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	IdOne = "7534801f-0919-4acb-abe8-3e46baa89ee9"
-	IdTwo = "244fbbc2-9055-4ce5-a6fd-65c69c88a054"
+	IdEH         = "EH"
+	ServerAddrEH = "wss://stream.talkfx.co/dconsumer/arrge"
+	IdOne        = "7534801f-0919-4acb-abe8-3e46baa89ee9"
+	IdTwo        = "244fbbc2-9055-4ce5-a6fd-65c69c88a054"
 )
 
 // TestWebSocket 测试websocket
@@ -26,7 +28,19 @@ func TestWebSocket(t *testing.T) {
 	//		Type: WsMessageTypeSub,
 	//		Data: []byte("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"ETC-BTC\"\n    }]\n}"),
 	//	})
-	Instance.NewWs(uuidOkx, ServerOkxAddr).Run()
+	//Instance.NewWs(uuidOkx, ServerOkxAddr).Run()
+	//Instance.NewWs(IdEH, ServerAddrEH).Run(IdEH)
+
 	fmt.Println(uuidValue, uuidTwo)
 	time.Sleep(30 * time.Second)
+}
+
+// TestWebSocketOne 测试 websocket
+func TestWebSocketOne(t *testing.T) {
+
+	NewDefaultWs("wss://stream.talkfx.co/dconsumer/arrge").
+		//SetSubMessage("connected").
+		SetPulse(5).
+		Run()
+	time.Sleep(30 * time.Minute)
 }
