@@ -2,9 +2,12 @@ package index
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/fasthttp/websocket"
 	"go.uber.org/zap"
 	"gotest/common/module/logs"
+	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -12,27 +15,30 @@ import (
 // Instance 全局唯一实例
 var Instance = &WsManage{
 	WsConnMap: make(map[string]*Ws),
-	statusMap: make(map[string]*WsStatus),
+	statusMap: make(map[string]*WsManageConfig),
 	lock:      sync.Mutex{},
-	Interval:  2,
 	once:      sync.Once{},
+	Interval:  2,
 }
 
-// WsStatus websocket 实例状态处理
-type WsStatus struct {
+// WsManageConfig websocket 实例状态处理
+type WsManageConfig struct {
 	status        int           // 状态：停止，开启，
-	isPersistence bool          // 是否持久化
-	isCleanUp     bool          // 是否过期清理
+	IsPersistence bool          // 是否持久化
+	IsCleanUp     bool          // 是否过期清理
 	Expiration    time.Duration // 过期时间
+	Persistence
+	Config
 }
 
 // WsManage websocket 实例
 type WsManage struct {
-	once      sync.Once            // 保证状态检测只运行一次
-	lock      sync.Mutex           // websocket 实例读写锁
-	Interval  time.Duration        // 间隔多少秒检查websocket 状态
-	statusMap map[string]*WsStatus // 实例状态：启动，关闭
-	WsConnMap map[string]*Ws       // 存储 websocket 实例
+	once     sync.Once     // 保证状态检测只运行一次
+	lock     sync.Mutex    // websocket 实例读写锁
+	Interval time.Duration // 间隔多少秒检查websocket 状态
+	Persistence
+	statusMap map[string]*WsManageConfig // 实例状态：启动，关闭
+	WsConnMap map[string]*Ws             // 存储 websocket 实例
 }
 
 // NewWsManage 新建websocket 管理实例
@@ -41,34 +47,35 @@ func NewWsManage(Interval time.Duration) *WsManage {
 		once:      sync.Once{},
 		lock:      sync.Mutex{},
 		Interval:  Interval,
-		statusMap: make(map[string]*WsStatus),
+		statusMap: make(map[string]*WsManageConfig),
 		WsConnMap: make(map[string]*Ws),
 	}
 }
 
 // NewWs 新建websocket 实例
-func (i *WsManage) NewWs(uuid, addr string) *WsManage {
-	if _, ok := i.WsConnMap[uuid]; !ok {
-		logs.Logger.Info("NewWs run")
-		// 创建实例
-		i.WsConnMap[uuid] = NewWs(&Config{
-			Addr:   addr,
-			ConnId: uuid,
-			Pulse:  5,
-			Nor:    5,
-		})
+func (i *WsManage) NewWs(cfg ...WsManageConfig) *WsManage {
+	for _, v := range cfg {
+		if _, ok := i.WsConnMap[v.Id]; !ok {
+			logs.Logger.Info("NewWs run")
+			// 创建实例
+			i.WsConnMap[v.Id] = NewWs(&Config{
+				Addr:          v.Addr,
+				Id:            v.Id,
+				Pulse:         v.Pulse,
+				Nor:           v.Nor,
+				ManageMessage: v.ManageMessage,
+			})
 
-		// 设置状态
-		i.statusMap[uuid] = &WsStatus{
-			status:        WsStatusStop,
-			isPersistence: false,
-			isCleanUp:     false,
-			Expiration:    0,
+			// 设置状态
+			i.statusMap[v.Id] = &WsManageConfig{
+				status:        WsStatusStop,
+				IsPersistence: v.IsPersistence,
+				IsCleanUp:     v.IsCleanUp,
+				Expiration:    v.Expiration,
+			}
 		}
 	}
-	i.once.Do(func() {
-		i.StatusMonitor()
-	})
+
 	return i
 }
 
@@ -76,6 +83,7 @@ func (i *WsManage) NewWs(uuid, addr string) *WsManage {
 func (i *WsManage) Run(uuids ...string) *WsManage {
 	// 不传参数则启动全部实例
 	if len(uuids) < 1 {
+		i.Get()
 		for k, v := range i.WsConnMap {
 			if i.statusMap[k].status == WsStatusStart {
 				continue
@@ -98,6 +106,10 @@ func (i *WsManage) Run(uuids ...string) *WsManage {
 		}
 		logs.Logger.Info("websocket", zap.String(v, "run"))
 	}
+
+	i.once.Do(func() {
+		i.StatusMonitor()
+	})
 	return i
 }
 
@@ -123,10 +135,10 @@ func (i *WsManage) SetWs(uuid string, ws *Ws) *WsManage {
 	// 添加协程使用WaitGroup管理线程状态
 	if _, ok := i.WsConnMap[uuid]; ok {
 		i.WsConnMap[uuid] = ws
-		i.statusMap[uuid] = &WsStatus{
+		i.statusMap[uuid] = &WsManageConfig{
 			status:        WsStatusStop,
-			isPersistence: false,
-			isCleanUp:     false,
+			IsPersistence: false,
+			IsCleanUp:     false,
 			Expiration:    0,
 		}
 	}
@@ -170,7 +182,7 @@ func (i *WsManage) SendMessage(msg ...*Massage) *WsManage {
 	logs.Logger.Info("SendMessage run")
 	for _, v := range msg {
 		if p, ok := i.WsConnMap[v.Id]; ok {
-			p.SendMessage(*v)
+			p.SendMessage()
 		}
 	}
 	return i
@@ -231,10 +243,10 @@ func (i *WsManage) GetWsConn(uuid string) *websocket.Conn {
 func (i *WsManage) setWsConn(uuid string, conn *websocket.Conn) {
 	if _, ok := i.WsConnMap[uuid]; !ok {
 		i.WsConnMap[uuid].instance = conn
-		i.statusMap[uuid] = &WsStatus{
+		i.statusMap[uuid] = &WsManageConfig{
 			status:        -1,
-			isPersistence: false,
-			isCleanUp:     false,
+			IsPersistence: false,
+			IsCleanUp:     false,
 			Expiration:    0,
 		}
 	}
@@ -255,4 +267,90 @@ func (i *WsManage) setContext(uuid string) {
 		i.WsConnMap[uuid].ctx.instance = instance
 		i.WsConnMap[uuid].ctx.close = c
 	}
+}
+
+// Set 数据持久化
+func (i *WsManage) Set(configs ...Config) {
+	logs.Logger.Info("Persistence run")
+	// 判断路径是否存在,不存在则创建
+	if isPathExist(storagePath) {
+		oldCfgs := i.Get()
+		configMap := map[string]*Config{}
+		for _, v := range oldCfgs {
+			configMap[v.Id] = v
+		}
+		for _, v := range configs {
+			configMap[v.Id] = &v
+		}
+		logs.Logger.Info("Persistence", zap.Reflect("msg", configMap))
+		byteData, err := json.Marshal(configMap)
+		if err != nil {
+			logs.Logger.Error("Marshal error", zap.Error(err))
+			return
+		}
+
+		logs.Logger.Info("Persistence", zap.ByteString("msg", byteData))
+		// 将数据写入json 文件
+		if err = os.WriteFile(storagePath, byteData, 0664); err != nil {
+			logs.Logger.Error("WriteFile error", zap.Error(err))
+			return
+		}
+	}
+}
+
+// Get 获取持久化数据
+func (i *WsManage) Get(ids ...string) []*Config {
+	logs.Logger.Info("GetPersistence run")
+	if !isPathExist(storagePath) {
+		return nil
+	}
+
+	storageData, err := os.ReadFile(storagePath)
+	if err != nil || storageData == nil || len(storageData) == 0 {
+		logs.Logger.Error("read file error", zap.Error(err))
+		return nil
+	}
+
+	configMap := map[string]*Config{}
+	if err = json.Unmarshal(storageData, &configMap); err != nil {
+		logs.Logger.Error("unmarshal persistence data error", zap.Error(err))
+		return nil
+	}
+
+	cfgs := []*Config{}
+	for _, v := range ids {
+		logs.Logger.Info("GetPersistence", zap.String("path", storagePath))
+		if _, ok := configMap[v]; ok {
+			cfgs = append(cfgs, configMap[v])
+		}
+	}
+
+	for _, v := range configMap {
+		cfgs = append(cfgs, v)
+	}
+
+	// 不穿参数为获取全部实例化数据
+	if len(ids) == 0 {
+		return cfgs
+	}
+
+	return nil
+}
+
+func isPathExist(path string) bool {
+	index := strings.LastIndex(path, "/")
+	path = path[:index]
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		if err = os.MkdirAll(path, os.ModePerm); err != nil {
+			logs.Logger.Error("Error creating directory:" + err.Error())
+			return false
+		}
+		logs.Logger.Info("Directory created successfully:" + path)
+		return true
+	} else if err != nil {
+		logs.Logger.Error("Error creating directory:" + err.Error())
+		return false
+	}
+	return true
 }

@@ -34,22 +34,24 @@ type Ctx struct {
 }
 
 type Config struct {
-	Addr   string        // 服务地址
-	ConnId string        // 服务id
-	Pulse  time.Duration // 脉搏
-	Nor    int           // 重连次数
+	Pulse      time.Duration // 脉搏
+	Id         string        // 服务id
+	Addr       string        // 服务地址
+	Nor        int           // 重连次数
+	SubMessage []string      // 默认订阅数据
 	ManageMessage
 }
 
 // Ws websocket 实例
 type Ws struct {
 	lock          sync.Mutex
-	connId        string          // 实例Id
-	ctx           *Ctx            // 上下文实例，管理协程
 	instance      *websocket.Conn // 用于关闭协程
 	pulse         time.Duration   // 设置脉搏，单位秒（多少秒跳动一次）（多少秒发送一次信息）
+	ctx           *Ctx            // 上下文实例，管理协程
+	id            string          // 实例Id
 	serverAdder   string          // 服务器地址
 	nor           int             // 重连次数
+	SubMessage    []string        // 默认订阅数据
 	ManageMessage                 // 处理信息
 }
 
@@ -58,7 +60,7 @@ func NewWs(cfg *Config) *Ws {
 	// 默认配置
 	if cfg == nil {
 		cfg = &Config{
-			ConnId:        uuid.NewString(),
+			Id:            uuid.NewString(),
 			Pulse:         5,
 			Nor:           5,
 			ManageMessage: &DefaultManage{},
@@ -66,7 +68,7 @@ func NewWs(cfg *Config) *Ws {
 	}
 
 	// 如果没有创建自定义接口则使用默认持久化接口
-	if cfg.ManageMessage != nil {
+	if cfg.ManageMessage == nil {
 		cfg.ManageMessage = &DefaultManage{}
 	}
 
@@ -80,12 +82,35 @@ func NewWs(cfg *Config) *Ws {
 			close:    off,
 		},
 		lock:          sync.Mutex{},
-		connId:        cfg.ConnId,
+		id:            cfg.Id,
 		instance:      getWebSocketInstance(cfg.Addr),
 		pulse:         cfg.Pulse,
 		serverAdder:   cfg.Addr,
 		nor:           cfg.Nor,
 		ManageMessage: cfg.ManageMessage,
+	}
+
+	return ws
+}
+
+// NewDefaultWs 创建默认的 websocket 实例
+func NewDefaultWs(addr string) *Ws {
+	// 设置上下文
+	ctx, off := context.WithCancel(context.Background())
+
+	// 配置实例
+	ws := &Ws{
+		ctx: &Ctx{
+			instance: ctx,
+			close:    off,
+		},
+		lock:          sync.Mutex{},
+		id:            uuid.NewString(),
+		instance:      getWebSocketInstance(addr),
+		pulse:         5,
+		serverAdder:   addr,
+		nor:           5,
+		ManageMessage: &DefaultManage{},
 	}
 
 	return ws
@@ -102,27 +127,37 @@ func (w *Ws) send(msg []byte) error {
 	return nil
 }
 
+// SetSubMessage 设置订阅消息
+func (w *Ws) SetSubMessage(msgs ...string) *Ws {
+	w.SubMessage = append(w.SubMessage, msgs...)
+	return w
+}
+
+// GetSubMessage 设置订阅消息
+func (w *Ws) GetSubMessage() []string {
+	return w.SubMessage
+}
+
 // SendMessage 发送消息
-func (w *Ws) SendMessage(msg ...Massage) {
+func (w *Ws) SendMessage(msg ...string) *Ws {
 	logs.Logger.Info("SendMessageJson", zap.Reflect("msg", msg))
 	for _, v := range msg {
-		if err := w.send(v.Data); err != nil {
+		if err := w.send([]byte(v)); err != nil {
 			logs.Logger.Error(err.Error())
-			return
 		}
 	}
-	w.Persistence(msg...)
+	return w
 }
 
 // SendMessageJson 发送消息
-func (w *Ws) SendMessageJson(msg ...Massage) {
+func (w *Ws) SendMessageJson(msg ...interface{}) *Ws {
 	logs.Logger.Info("SendMessageJson", zap.Reflect("msg", msg))
 	for _, v := range msg {
-		if err := w.instance.WriteJSON(v.Data); err != nil {
+		if err := w.instance.WriteJSON(v); err != nil {
 			logs.Logger.Error(err.Error())
 		}
 	}
-	w.Persistence(msg...)
+	return w
 }
 
 // read 读取消息
@@ -137,8 +172,14 @@ func (w *Ws) read() {
 			msgType, msg, err := w.instance.ReadMessage()
 			if err != nil {
 				logs.Logger.Error(err.Error())
+			}
+
+			// 当对方断开连接后进行重连
+			if msgType == websocket.CloseMessage {
 				w.reconnection()
 			}
+
+			// 处理接收的信息
 			w.DealWithMessage(msgType, msg)
 		}
 	}
@@ -168,28 +209,34 @@ func (w *Ws) reconnection() {
 	logs.Logger.Info("reconnection run")
 	defer logs.Logger.Info("reconnection close")
 	for i := 0; i < w.nor; i++ {
-		var err error
+		// 判断实例是否创建成功
 		w.instance = getWebSocketInstance(w.serverAdder)
-		if err != nil {
-			logs.Logger.Error("websocket", zap.Int("reconnection", i), zap.Error(err))
+		if w.instance == nil {
+			logs.Logger.Info("websocket", zap.Int("reconnection", i))
+
+			// 如果最后一次连接依旧失败，关闭相关协程
+			if i == w.nor-1 {
+				w.close()
+				return
+			}
 			continue
 		}
 
-		logs.Logger.Info("websocket", zap.Int("reconnection", i))
-		if i == w.nor-1 {
-			w.close()
-			return
-		}
+		// 当连接成功发送订阅数据,直接退出循环
+		w.resubscribe()
+
+		// 创建协程
+		w.Run()
+		break
 	}
 }
 
 // rsSub 重新订阅
 func (w *Ws) resubscribe() {
-	// 重连成功发送持久化的订阅数据
-	logs.Logger.Info("resubscribe", zap.String("id", w.connId))
-	for _, v := range w.GetPersistence(w.connId, WsMessageTypeSub) {
-		logs.Logger.Info("resubscribe", zap.String("id", v.Id))
-		if err := w.send(v.Data); err != nil {
+	logs.Logger.Info("resubscribe", zap.String("id", w.id))
+	for _, v := range w.SubMessage {
+		logs.Logger.Info("resubscribe", zap.String("id", v))
+		if err := w.send([]byte(v)); err != nil {
 			logs.Logger.Error("resubscribe error", zap.Error(err))
 			continue
 		}
@@ -199,9 +246,11 @@ func (w *Ws) resubscribe() {
 // Run 运行 websocket 实例
 func (w *Ws) Run() {
 	// 发送持久化的订阅数据
-	w.resubscribe()
+	w.SendMessage(w.SubMessage...)
 	go w.read()
-	go w.heartbeat()
+	if w.pulse != 0 {
+		go w.heartbeat()
+	}
 }
 
 // close 关闭通道和实例
@@ -215,13 +264,18 @@ func (w *Ws) close() {
 	return
 }
 
+// SetPulse 设置心跳
+func (w *Ws) SetPulse(pulse time.Duration) *Ws {
+	w.pulse = pulse
+	return w
+}
+
 // getWebSocketInstance 获取websocket实例
 func getWebSocketInstance(addr string) *websocket.Conn {
 	conn, _, err := websocket.DefaultDialer.Dial(addr, nil)
 	if err != nil {
 		logs.Logger.Error("getWebSocketInstance err", zap.Error(err))
 		return nil
-
 	}
 	return conn
 }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Example</title>
+</head>
+<body>
+<div id="messages"></div>
+<script>
+    const messagesElement = document.getElementById('messages');
+
+    // 创建 WebSocket 连接
+    const ws = new WebSocket('wss://stream.talkfx.co/dconsumer/arrge');
+
+    // 连接建立后的回调函数
+    ws.onopen = function(event) {
+        messagesElement.innerHTML += '<p>Connected to WebSocket server.</p>';
+    };
+
+    // 接收消息的回调函数
+    ws.onmessage = function(event) {
+        // messagesElement.innerHTML += '<p>Received message: ' + event.data + '</p>';
+        console.log(event.data)
+    };
+
+    // 连接关闭后的回调函数
+    ws.onclose = function(event) {
+        messagesElement.innerHTML += '<p>Connection closed.</p>';
+    };
+
+    // 发送消息
+    function sendMessage() {
+        const message = prompt('Enter message to send:');
+        if (message) {
+            ws.send(message);
+        }
+    }
+
+    // 关闭连接
+    function closeConnection() {
+        ws.close();
+    }
+</script>
+</body>
+</html>
