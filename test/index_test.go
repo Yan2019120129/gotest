@@ -60,8 +60,8 @@ func TestArray(t *testing.T) {
 // TestAutoTime 测试gorm 自动更新时间
 func TestAutoTime(t *testing.T) {
 	user := models.User{
-		AdminId:  1,
-		ParentId: 3,
+		AdminUserId: 1,
+		ParentId:    3,
 	}
 	database.DB.Create(&user)
 	fmt.Println(user.UpdatedAt)
