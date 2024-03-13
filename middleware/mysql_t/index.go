@@ -54,7 +54,7 @@ func GormMapping() {
 	logs.Logger.Info("数据", zap.Reflect("密码", password))
 	avatars := []string{gofakeit.ImageURL(200, 100), gofakeit.ImageURL(200, 100)}
 	userInfo := &models.User{
-		AdminId:     1,
+		AdminUserId: 1,
 		ParentId:    1,
 		UserName:    gofakeit.Name(),
 		NickName:    gofakeit.Name(),
@@ -256,7 +256,7 @@ func InsertMysql() {
 
 			// 插入用户数据
 			userInfo := &models.User{
-				AdminId:     gofakeit.Number(1, 100),
+				AdminUserId: gofakeit.Number(1, 100),
 				ParentId:    gofakeit.Number(1, 100),
 				UserName:    gofakeit.Name(),
 				NickName:    gofakeit.Name(),
@@ -317,7 +317,7 @@ func InsertMysql() {
 // InsertData 插入数据
 func InsertData() {
 	userInfo := &models.User{
-		AdminId:     gofakeit.Number(1, 100),
+		AdminUserId: gofakeit.Number(1, 100),
 		ParentId:    gofakeit.Number(1, 100),
 		UserName:    gofakeit.Name(),
 		NickName:    gofakeit.Name(),
@@ -386,39 +386,52 @@ func CrontabSelect(second time.Duration) {
 
 // Insert 测试插入
 func Insert() {
-	userInfo := &models.User{
-		AdminId:     gofakeit.Number(1, 100),
-		ParentId:    gofakeit.Number(1, 100),
-		UserName:    gofakeit.Name(),
-		NickName:    gofakeit.Name(),
-		Email:       gofakeit.Email(),
-		Telephone:   gofakeit.Phone(),
-		Avatar:      gofakeit.ImageURL(200, 100),
-		Sex:         gofakeit.RandomInt([]int{1, 2}),
-		Password:    gofakeit.Password(true, true, true, false, false, 10),
-		SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
-		Money:       gofakeit.Float64Range(100, 100000),
-		Type:        gofakeit.RandomInt([]int{1, 11, 21}),
-		Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
-		Data:        gofakeit.Sentence(10),
-		Desc:        gofakeit.Sentence(20),
-	}
-	//userMap := make(map[string]interface{})
-	//userMap["admin_id"] = gofakeit.Number(1, 100)
-	//userMap["parent_id"] = gofakeit.Number(1, 100)
-	//userMap["username"] = gofakeit.Name()
-	//userMap["nickname"] = gofakeit.Name()
-	//userMap["email"] = gofakeit.Email()
-	//userMap["telephone"] = gofakeit.Phone()
-	//userMap["avatar"] = gofakeit.ImageURL(200, 100)
-	//userMap["sex"] = gofakeit.RandomInt([]int{1, 2})
-	//userMap["password"] = gofakeit.Password(true, true, true, false, false, 10)
-	//userMap["security_key"] = gofakeit.Password(true, true, true, false, false, 10)
-	//userMap["money"] = gofakeit.Float64Range(100, 100000)
-	//userMap["birthday"] = gofakeit.Number(100000000, 1000000000)
-	//userMap["type"] = gofakeit.RandomInt([]int{1, 11, 21})
-	//userMap["status"] = gofakeit.RandomInt([]int{-2, -1, 10})
-	//userMap["data"] = gofakeit.Sentence(10)
-	//database.DB.Table("user").Create(userMap)
+	//userInfo := &models.User{
+	//	AdminUserId:     gofakeit.Number(1, 100),
+	//	ParentId:    gofakeit.Number(1, 100),
+	//	UserName:    gofakeit.Name(),
+	//	NickName:    gofakeit.Name(),
+	//	Email:       gofakeit.Email(),
+	//	Telephone:   gofakeit.Phone(),
+	//	Avatar:      gofakeit.ImageURL(200, 100),
+	//	Sex:         gofakeit.RandomInt([]int{1, 2}),
+	//	Password:    gofakeit.Password(true, true, true, false, false, 10),
+	//	SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
+	//	Money:       gofakeit.Float64Range(100, 100000),
+	//	Type:        gofakeit.RandomInt([]int{1, 11, 21}),
+	//	Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
+	//	Data:        gofakeit.Sentence(10),
+	//	Desc:        gofakeit.Sentence(20),
+	//}
+	userInfo := make(map[string]interface{})
+	userInfo["admin_id"] = gofakeit.Number(1, 100)
+	userInfo["parent_id"] = gofakeit.Number(1, 100)
+	userInfo["username"] = gofakeit.Name()
+	userInfo["nickname"] = gofakeit.Name()
+	userInfo["email"] = gofakeit.Email()
+	userInfo["telephone"] = gofakeit.Phone()
+	userInfo["avatar"] = gofakeit.ImageURL(200, 100)
+	userInfo["sex"] = gofakeit.RandomInt([]int{1, 2})
+	userInfo["password"] = gofakeit.Password(true, true, true, false, false, 10)
+	userInfo["security_key"] = gofakeit.Password(true, true, true, false, false, 10)
+	userInfo["money"] = gofakeit.Float64Range(100, 100000)
+	userInfo["birthday"] = gofakeit.Number(100000000, 1000000000)
+	userInfo["type"] = gofakeit.RandomInt([]int{1, 11, 21})
+	userInfo["status"] = gofakeit.RandomInt([]int{-2, -1, 10})
+	userInfo["data"] = gofakeit.Sentence(10)
 	database.DB.Table("user").Create(userInfo)
+}
+
+// SelectBelongsTo 一对一查找方式
+func SelectBelongsTo() {
+	userInfo := &models.User{}
+	adminInfo := &models.AdminUser{}
+
+	err := database.DB.Preload("AdminUserId").Where(1).Find(adminInfo)
+	if err != nil {
+		//logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+		return
+	}
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("userInfo", userInfo))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminInfo", adminInfo))
 }

@@ -1,8 +1,11 @@
 package models
 
+import "github.com/brianvoe/gofakeit/v6"
+
 // AdminUser 管理表
 type AdminUser struct {
-	Id          int     `gorm:"type:int unsigned primary key auto_increment;comment:主键;"`
+	Model
+	User        *[]*User
 	ParentId    int     `gorm:"type:int unsigned not null;comment:上级ID"`
 	UserName    string  `gorm:"column:username;type:varchar(60) not null;comment:用户名"`
 	NickName    string  `gorm:"column:nickname;type:varchar(60) not null;comment:昵称"`
@@ -15,8 +18,22 @@ type AdminUser struct {
 	Data        string  `gorm:"type:text;comment:数据"`
 	Domains     string  `gorm:"type:varchar(1020) not null;comment:绑定域名"`
 	ExpiredAt   int     `gorm:"type:int unsigned not null;comment:过期时间"`
-	UpdatedAt   int     `gorm:"type:int unsigned not null;autoUpdateTime;comment:更新时间"`
-	CreatedAt   int     `gorm:"type:int unsigned not null;autoCreateTime;comment:创建时间"`
+}
+
+func GetDefaultAdminUser() *AdminUser {
+	return &AdminUser{
+		ParentId:    gofakeit.Number(1, 100),
+		UserName:    gofakeit.Name(),
+		NickName:    gofakeit.Name(),
+		Email:       gofakeit.Email(),
+		Avatar:      gofakeit.ImageURL(200, 100),
+		Password:    gofakeit.Password(true, true, true, false, false, 10),
+		SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
+		Money:       gofakeit.Float64Range(100, 100000),
+		Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
+		Data:        gofakeit.Letter(),
+		Domains:     gofakeit.Letter(),
+	}
 }
 
 const (
