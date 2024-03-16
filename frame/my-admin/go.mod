@@ -5,6 +5,7 @@ go 1.21.5
 require (
 	github.com/GoAdminGroup/filemanager v0.0.6
 	github.com/GoAdminGroup/go-admin v1.2.24
+	github.com/GoAdminGroup/librarian v0.0.5
 	github.com/GoAdminGroup/themes v0.0.43
 	github.com/gavv/httpexpect v1.1.3
 	github.com/gin-gonic/gin v1.9.1
@@ -62,8 +63,10 @@ require (
 	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/sclevine/agouti v3.0.0+incompatible // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
+	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2 // indirect
 	github.com/smartystreets/goconvey v1.8.1 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect

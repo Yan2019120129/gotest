@@ -12,8 +12,12 @@ import "github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 //
 // example:
 //
+// "lang" => http://localhost:9033/admin/info/lang
+//
 // example end
 var Generators = map[string]table.Generator{
+	"user": GetUsersTable,
+	"lang": GetLangTable,
 
 	// generators end
 }
