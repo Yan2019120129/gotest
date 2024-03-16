@@ -25,33 +25,28 @@ func TestSelectBelongsTo(t *testing.T) {
 // TestSelectBelongTo 测试一对一查询 并自动映射到自定义结构体测试
 func TestSelectBelongTo(t *testing.T) {
 	dtoUserInfo := &dto.UserInfo{}
-	err := database.DB.Model(&models.User{}).
-		//Preload("User").
-		//Preload("User.AdminUser").
+	if err := database.DB.Model(&models.User{}).
 		Preload("AdminUser").
-		Where("id = ?", 2).
-		Find(dtoUserInfo).Error
-	if err != nil {
+		Take(dtoUserInfo, 1).Error; err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("dtoUserInfo", dtoUserInfo))
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("dtoUserInfo.AdminUser", dtoUserInfo.AdminUser))
-
 }
 
-// TestSelectHasOne 测试一对一关系
-func TestSelectHasOne(t *testing.T) {
+// TestSelectHasMany 测试一对多关系
+func TestSelectHasMany(t *testing.T) {
 	// 查询管理员和用户
-	userInfo := &dto.UserInfo{}
-	err := database.DB.Model(&models.User{}).
-		Preload("UserInfo").
-		Preload("UserInfo.AdminUserInfo").
-		Where("id = ?", 1).Take(userInfo).Error
+	adminUserInfo := &dto.AdminUserInfo{}
+	err := database.DB.Model(&models.AdminUser{}).
+		Preload("Users", "status = ?", 10).
+		Take(adminUserInfo, 1).Error
 	if err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
 	}
-	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo", userInfo))
-	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo.Users", userInfo.AdminUser))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo", adminUserInfo))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo.Users", adminUserInfo.Users))
+
 }

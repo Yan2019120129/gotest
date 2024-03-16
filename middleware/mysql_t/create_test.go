@@ -10,7 +10,7 @@ import (
 
 // CreateTable 创建表
 func TestCreateTable(t *testing.T) {
-	err := database.DB.AutoMigrate(&models.User{})
+	err := database.DB.AutoMigrate(&models.User{}, &models.Product{}, &models.ProductCategory{}, &models.WalletAssets{})
 	if err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
