@@ -19,12 +19,15 @@ func TestCreateTable(t *testing.T) {
 
 // CreateTable 插入数据
 func TestInserter(t *testing.T) {
-	//err := database.DB.Create(models.GetDefaultUser().SetAdminUser(models.GetDefaultAdminUser())).Error
-	//if err != nil {
-	//	logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
-	//	return
-	//}
+	err := database.DB.Create(models.GetDefaultUser().SetAdminUser(models.GetDefaultAdminUser())).Error
+	if err != nil {
+		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+		return
+	}
+}
 
+// TestInsertAssociation 插入数据并关联Id
+func TestAssociation(t *testing.T) {
 	err := database.DB.Create(models.GetDefaultUser().SetAdminId(1)).Error
 	if err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))

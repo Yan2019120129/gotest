@@ -4,8 +4,8 @@ import "gotest/common/models"
 
 type AdminUserInfo struct {
 	models.Model
-	UserName string `json:"userName"`
-	NickName string `json:"nickName"`
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
 	Email    string `json:"email"`
 	Avatar   string `json:"avatar"`
 }

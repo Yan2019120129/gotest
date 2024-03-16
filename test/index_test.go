@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"fmt"
@@ -108,4 +108,41 @@ func randNum(m, n int) int {
 	// 生成大于m且小于n的随机整数
 	result := rand.Intn(n-m) + m
 	return result
+}
+
+type People struct {
+	Name string
+	Age  int
+}
+
+// TestAddr 测试地址传递
+func TestAddr(t *testing.T) {
+	people := People{
+		Name: "yan",
+		Age:  18,
+	}
+	tempPeople := people
+	tempPeopleOne := People{
+		Name: "yan",
+		Age:  18,
+	}
+	intValue := 1
+	IntAddr(&intValue)
+	fmt.Printf("int:%p\n", &intValue)
+	PeopleAddr(people)
+	fmt.Printf("people:%p\n", &people)
+	fmt.Printf("peopleEqtempPeople:%v,p1:%p,p1:%p,p1Eqp2:%v\n", people == tempPeople, &people, &tempPeople, &people == &tempPeople)
+	fmt.Printf("peopleEqtempPeopleOne:%v,p1:%p,p1:%p\n", people == tempPeopleOne, &people, &tempPeopleOne)
+
+}
+
+// IntAddr addr 测试int 类型地址传输区别
+func IntAddr(i *int) {
+	fmt.Printf("i:%p\n", &i)
+}
+
+// PeopleAddr addr 测试 PeopleAddr 类型地址传输区别
+func PeopleAddr(p People) {
+	fmt.Printf("PeopleAddr:%p\n", &p)
+	fmt.Printf("PeopleAddr&*:%p\n", &p)
 }
