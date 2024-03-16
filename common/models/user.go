@@ -29,7 +29,7 @@ type User struct {
 func GetDefaultUser() *User {
 	return &User{
 		AdminUserId: 0,
-		ParentId:    gofakeit.Number(1, 100),
+		ParentId:    0,
 		UserName:    gofakeit.Name(),
 		NickName:    gofakeit.Name(),
 		Email:       gofakeit.Email(),
@@ -52,6 +52,11 @@ func (u *User) SetAdminId(adminUserId int) *User {
 
 func (u *User) SetAdminUser(adminUser *AdminUser) *User {
 	u.AdminUser = adminUser
+	return u
+}
+
+func (u *User) SetParentId(parentId int) *User {
+	u.ParentId = parentId
 	return u
 }
 

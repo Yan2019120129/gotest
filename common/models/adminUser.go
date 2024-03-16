@@ -5,7 +5,7 @@ import "github.com/brianvoe/gofakeit/v6"
 // AdminUser 管理表
 type AdminUser struct {
 	Model
-	User        *[]*User
+	Users       []*User
 	ParentId    int     `gorm:"type:int unsigned not null;comment:上级ID"`
 	UserName    string  `gorm:"column:username;type:varchar(60) not null;comment:用户名"`
 	NickName    string  `gorm:"column:nickname;type:varchar(60) not null;comment:昵称"`
@@ -20,9 +20,10 @@ type AdminUser struct {
 	ExpiredAt   int     `gorm:"type:int unsigned not null;comment:过期时间"`
 }
 
+// GetDefaultAdminUser 获取默认管理实例
 func GetDefaultAdminUser() *AdminUser {
 	return &AdminUser{
-		ParentId:    gofakeit.Number(1, 100),
+		ParentId:    0,
 		UserName:    gofakeit.Name(),
 		NickName:    gofakeit.Name(),
 		Email:       gofakeit.Email(),
@@ -34,6 +35,18 @@ func GetDefaultAdminUser() *AdminUser {
 		Data:        gofakeit.Letter(),
 		Domains:     gofakeit.Letter(),
 	}
+}
+
+// SetUser  设置用户数据
+func (a *AdminUser) SetUser(users ...*User) *AdminUser {
+	a.Users = append(a.Users, users...)
+	return a
+}
+
+// SetParentId  设置上级Id
+func (a *AdminUser) SetParentId(parentId int) *AdminUser {
+	a.ParentId = parentId
+	return a
 }
 
 const (

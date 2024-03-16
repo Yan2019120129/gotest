@@ -5,6 +5,7 @@ import "gotest/common/models"
 // UserInfo  用户信息
 type UserInfo struct {
 	models.Model
+	Users       []*UserInfo    `gorm:"foreignKey:ParentId"`
 	ParentId    int            `json:"parentId"`
 	AdminUserId int            `json:"adminUserId"`
 	Telephone   string         `json:"telephone"`
