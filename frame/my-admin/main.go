@@ -3,11 +3,15 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
+	"my-admin/models"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -20,7 +24,6 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/chartjs"
 	"github.com/gin-gonic/gin"
 
-	"my-admin/models"
 	"my-admin/pages"
 	"my-admin/tables"
 )
@@ -58,6 +61,12 @@ func startServer() {
 		Addr:    ":4100",
 		Handler: r,
 	}
+	ip, err := GetOutBoundIP()
+	if err != nil {
+		return
+	}
+
+	SprintRunLog(srv.Addr, ip)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && errors.Is(err, http.ErrServerClosed) {
@@ -80,4 +89,30 @@ func startServer() {
 	eng.MysqlConnection().Close()
 
 	log.Println("Server exiting")
+}
+
+// SprintRunLog 打印启动图标
+func SprintRunLog(addr, ip string) {
+	fmt.Println(
+		`
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -     
+|                                             |   ` + "http://localhost" + addr + "/admin/login" + `         
+|   *	  *                                   |   ` + "http://" + ip + addr + "/admin/login" + `
+|    *   *    *  *  * *         *  *  *       |
+|      *     *         *      *         *     |
+|      *     *         *      *         *     |
+|      *      *  *  *  *  *   *         *     |
+|                                             |                    Project created by programmer yan.
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -      
+`)
+}
+
+func GetOutBoundIP() (ip string, err error) {
+	conn, err := net.Dial("udp", "8.8.8.8:53")
+	if err != nil {
+		return
+	}
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+	ip = strings.Split(localAddr.String(), ":")[0]
+	return
 }

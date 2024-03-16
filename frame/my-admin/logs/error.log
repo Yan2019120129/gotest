@@ -1,0 +1,741 @@
+2024-03-04T03:30:59.400+0800	[31mERROR[0m	controller/new.go:118	insert data error: table is empty
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-04T03:31:17.292+0800	[31mERROR[0m	controller/new.go:118	insert data error: table is empty
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-09T01:49:23.244+0800	[31mERROR[0m	controller/plugins.go:438	download plugins, rename errormap[error:rename /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian@v0.0.5: file exists nowPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 rawPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian]
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).PluginDownload
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/plugins.go:438
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func3
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-09T01:49:27.798+0800	[31mERROR[0m	controller/plugins.go:438	download plugins, rename errormap[error:rename /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian@v0.0.5: file exists nowPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 rawPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian]
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).PluginDownload
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/plugins.go:438
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func3
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-09T01:49:52.481+0800	[31mERROR[0m	controller/plugins.go:438	download plugins, rename errormap[error:rename /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian@v0.0.5: file exists nowPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian-0.0.5 rawPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/librarian]
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).PluginDownload
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/plugins.go:438
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func3
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-09T01:50:37.014+0800	[31mERROR[0m	controller/plugins.go:438	download plugins, rename errormap[error:rename /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/filemanager-0.0.6 /home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/filemanager@v0.0.6: file exists nowPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/filemanager-0.0.6 rawPath:/home/programmer-yan/go/pkg/mod/github.com/GoAdminGroup/filemanager]
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).PluginDownload
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/plugins.go:438
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func3
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:29:41.063+0800	[31mERROR[0m	controller/new.go:118	insert data error: Error 1366: Incorrect integer value: 'man' for column 'gender' at row 1
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:30:16.823+0800	[31mERROR[0m	controller/new.go:118	insert data error: Error 1406: Data too long for column 'phone' at row 1
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:30:50.144+0800	[31mERROR[0m	controller/new.go:118	insert data error: Error 1406: Data too long for column 'phone' at row 1
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:31:24.496+0800	[31mERROR[0m	controller/new.go:118	insert data error: Error 1406: Data too long for column 'phone' at row 1
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/new.go:118
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).NewForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/new.go:121
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:32:07.332+0800	[31mERROR[0m	controller/edit.go:174	update data error: Error 1406: Data too long for column 'phone' at row 1
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).EditForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/edit.go:174
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).EditForm
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/edit.go:143
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:49:30.918+0800	[31mERROR[0m	controller/handler.go:31	runtime error: invalid memory address or nil pointer dereference
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:914
+runtime.panicmem
+	/usr/local/go/src/runtime/panic.go:261
+runtime.sigpanic
+	/usr/local/go/src/runtime/signal_unix.go:861
+database/sql.(*DB).conn
+	/usr/local/go/src/database/sql/sql.go:1282
+database/sql.(*DB).query
+	/usr/local/go/src/database/sql/sql.go:1721
+database/sql.(*DB).QueryContext.func1
+	/usr/local/go/src/database/sql/sql.go:1704
+database/sql.(*DB).retry
+	/usr/local/go/src/database/sql/sql.go:1538
+database/sql.(*DB).QueryContext
+	/usr/local/go/src/database/sql/sql.go:1703
+database/sql.(*DB).Query
+	/usr/local/go/src/database/sql/sql.go:1717
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/performer.go:17
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/mysql.go:85
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).ShowColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/statement.go:449
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:1138
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getDataFromDatabase
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:483
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).GetData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:148
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTableData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:70
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTable
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:102
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).ShowInfo
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:60
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:50:07.552+0800	[31mERROR[0m	controller/handler.go:31	runtime error: invalid memory address or nil pointer dereference
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:914
+runtime.panicmem
+	/usr/local/go/src/runtime/panic.go:261
+runtime.sigpanic
+	/usr/local/go/src/runtime/signal_unix.go:861
+database/sql.(*DB).conn
+	/usr/local/go/src/database/sql/sql.go:1282
+database/sql.(*DB).query
+	/usr/local/go/src/database/sql/sql.go:1721
+database/sql.(*DB).QueryContext.func1
+	/usr/local/go/src/database/sql/sql.go:1704
+database/sql.(*DB).retry
+	/usr/local/go/src/database/sql/sql.go:1538
+database/sql.(*DB).QueryContext
+	/usr/local/go/src/database/sql/sql.go:1703
+database/sql.(*DB).Query
+	/usr/local/go/src/database/sql/sql.go:1717
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/performer.go:17
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/mysql.go:85
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).ShowColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/statement.go:449
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:1138
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getDataFromDatabase
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:483
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).GetData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:148
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTableData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:70
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTable
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:102
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).ShowInfo
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:60
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:50:55.392+0800	[31mERROR[0m	controller/handler.go:31	runtime error: invalid memory address or nil pointer dereference
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:914
+runtime.panicmem
+	/usr/local/go/src/runtime/panic.go:261
+runtime.sigpanic
+	/usr/local/go/src/runtime/signal_unix.go:861
+database/sql.(*DB).conn
+	/usr/local/go/src/database/sql/sql.go:1282
+database/sql.(*DB).query
+	/usr/local/go/src/database/sql/sql.go:1721
+database/sql.(*DB).QueryContext.func1
+	/usr/local/go/src/database/sql/sql.go:1704
+database/sql.(*DB).retry
+	/usr/local/go/src/database/sql/sql.go:1538
+database/sql.(*DB).QueryContext
+	/usr/local/go/src/database/sql/sql.go:1703
+database/sql.(*DB).Query
+	/usr/local/go/src/database/sql/sql.go:1717
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/performer.go:17
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/mysql.go:85
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).ShowColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/statement.go:449
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:1138
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getDataFromDatabase
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:483
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).GetData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:148
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTableData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:70
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTable
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:102
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).ShowInfo
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:60
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009
+2024-03-12T00:52:24.672+0800	[31mERROR[0m	controller/handler.go:31	runtime error: invalid memory address or nil pointer dereference
+github.com/GoAdminGroup/go-admin/modules/logger.Error
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/logger/logger.go:285
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:914
+runtime.panicmem
+	/usr/local/go/src/runtime/panic.go:261
+runtime.sigpanic
+	/usr/local/go/src/runtime/signal_unix.go:861
+database/sql.(*DB).conn
+	/usr/local/go/src/database/sql/sql.go:1282
+database/sql.(*DB).query
+	/usr/local/go/src/database/sql/sql.go:1721
+database/sql.(*DB).QueryContext.func1
+	/usr/local/go/src/database/sql/sql.go:1704
+database/sql.(*DB).retry
+	/usr/local/go/src/database/sql/sql.go:1538
+database/sql.(*DB).QueryContext
+	/usr/local/go/src/database/sql/sql.go:1703
+database/sql.(*DB).Query
+	/usr/local/go/src/database/sql/sql.go:1717
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/performer.go:17
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/mysql.go:85
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).ShowColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/db/statement.go:449
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getColumns
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:1138
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).getDataFromDatabase
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:483
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/table.(*DefaultTable).GetData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/table/default.go:148
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTableData
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:70
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).showTable
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:102
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).ShowInfo
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/controller/show.go:60
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin/modules/guard.(*Guard).CheckPrefix
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/modules/guard/guard.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).initRouter.Middleware.(*Invoker).Middleware.func6
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/modules/auth/middleware.go:132
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/gin.(*Gin).AddHandler.func1
+	/home/programmer-yan/go/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.24/adapter/gin/gin.go:87
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:102
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.LoggerWithConfig.func1
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/logger.go:240
+github.com/gin-gonic/gin.(*Context).Next
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:174
+github.com/gin-gonic/gin.(*Engine).handleHTTPRequest
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:620
+github.com/gin-gonic/gin.(*Engine).ServeHTTP
+	/home/programmer-yan/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:576
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2938
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:2009

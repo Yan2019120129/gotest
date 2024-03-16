@@ -5,7 +5,7 @@
 			"port": "3306",
 			"user": "root",
 			"pwd": "Aa123098..",
-			"name": "go_admin",
+			"name": "my_admin",
 			"driver": "mysql",
 			"max_idle_con": 5,
 			"max_open_con": 10,
@@ -17,7 +17,7 @@
 	"prefix": "admin",
 	"theme": "sword",
 	"store": {
-		"path": "/Users/taozi/Documents/Golang/gotest/frame/my-admin/public/uoloads",
+		"path": "./public/uploads",
 		"prefix": "public/uploads"
 	},
 	"title": "GoAdmin",
