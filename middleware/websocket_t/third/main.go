@@ -14,6 +14,9 @@ const (
 	// ServerOkxAddr okx 行情websocket 地址
 	ServerOkxAddr = "wss://ws.okx.com:8443/ws/v5/public"
 
+	// ServerLocalhostAddr okx 行情websocket 地址
+	ServerLocalhostAddr = "ws://localhost:3020/api/v1/ws"
+
 	// ServerAddrEH 易汇数据
 	ServerAddrEH = "wss://stream.talkfx.co/dconsumer/arrge"
 
@@ -32,21 +35,44 @@ func main() {
 	//	SetPulse(5).
 	//	Run()
 
-	index.NewDefaultWs(ServerAddrEBC).
-		SetSubMessage("{\n    \"cmd\": \"req\",\n    \"args\": [\n        \"candle.1D.BCHUSDT\",\n        361,\n        1678861513,\n        1709965573\n    ],\n    \"id\": \"trade.1D.BCHUSDT\"\n}").
-		SetManage(&EH{}).
-		SetPulse(0).
-		Run()
-
-	index.NewDefaultWs(ServerOkxAddr).
-		SetSubMessage("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"BCH-USDT\"\n    }]\n}").
-		SetManage(&Okx{}).
-		SetPulse(0).
-		Run()
-
+	//index.NewDefaultWs(ServerAddrEBC).
+	//	SetSubMessage("{\n    \"cmd\": \"req\",\n    \"args\": [\n        \"candle.1D.BCHUSDT\",\n        361,\n        1678861513,\n        1709965573\n    ],\n    \"id\": \"trade.1D.BCHUSDT\"\n}").
+	//	SetManage(&EH{}).
+	//	SetPulse(0).
+	//	Run()
+	//
+	//index.NewDefaultWs(ServerOkxAddr).
+	//	SetSubMessage("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"BCH-USDT\"\n    }]\n}").
+	//	SetManage(&Okx{}).
+	//	SetPulse(0).
+	//	Run()
+	for i := 0; i < 100; i++ {
+		index.NewDefaultWs(ServerLocalhostAddr).
+			SetSubMessage(`{
+    "op": "subscribe",
+    "data": {
+        "channel": "tickers",
+        "args": [
+            "LTC-BTC",
+            "ETC-BTC",
+            "DOGE-ETH",
+            "UNI-USDT"
+        ]
+    }
+}`).
+			SetManage(&Local{}).
+			Run()
+		time.Sleep(50 * time.Millisecond)
+		logs.Logger.Info(logs.LogMsgApp, zap.Int("connect", i))
+	}
 	wg.Add(1)
 	wg.Wait()
 }
+
+// : "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
+//[21:33:02.099]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
+//[21:33:02.100]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
+//[21:33:02.100]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"
 
 type EH struct {
 }
@@ -109,6 +135,14 @@ func (o *Okx) DealWithMessage(msgType int, msg []byte) {
 		date := t.Format("2006-01-02 15:04:05")
 		logs.Logger.Info("Okx", zap.String("date", date), zap.String("price", data.Last))
 	}
+}
+
+type Local struct {
+}
+
+// DealWithMessage 处理易汇数据
+func (l *Local) DealWithMessage(msgType int, msg []byte) {
+	logs.Logger.Info("Okx", zap.String("date", string(msg)))
 }
 
 type OkxData struct {

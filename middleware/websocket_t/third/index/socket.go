@@ -171,11 +171,7 @@ func (w *Ws) read() {
 		default:
 			msgType, msg, err := w.instance.ReadMessage()
 			if err != nil {
-				logs.Logger.Error(err.Error())
-			}
-
-			// 当对方断开连接后进行重连
-			if msgType == websocket.CloseMessage {
+				// 当对方断开连接后进行重连
 				w.reconnection()
 			}
 
