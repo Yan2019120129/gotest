@@ -31,8 +31,21 @@ func TestSelectBelongTo(t *testing.T) {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
 	}
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("User", dtoUserInfo))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("AdminUser", dtoUserInfo.AdminUser))
+}
+
+// TestSelectBelongTo 测试一对一查询内连接 并自动映射到自定义结构体测试
+func TestSelectBelongToInner(t *testing.T) {
+	dtoUserInfo := &dto.UserInfo{}
+	if err := database.DB.Model(&models.User{}).
+		Preload("Users", database.DB.Preload("Users")).
+		Take(dtoUserInfo, 1).Error; err != nil {
+		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+		return
+	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("dtoUserInfo", dtoUserInfo))
-	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("dtoUserInfo.AdminUser", dtoUserInfo.AdminUser))
+	logs.Logger.Info(logs.LogMsgApp, zap.Int("UserLen", len(dtoUserInfo.Users)), zap.Reflect("dtoUserInfo.Users", dtoUserInfo.Users))
 }
 
 // TestSelectHasMany 测试一对多关系

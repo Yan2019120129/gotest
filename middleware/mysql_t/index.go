@@ -386,7 +386,7 @@ func CrontabSelect(second time.Duration) {
 
 // Insert 测试插入
 func Insert() {
-	//userInfo := &models.User{
+	//userInfo := &models.Users{
 	//	AdminUserId:     gofakeit.Number(1, 100),
 	//	ParentId:    gofakeit.Number(1, 100),
 	//	UserName:    gofakeit.Name(),
