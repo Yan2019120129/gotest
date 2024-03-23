@@ -15,7 +15,6 @@ func TestSelectBelongsTo(t *testing.T) {
 	userInfo := &models.User{}
 	err := database.DB.Model(&models.User{}).Preload("AdminUser").Where("id = ?", 2).Find(userInfo).Error
 	if err != nil {
-		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("userInfo", userInfo))
@@ -25,10 +24,7 @@ func TestSelectBelongsTo(t *testing.T) {
 // TestSelectBelongTo 测试一对一查询 并自动映射到自定义结构体测试
 func TestSelectBelongTo(t *testing.T) {
 	dtoUserInfo := &dto.UserInfo{}
-	if err := database.DB.Model(&models.User{}).
-		Preload("AdminUser").
-		Take(dtoUserInfo, 1).Error; err != nil {
-		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+	if err := database.DB.Model(&models.User{}).Preload("AdminUser").Take(dtoUserInfo, 1).Error; err != nil {
 		return
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("User", dtoUserInfo))
@@ -38,10 +34,7 @@ func TestSelectBelongTo(t *testing.T) {
 // TestSelectBelongTo 测试一对一查询内连接 并自动映射到自定义结构体测试
 func TestSelectBelongToInner(t *testing.T) {
 	dtoUserInfo := &dto.UserInfo{}
-	if err := database.DB.Model(&models.User{}).
-		Preload("Users", database.DB.Preload("Users")).
-		Take(dtoUserInfo, 1).Error; err != nil {
-		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+	if err := database.DB.Model(&models.User{}).Preload("Users").Take(dtoUserInfo, 1).Error; err != nil {
 		return
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("dtoUserInfo", dtoUserInfo))
@@ -52,11 +45,8 @@ func TestSelectBelongToInner(t *testing.T) {
 func TestSelectHasMany(t *testing.T) {
 	// 查询管理员和用户
 	adminUserInfo := &dto.AdminUserInfo{}
-	err := database.DB.Model(&models.AdminUser{}).
-		Preload("Users", "status = ?", 10).
-		Take(adminUserInfo, 1).Error
+	err := database.DB.Model(&models.AdminUser{}).Preload("Users", "status = ?", 10).Take(adminUserInfo, 1).Error
 	if err != nil {
-		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo", adminUserInfo))

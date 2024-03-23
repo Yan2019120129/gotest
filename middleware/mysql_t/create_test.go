@@ -21,7 +21,7 @@ func TestCreateTable(t *testing.T) {
 func TestInserter(t *testing.T) {
 	userList := make([]*models.User, 0)
 	for i := 0; i < 10; i++ {
-		userList = append(userList, models.GetDefaultUser())
+		userList = append(userList, models.GetDefaultUser().SetParentId(1))
 	}
 	adminUserInfo := models.GetDefaultAdminUser().SetUser(userList...)
 	err := database.DB.Create(adminUserInfo).Error
