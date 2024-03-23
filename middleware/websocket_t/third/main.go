@@ -30,23 +30,7 @@ const (
 var wg sync.WaitGroup
 
 func main() {
-	//index.NewDefaultWs(ServerAddrEH).
-	//	//SetSubMessage("connected").
-	//	SetPulse(5).
-	//	Run()
-
-	//index.NewDefaultWs(ServerAddrEBC).
-	//	SetSubMessage("{\n    \"cmd\": \"req\",\n    \"args\": [\n        \"candle.1D.BCHUSDT\",\n        361,\n        1678861513,\n        1709965573\n    ],\n    \"id\": \"trade.1D.BCHUSDT\"\n}").
-	//	SetManage(&EH{}).
-	//	SetPulse(0).
-	//	Run()
-	//
-	//index.NewDefaultWs(ServerOkxAddr).
-	//	SetSubMessage("{\n    \"op\": \"subscribe\",\n    \"args\": [{\n        \"channel\": \"tickers\",\n        \"instId\": \"BCH-USDT\"\n    }]\n}").
-	//	SetManage(&Okx{}).
-	//	SetPulse(0).
-	//	Run()
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 12; i++ {
 		index.NewDefaultWs(ServerLocalhostAddr).
 			SetSubMessage(`{
     "op": "subscribe",
@@ -68,11 +52,6 @@ func main() {
 	wg.Add(1)
 	wg.Wait()
 }
-
-// : "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
-//[21:33:02.099]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
-//[21:33:02.100]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"}
-//[21:33:02.100]  INFO    /Users/taozi/Documents/Golang/gotest/middleware/websocket_t/third/main.go:128   Okx     {"date": "{\"code\":-1,\"data\":null,\"msg\":\"invalid character 'p' looking for beginning of value\"}\n"
 
 type EH struct {
 }
