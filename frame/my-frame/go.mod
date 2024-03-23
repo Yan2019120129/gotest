@@ -1,6 +1,6 @@
 module my-frame
 
-go 1.21.5
+go 1.20
 
 require (
 	github.com/ClickHouse/ch-go v0.58.2 // indirect
