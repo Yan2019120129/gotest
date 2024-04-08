@@ -91,15 +91,23 @@ func TestUUID(t *testing.T) {
 
 // TestRandomPrice 随机单价
 func TestRandomPrice(t *testing.T) {
-	currentPrice := 50.00
+	currentPrice := 100000.0
 	mode := 2
-	var resultPrice float64 = 0
-	if mode == 1 {
-		resultPrice = currentPrice * (1 + float64(randNum(1, 50))/10000)
-	} else {
-		resultPrice = currentPrice * float64(randNum(9950, 9999)) / 10000
+	accuracy := 3
+	randomPrice := 5.0
+	denominator := 1.0
+	for i := 0; i < accuracy; i++ {
+		denominator = denominator * 10
 	}
-	fmt.Println("data:", resultPrice)
+	var resultPrice float64 = 0
+	switch mode {
+	case 1:
+		resultPrice = currentPrice + float64(randNum(1, 5))/denominator
+	case 2:
+		resultPrice = currentPrice - float64(randNum(1, 5))/denominator
+	}
+	fmt.Println("denominator", randomPrice*1/denominator)
+	fmt.Println("resultPrice", resultPrice)
 }
 
 func randNum(m, n int) int {
