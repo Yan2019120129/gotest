@@ -3,7 +3,6 @@ package tmap
 import (
 	"fmt"
 	"github.com/brianvoe/gofakeit/v6"
-	"maps"
 	"time"
 )
 
@@ -46,13 +45,13 @@ func IfMap() {
 
 // CopyMap 测试复制map
 func CopyMap() {
-	mapData := map[string]interface{}{gofakeit.LastName(): gofakeit.Name(), gofakeit.LastName(): "yan", gofakeit.LastName(): "man"}
-	mapDataTow := map[string]interface{}{gofakeit.LastName(): 18, gofakeit.LastName(): gofakeit.Name(), gofakeit.LastName(): "man"}
-	// v为值，ok判断是否存在，存在为true，否为false
-	tempMap := map[string]interface{}{}
-	maps.Copy(tempMap, mapData)
-	maps.Copy(tempMap, mapDataTow)
-	fmt.Println(tempMap)
+	//mapData := map[string]interface{}{gofakeit.LastName(): gofakeit.Name(), gofakeit.LastName(): "yan", gofakeit.LastName(): "man"}
+	//mapDataTow := map[string]interface{}{gofakeit.LastName(): 18, gofakeit.LastName(): gofakeit.Name(), gofakeit.LastName(): "man"}
+	//// v为值，ok判断是否存在，存在为true，否为false
+	//tempMap := map[string]interface{}{}
+	//maps.Copy(tempMap, mapData)
+	//maps.Copy(tempMap, mapDataTow)
+	//fmt.Println(tempMap)
 }
 
 // MapGoroutine 测试map 多线程读写问题
