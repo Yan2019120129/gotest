@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/google/uuid"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -42,3 +44,59 @@ func Context(id string, ctx context.Context) {
 		}
 	}
 }
+
+var x int64
+var l sync.Mutex
+var wg sync.WaitGroup
+
+// 原子操作版加函数
+func atomicAdd() {
+	for i := 0; i < 10; i++ {
+		atomic.AddInt64(&x, gofakeit.Int64())
+
+	}
+	wg.Done()
+}
+
+// 互斥锁版加函数
+func mutexAdd() {
+	for i := 0; i < 10; i++ {
+		l.Lock()
+		x = gofakeit.Int64()
+		l.Unlock()
+	}
+	wg.Done()
+}
+
+// 普通版加函数
+func add() {
+	for i := 0; i < 10; i++ {
+		// x = x + 1
+		x = gofakeit.Int64()
+	}
+	wg.Done()
+}
+
+// TestMutexAdd 测试原子操作添加数据
+func TestMutexAdd(t *testing.T) {
+	start := time.Now()
+	for i := 0; i < 100000; i++ {
+		wg.Add(1)
+		//go add() // 普通版add函数 不是并发安全的
+		//go mutexAdd() // 加锁版add函数 是并发安全的，但是加锁性能开销大
+		go atomicAdd() // 原子操作版add函数 是并发安全，性能优于加锁版
+	}
+	wg.Wait()
+	end := time.Now()
+	fmt.Println(x)
+	fmt.Println(end.Sub(start))
+}
+
+// -2866055792857880426
+// 20.549042ms
+
+// -509795112266522614
+//21.598417ms
+
+// -537491006813644454
+//17.001458ms
