@@ -10,10 +10,23 @@ import (
 
 // CreateTable 创建表
 func TestCreateTable(t *testing.T) {
-	err := database.DB.AutoMigrate(&models.User{}, &models.Product{}, &models.ProductCategory{}, &models.WalletAssets{})
+	err := database.DB.AutoMigrate(&models.User{}, &models.Product{})
 	if err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return
+	}
+
+}
+
+// GetColumn 获取字段信息
+func TestGetColumn(t *testing.T) {
+	types, err := database.DB.Migrator().ColumnTypes(&models.ProductOrder{})
+	if err != nil {
+		return
+	}
+
+	for _, v := range types {
+		logs.Logger.Info(logs.LogMsgTest, zap.String("column", v.Name()))
 	}
 }
 

@@ -51,5 +51,17 @@ func TestSelectHasMany(t *testing.T) {
 	}
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo", adminUserInfo))
 	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("adminUserInfo.Users", adminUserInfo.Users))
+}
 
+// TestSelectHasMany 测试一对多关系
+func TestSelectBelongToNoAssociation(t *testing.T) {
+	// 查询管理员和用户
+	langInfo := &models.Lang{}
+	err := database.DB.Model(&models.Lang{}).Preload("AdminUser", "status = ?", 10).Preload("AdminUser.Users", "status = ?", 10).Take(langInfo, 71).Error
+	if err != nil {
+		return
+	}
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("Lang", langInfo))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("lang.AdminUser", langInfo.AdminUser))
+	logs.Logger.Info(logs.LogMsgApp, zap.Reflect("lang.AdminUser.Users", langInfo.AdminUser.Users))
 }
