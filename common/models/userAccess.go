@@ -1,7 +1,7 @@
 package models
 
-// Access 前台访问表
-type Access struct {
+// UserAccess 前台访问表
+type UserAccess struct {
 	Id        int    `gorm:"type:int unsigned primary key auto_increment;comment:主键;"`
 	AdminId   int    `gorm:"type:int unsigned not null;comment:管理ID"`
 	UserId    int    `gorm:"type:int unsigned not null;comment:用户ID"`

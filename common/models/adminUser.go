@@ -5,7 +5,7 @@ import "github.com/brianvoe/gofakeit/v6"
 // AdminUser 管理表
 type AdminUser struct {
 	Model
-	Users       []*User
+	Users       []*User `gorm:"foreignKey:AdminId"`
 	ParentId    int     `gorm:"type:int unsigned not null;comment:上级ID"`
 	UserName    string  `gorm:"column:username;type:varchar(60) not null;comment:用户名"`
 	NickName    string  `gorm:"column:nickname;type:varchar(60) not null;comment:昵称"`

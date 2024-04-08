@@ -7,8 +7,10 @@ import (
 // User 用户表
 type User struct {
 	Model
-	AdminUser   *AdminUser
-	AdminUserId int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
+	AdminUser *AdminUser
+	//AdminUserId int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
+	AdminUserId int     `gorm:"-"`
+	AdminId     int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
 	ParentId    int     `gorm:"type:int unsigned not null;comment:父级ID"`
 	UserName    string  `gorm:"column:username;uniqueIndex;type:varchar(60) not null;comment:用户名"`
 	NickName    string  `gorm:"column:nickname;type:varchar(60) not null;comment:昵称"`
@@ -28,8 +30,6 @@ type User struct {
 
 func GetDefaultUser() *User {
 	return &User{
-		AdminUserId: 0,
-		ParentId:    0,
 		UserName:    gofakeit.Name(),
 		NickName:    gofakeit.Name(),
 		Email:       gofakeit.Email(),
@@ -45,6 +45,7 @@ func GetDefaultUser() *User {
 		Desc:        gofakeit.Sentence(20),
 	}
 }
+
 func (u *User) SetAdminId(adminUserId int) *User {
 	u.AdminUserId = adminUserId
 	return u
