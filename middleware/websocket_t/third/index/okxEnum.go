@@ -1,9 +1,5 @@
 package index
 
-import (
-	"maps"
-)
-
 // ServerOkxAddr 产品行情地址。
 const (
 	// ServerOkxAddr okx 行情websocket 地址
@@ -91,8 +87,11 @@ var ChannelKlineMap = map[string]string{
 var ChannelAllMap = marge()
 
 func marge() map[string]string {
-	tempMap := make(map[string]string)
-	maps.Copy(tempMap, ChannelMap)
-	maps.Copy(tempMap, ChannelKlineMap)
+	tempMap := ChannelMap
+	for k, v := range ChannelKlineMap {
+		if _, ok := tempMap[k]; !ok {
+			tempMap[k] = v
+		}
+	}
 	return tempMap
 }
