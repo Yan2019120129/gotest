@@ -30,25 +30,31 @@ const (
 var wg sync.WaitGroup
 
 func main() {
-	for i := 0; i < 12; i++ {
-		index.NewDefaultWs(ServerLocalhostAddr).
-			SetSubMessage(`{
-    "op": "subscribe",
-    "data": {
-        "channel": "tickers",
-        "args": [
-            "LTC-BTC",
-            "ETC-BTC",
-            "DOGE-ETH",
-            "UNI-USDT"
-        ]
-    }
-}`).
-			SetManage(&Local{}).
-			Run()
-		time.Sleep(50 * time.Millisecond)
-		logs.Logger.Info(logs.LogMsgApp, zap.Int("connect", i))
-	}
+	//	message := `{
+	//"op": "subscribe",
+	//    "data": {
+	//        "channel": "tickers",
+	//        "args": [
+	//            "LTC-BTC",
+	//            "ETC-BTC",
+	//            "DOGE-ETH",
+	//            "UNI-USDT"
+	//        ]
+	//    }
+	//}`
+	//	for i := 0; i < 100; i++ {
+	//		index.NewDefaultWs(ServerLocalhostAddr).
+	//			SetSubMessage(message).
+	//			SetManage(&Local{}).
+	//			Run()
+	//		time.Sleep(50 * time.Millisecond)
+	//		logs.Logger.Info(logs.LogMsgApp, zap.Int("connect", i))
+	//	}
+
+	index.NewDefaultWs(ServerAddrEH).
+		//SetSubMessage("currency").
+		SetManage(&Local{}).
+		Run()
 	wg.Add(1)
 	wg.Wait()
 }
