@@ -1,70 +1,67 @@
 package models
 
-const (
-	ProductNumsUnlimited  = -1 //	没有限制购买
-	ProductStatusActivate = 10 //	状态上架
-	ProductStatusDisabled = -1 //	状态下架
-	ProductStatusDelete   = -2 //	状态删除
-	ProductTypeDefault    = 1  //	自营商品
-	ProductTypeWholesale  = 2  //	批发商品
-)
+import "github.com/brianvoe/gofakeit/v6"
 
-// ProductShop 数据库模型属性
-type ProductShop struct {
-	Id            int64   `json:"id"`             //主键
-	ParentId      int64   `json:"parent_id"`      //上级ID
-	AdminId       int64   `json:"admin_id"`       //管理员ID
-	CategoryId    int64   `json:"category_id"`    //类目ID
-	ShopId        int64   `json:"shop_id"`        //店铺ID 0批发中心
-	AssetsId      int64   `json:"assets_id"`      //资产ID
-	Name          string  `json:"name"`           //标题
-	Images        string  `json:"images"`         //图片列表
-	OriginalMoney float64 `json:"original_money"` //原价
-	Money         float64 `json:"money"`          //现价
-	Increase      float64 `json:"increase"`       //涨幅
-	Type          int64   `json:"type"`           //类型 1自营商品 2批发商品
-	Sort          int64   `json:"sort"`           //排序
-	Status        int64   `json:"status"`         //状态 -2删除 -1禁用 10启用
-	Sales         int64   `json:"sales"`          //销售量
-	Rating        float64 `json:"rating"`         //评分
-	Nums          int64   `json:"nums"`           //限购 -1 无限制
-	Used          int64   `json:"used"`           //已用
-	Total         int64   `json:"total"`          //总数
-	Data          string  `json:"data"`           //数据
-	Describes     string  `json:"describes"`      //描述
-	UpdatedAt     int64   `json:"updated_at"`     //更新时间
-	CreatedAt     int64   `json:"created_at"`     //创建时间
+// Product 产品表
+type Product struct {
+	Id                int `gorm:" type:int unsigned primary key auto_increment; comment: 主键"`
+	AdminUserId       int `gorm:" type:int unsigned not null; comment: 管理员ID"`
+	AdminUser         *AdminUser
+	ProductCategoryId int `gorm:" type:int unsigned not null; comment: 类目ID"`
+	ProductCategory   *ProductCategory
+	WalletAssetsId    int `gorm:" type:int unsigned not null; comment: 资产ID"`
+	WalletAssets      *WalletAssets
+	Name              string  `gorm:" type:varchar(64) not null; comment: 标题"`
+	Images            string  `gorm:" type:varchar(2048) not null; comment: 图片列表"`
+	Money             float64 `gorm:" type:decimal(12,2) not null; comment: 金额"`
+	Type              int     `gorm:" type:tinyint not null; default: 1; comment: 类型 1默认"`
+	Sort              int     `gorm:" type:int unsigned not null; comment: 排序"`
+	Status            int     `gorm:" type:tinyint not null; default: 10; comment: 状态 -2删除 -1禁用 10启用"`
+	Recommend         int     `gorm:" type:tinyint not null; default: -1; comment: 推荐 -1关闭 10推荐"`
+	Sales             int     `gorm:" type:int unsigned not null; comment: 销售量"`
+	Nums              int     `gorm:" type:tinyint not null; default: -1; comment: 限购 -1无限"`
+	Used              int     `gorm:" type:int unsigned not null; comment: 已使用"`
+	Total             int     `gorm:" type:int unsigned not null; comment: 总数"`
+	Data              string  `gorm:" type:text; comment: 数据"`
+	Describes         string  `gorm:" type:text; comment: 描述"`
+	UpdatedAt         int     `gorm:" type:int unsigned not null; autoUpdateTime; comment: 更新时间"`
+	CreatedAt         int     `gorm:" type:int unsigned not null; autoCreateTime; comment: 创建时间"`
 }
 
-// HomeProductInfo 前台产品信息
-type HomeProductInfo struct {
-	ProductInfo
-	IsFollow bool `json:"isFollow"` // 是否关注产品
+// GetProductDefault 获取默认数据
+func GetProductDefault() *Product {
+	return &Product{
+		Id:        0,
+		Name:      gofakeit.Name(),
+		Images:    gofakeit.ImageURL(200, 400),
+		Money:     gofakeit.Float64Range(10, 30),
+		Type:      gofakeit.RandomInt([]int{1, 3}),
+		Sort:      gofakeit.Number(1, 100),
+		Status:    gofakeit.RandomInt([]int{-2, -1, 20}),
+		Recommend: gofakeit.RandomInt([]int{-1, 20}),
+		Sales:     gofakeit.Number(1, 500),
+		Nums:      -1,
+		Used:      gofakeit.Number(1, 500),
+		Total:     gofakeit.Number(500, 600),
+		Data:      gofakeit.Letter(),
+		Describes: gofakeit.Letter(),
+	}
 }
 
-// StoreProductInfo 商家批发产品信息
-type StoreProductInfo struct {
-	ProductInfo
-	Status   int64   `json:"status"`   //	产品状态
-	Stock    int64   `json:"stock"`    //	产品库存
-	Increase float64 `json:"increase"` //	涨幅
+// SetAdminId 设置管理员Id
+func (p *Product) SetAdminId(id int) *Product {
+	p.AdminUserId = id
+	return p
 }
 
-// ProductInfo 产品信息
-type ProductInfo struct {
-	Id            int64   `json:"id"`            //	产品ID
-	ShopId        int64   `json:"shopId"`        //	店铺ID
-	Image         string  `json:"image"`         //	产品图片
-	Name          string  `json:"name"`          //	产品名称
-	Money         float64 `json:"money"`         //	产品现价
-	OriginalMoney float64 `json:"originalMoney"` //	产品原价
-	Type          int64   `json:"type"`          //	产品类型
-	Sales         int64   `json:"sales"`         //	产品销量
-	CreatedAt     int64   `json:"createdAt"`     //	创建时间
+// SetProductCategory 设置分类Id
+func (p *Product) SetProductCategory(id int) *Product {
+	p.ProductCategoryId = id
+	return p
 }
 
-// ProductImage 产品图片
-type ProductImage struct {
-	Label string `json:"label"` //	图片说明
-	Value string `json:"value"` //	图片地址
+// SetWalletAssetsId 设置钱包资产Id
+func (p *Product) SetWalletAssetsId(id int) *Product {
+	p.WalletAssetsId = id
+	return p
 }
