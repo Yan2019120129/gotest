@@ -18,6 +18,7 @@ const (
 	LogMsgFiber    = "fiber"
 	LogMsgGorm     = "gorm"
 	LogMsgApp      = "app"
+	LogMsgTest     = "test"
 	LogMsgOkx      = "okx"
 	LogModeCustom  = "custom"
 	LogModeProduct = "product"
