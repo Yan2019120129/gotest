@@ -2,38 +2,28 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
+	"math/rand"
+	"time"
 )
 
 func main() {
-	url := "https://www.dhgate.com/product/design-ggity-socks-for-women-sexy-letter/926012915.html"
-	method := "GET"
-
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
-
-	if err != nil {
-		fmt.Println(err)
-		return
+	number := 4
+	x := 1.0000000
+	sum := 100.0
+	for i := 0; i < number; i++ {
+		x = x * 10
 	}
-	req.Header.Add("User-Agent", "Apifox/1.0.0 (https://apifox.com)")
-	req.Header.Add("Accept", "*/*")
-	req.Header.Add("Host", "www.dhgate.com")
-	req.Header.Add("Connection", "keep-alive")
-	req.Header.Add("Cookie", "csrfToken=VV_lxhF1iyXuAxZsoAwDLuPp; language=en; vid=820A13ACD9DFEE65D15DB24E02FC1004; b2b_ip_country=US; b2b_ship_country=US; last_choice=0; ref_df=direct; odvid=rBMKgmXu39lOsl3RBBD8Ag==")
+	sum = sum * 1 / x
+	b := randNum(1, 10)
+	fmt.Println(b)
+	fmt.Println(x)
+	fmt.Println(sum)
+}
 
-	res, err := client.Do(req)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer res.Body.Close()
+func randNum(m, n int) int {
+	// 设置随机数种子
+	rand.NewSource(time.Now().UnixNano())
 
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(string(body))
+	// 生成大于m且小于n的随机整数
+	return rand.Intn(n-m) + m
 }
