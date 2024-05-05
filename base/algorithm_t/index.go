@@ -220,6 +220,26 @@ func GetIntersectionNode(headA, headB *ListNode) *ListNode {
 	return tempMap[index]
 }
 
+func GetIntersectionNodeTow(headA, headB *ListNode) *ListNode {
+	mapNode := make(map[string]*ListNode)
+	index := ""
+	for headA != nil {
+		key := fmt.Sprintf("%p", headA)
+		mapNode[key] = headA
+		headA = headA.Next
+	}
+	for headB != nil {
+		key := fmt.Sprintf("%p", headB)
+		if _, ok := mapNode[key]; ok {
+			index = key
+			break
+		}
+		headB = headB.Next
+	}
+
+	return mapNode[index]
+}
+
 func searchValues(headB *ListNode) ([]string, int, map[string]*ListNode) {
 	mapNode := make(map[string]*ListNode)
 	values := make([]string, 0)
