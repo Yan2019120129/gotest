@@ -221,23 +221,16 @@ func GetIntersectionNode(headA, headB *ListNode) *ListNode {
 }
 
 func GetIntersectionNodeTow(headA, headB *ListNode) *ListNode {
-	mapNode := make(map[string]*ListNode)
-	index := ""
-	for headA != nil {
-		key := fmt.Sprintf("%p", headA)
-		mapNode[key] = headA
-		headA = headA.Next
+	mapNode := make(map[*ListNode]bool)
+	for tmp := headA; tmp != nil; tmp = tmp.Next {
+		mapNode[tmp] = true
 	}
-	for headB != nil {
-		key := fmt.Sprintf("%p", headB)
-		if _, ok := mapNode[key]; ok {
-			index = key
-			break
+	for tmp := headB; tmp != nil; tmp = tmp.Next {
+		if mapNode[tmp] {
+			return tmp
 		}
-		headB = headB.Next
 	}
-
-	return mapNode[index]
+	return nil
 }
 
 func searchValues(headB *ListNode) ([]string, int, map[string]*ListNode) {

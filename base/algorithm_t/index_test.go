@@ -107,16 +107,24 @@ func BenchmarkMoveZeroesMy(b *testing.B) {
 
 // TestGetIntersectionNode 测试交叉链表
 func TestGetIntersectionNode(t *testing.T) {
+	//sync := &ListNode{
+	//	Val: 8,
+	//	Next: &ListNode{
+	//		Val: 4,
+	//		Next: &ListNode{
+	//			Val: 5},
+	//	},
+	//}
+	//temp := &ListNode{Val: 4, Next: &ListNode{Val: 1, Next: sync}}
+	//temp2 := &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 1, Next: sync}}}
 	sync := &ListNode{
-		Val: 8,
+		Val: 2,
 		Next: &ListNode{
 			Val: 4,
-			Next: &ListNode{
-				Val: 5},
 		},
 	}
-	temp := &ListNode{Val: 4, Next: &ListNode{Val: 1, Next: sync}}
-	temp2 := &ListNode{Val: 5, Next: &ListNode{Val: 6, Next: &ListNode{Val: 1, Next: sync}}}
+	temp2 := &ListNode{Val: 3, Next: sync}
+	temp := &ListNode{Val: 1, Next: &ListNode{Val: 9, Next: &ListNode{Val: 1, Next: sync}}}
 
 	//sync := &ListNode{
 	//	Val: 1,
@@ -124,7 +132,7 @@ func TestGetIntersectionNode(t *testing.T) {
 	//temp := sync
 	//temp2 := sync
 
-	node := GetIntersectionNode(temp, temp2)
+	node := GetIntersectionNodeTow(temp, temp2)
 	if node != nil {
 		t.Log(node.Val)
 	}
