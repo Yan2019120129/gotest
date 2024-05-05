@@ -141,3 +141,36 @@ func MaximumNumberOfStringPairsFrid(words []string) int {
 	}
 	return ans
 }
+
+// MoveZeroes 移动零值
+func MoveZeroes(nums []int) {
+	length := len(nums)
+	if length == 0 {
+		return
+	}
+	j := 0
+	for i := 0; i < length; i++ {
+		if nums[i] != 0 {
+			temp := nums[i]
+			nums[i] = nums[j]
+			nums[j] = temp
+			j++
+		}
+	}
+}
+
+// 输入: nums = [0,1,0,3,12]
+// 输出: [1,3,12,0,0]
+
+// RemoveElement 移除元素
+func RemoveElement(nums []int, val int) int {
+	length := len(nums)
+	number := 0
+	for i := 0; i < length; i++ {
+		if nums[i] == val {
+			nums = append(nums[:i], nums[i+1:]...)
+			number++
+		}
+	}
+	return length - number
+}
