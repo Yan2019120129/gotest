@@ -3,6 +3,7 @@ package string_t
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -61,4 +62,11 @@ func TestMultipleDataString(t *testing.T) {
 func TestMultipleDataInt(t *testing.T) {
 	//MultipleDataInt(45, 33, 90)
 	MultipleDataInt(45)
+}
+
+// TestMultipleDataInt 测试传入多数据的情况
+func TestStringSlice(t *testing.T) {
+	stringList := []string{"yan"}
+	joinStrings := strings.Join(stringList, ",")
+	fmt.Println(joinStrings)
 }

@@ -14,7 +14,6 @@ func Map() {
 		fmt.Println("p:", p)
 		fmt.Println("ok:", ok)
 	}
-
 }
 
 // ForMap 测试map for 遍历
