@@ -145,9 +145,6 @@ func MaximumNumberOfStringPairsFrid(words []string) int {
 // MoveZeroes 移动零值
 func MoveZeroes(nums []int) {
 	length := len(nums)
-	if length == 0 {
-		return
-	}
 	j := 0
 	for i := 0; i < length; i++ {
 		if nums[i] != 0 {
@@ -155,6 +152,22 @@ func MoveZeroes(nums []int) {
 			nums[i] = nums[j]
 			nums[j] = temp
 			j++
+		}
+	}
+}
+
+// MoveZeroesMy 移动零值
+func MoveZeroesMy(nums []int) {
+	length := len(nums)
+	for i := 0; i < length; i++ {
+		if nums[i] == 0 {
+			for j := i; j < length; j++ {
+				if nums[j] != 0 {
+					nums[i] = nums[j]
+					nums[j] = 0
+					break
+				}
+			}
 		}
 	}
 }
@@ -173,4 +186,49 @@ func RemoveElement(nums []int, val int) int {
 		}
 	}
 	return length - number
+}
+
+// Merge 二路归并算法
+func Merge(array, arrayTow []int, low, m, height int) {
+	//i := low
+	//j := m + 1
+	//k := low
+	//for (i <= m) && (j <= height) {
+	//	if array[i]
+	//}
+}
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func GetIntersectionNode(headA, headB *ListNode) *ListNode {
+	values, lenght, tempMap := searchValues(headA)
+	values1, lenght1, _ := searchValues(headB)
+	tempLen := lenght
+	if lenght > lenght1 {
+		tempLen = lenght1
+	}
+	index := ""
+	for i := 1; i <= tempLen; i++ {
+		if values1[lenght1-i] == values[lenght-i] {
+			index = values1[lenght1-i]
+			continue
+		}
+	}
+	return tempMap[index]
+}
+
+func searchValues(headB *ListNode) ([]string, int, map[string]*ListNode) {
+	mapNode := make(map[string]*ListNode)
+	values := make([]string, 0)
+	for headB != nil {
+		key := fmt.Sprintf("%p", headB)
+		mapNode[key] = headB
+		values = append(values, key)
+		headB = headB.Next
+	}
+
+	return values, len(values), mapNode
 }
