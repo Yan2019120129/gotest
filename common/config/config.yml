@@ -64,7 +64,7 @@ redis:
     # 密码
     pass: ""
     # 数据库 0-15
-    dbname: 0
+    dbname: 15
     # 连接超时时间
     connect-timeout: 30
     # 读取超时时间
