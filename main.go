@@ -1,29 +1,25 @@
 package main
 
-import (
-	"fmt"
-	"math/rand"
-	"time"
+import "fmt"
+
+const (
+	serverAddr = "./product"
 )
 
 func main() {
-	number := 4
-	x := 1.0000000
-	sum := 100.0
-	for i := 0; i < number; i++ {
-		x = x * 10
+	name := "/crawling/describe/images_I_41ljs+T-dO14S._SL1500_.jpg"
+	tmpName := []byte(name)
+	isPoint := false
+	for i := len(tmpName) - 1; i > 0; i-- {
+		if tmpName[i] == '+' || tmpName[i] == '-' {
+			tmpName[i] = '_'
+		}
+		if tmpName[i] == '.' && isPoint {
+			tmpName = append(tmpName[:i], tmpName[i+1:]...)
+		}
+		if tmpName[i] == '.' {
+			isPoint = true
+		}
 	}
-	sum = sum * 1 / x
-	b := randNum(1, 10)
-	fmt.Println(b)
-	fmt.Println(x)
-	fmt.Println(sum)
-}
-
-func randNum(m, n int) int {
-	// 设置随机数种子
-	rand.NewSource(time.Now().UnixNano())
-
-	// 生成大于m且小于n的随机整数
-	return rand.Intn(n-m) + m
+	fmt.Println(string(tmpName))
 }
