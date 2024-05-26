@@ -7,7 +7,7 @@ import (
 // User 用户表
 type User struct {
 	Model
-	AdminUser *AdminUser
+	//AdminUser *AdminUser
 	//AdminUserId int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
 	AdminUserId int     `gorm:"-"`
 	AdminId     int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
@@ -52,7 +52,7 @@ func (u *User) SetAdminId(adminUserId int) *User {
 }
 
 func (u *User) SetAdminUser(adminUser *AdminUser) *User {
-	u.AdminUser = adminUser
+	//u.AdminUser = adminUser
 	return u
 }
 
