@@ -94,6 +94,7 @@ func (_Dhgate *Dhgate) Details(url string) *ProductInfo {
 			}
 		})
 	})
+
 	_Dhgate.collyCollector.OnResponse(func(r *colly.Response) {
 		if !utils.PathExists(saveImagePath) {
 			utils.PathMkdirAll(saveImagePath)
