@@ -3,7 +3,6 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"my-frame/app/admin/api/index"
-	"my-frame/app/admin/api/okx"
 )
 
 func InitRouter(ctx *gin.Engine) {
@@ -17,9 +16,5 @@ func InitRouter(ctx *gin.Engine) {
 		router.POST("/redis/rds", index.Rds)
 		router.POST("/redis/sub", index.SubRds)
 		router.POST("/redis/publish", index.Publish)
-		okxRouter := router.Group("/okx")
-		{
-			okxRouter.GET("/ticker/index", okx.TickerIndex)
-		}
 	}
 }
