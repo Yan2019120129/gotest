@@ -1,25 +1,28 @@
 package main
 
-import "fmt"
-
-const (
-	serverAddr = "./product"
-)
+var sqlPaths = []string{
+	"./common/file/productsql/product.sql",
+	"./common/file/productsql/product_attrs_key.sql",
+	"./common/file/productsql/product_attrs_sku.sql",
+	"./common/file/productsql/product_attrs_val.sql"}
 
 func main() {
-	name := "/crawling/describe/images_I_41ljs+T-dO14S._SL1500_.jpg"
-	tmpName := []byte(name)
-	isPoint := false
-	for i := len(tmpName) - 1; i > 0; i-- {
-		if tmpName[i] == '+' || tmpName[i] == '-' {
-			tmpName[i] = '_'
-		}
-		if tmpName[i] == '.' && isPoint {
-			tmpName = append(tmpName[:i], tmpName[i+1:]...)
-		}
-		if tmpName[i] == '.' {
-			isPoint = true
-		}
+	strs := []string{"eat", "tea", "tan", "ate", "nat", "bat"}
+	groupAnagrams(strs)
+}
+
+// 字母异位词分组
+func groupAnagrams(arr []string) [][]string {
+
+	return nil
+}
+
+// binarySorting 二分排序
+func binarySorting(s string) string {
+	sLen := len(s)
+	if sLen == 1 || sLen == 0 {
+		return s
 	}
-	fmt.Println(string(tmpName))
+
+	return s
 }
