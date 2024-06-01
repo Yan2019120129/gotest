@@ -2,25 +2,29 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"my-frame/app/admin/router"
-	"my-frame/config"
+	"my-frame/configs"
 	"my-frame/module/logs"
 )
 
 func main() {
+	InitApp()
+}
 
+// InitApp 初始化项目
+func InitApp() {
 	// 配置gin
-	cfg := config.GetGin()
+	cfg := configs.GetGin()
 
 	engin := gin.Default()
 
 	// 初始化后台路由
 	router.InitRouter(engin)
 
-	// 初始化websocket
-	//_ = okx.OkxInstance.ConnectWS()
+	zap.ReplaceGlobals(logs.Logger)
 
 	if err := engin.Run(cfg.Port); err != nil {
-		logs.Logger.Error(err.Error())
+		zap.L().Error(err.Error())
 	}
 }
