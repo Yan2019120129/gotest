@@ -1,87 +1,103 @@
 package main
 
 import (
-	"gorm.io/gorm"
-	"gotest/common/models"
-	"gotest/common/utils"
+	"strconv"
 	"strings"
+	"sync"
 )
 
-// AttrsAttr 产品属性信息
-type AttrsAttr struct {
-	models.ProductAttrsKey
-	Value []*models.ProductAttrsVal `gorm:"foreignKey:KeyId"`
+type ProductAttr struct {
+	mutex    sync.Mutex
+	Price    []float64
+	Images   []string
+	Style    map[string][]string
+	Title    string
+	Name     string
+	Describe string
 }
 
-func (AttrsAttr) TableName() string {
-	return "product_attrs_key"
-}
-
-// InsertProduct 插入爬取的产品
-func InsertProduct(tx *gorm.DB, settingAdminId, categoryId uint, productAttr *ProductAttr) error {
-	if err := tx.Transaction(func(tx *gorm.DB) error {
-		discount := utils.Round((productAttr.GetOriginalPrice()-productAttr.GetCurrentPrice())/productAttr.GetOriginalPrice(), 2)
-		productInfo := models.Product{
-			AdminId:    settingAdminId,
-			CategoryId: categoryId,
-			Name:       productAttr.Title,
-			Images:     productAttr.Images,
-			Money:      productAttr.GetCurrentPrice(),
-			Discount:   discount,
-			Type:       2,
-			Desc:       productAttr.Describe,
-		}
-		// 插入产品
-		if err := tx.Create(&productInfo).Error; err != nil {
-			return err
-		}
-
-		if len(productAttr.Style) > 0 {
-			productKeyList := make([]*AttrsAttr, 0)
-			for key, values := range productAttr.Style {
-				attrsKeyInfo := &AttrsAttr{
-					ProductAttrsKey: models.ProductAttrsKey{
-						Model:     gorm.Model{},
-						ProductId: productInfo.ID,
-						Name:      key,
-					},
-				}
-				for _, value := range values {
-					attrsKeyInfo.Value = append(attrsKeyInfo.Value, &models.ProductAttrsVal{
-						Name: value,
-					})
-				}
-				productKeyList = append(productKeyList, attrsKeyInfo)
-			}
-
-			// 插入产品健值属性
-			if err := tx.Create(&productKeyList).Error; err != nil {
-				return err
-			}
-
-			generateSkuList := ProductAttrsGenerateSkuList(tx, productInfo.ID)
-
-			productSkuList := make([]*models.ProductAttrsSku, 0)
-			for _, skuInfo := range generateSkuList {
-				productSkuList = append(productSkuList, &models.ProductAttrsSku{
-					ProductId: productInfo.ID,
-					Vals:      strings.Join(skuInfo.Ids, ","),
-					Name:      strings.Join(skuInfo.Name, "."),
-					Money:     productAttr.GetCurrentPrice(),
-					Discount:  discount,
-				})
-			}
-
-			// 插入产品sku属性
-			if err := tx.Create(&productSkuList).Error; err != nil {
-				return err
-			}
-		}
-
-		return nil
-	}); err != nil {
-		return err
+func NewProductAttr() *ProductAttr {
+	return &ProductAttr{
+		mutex:  sync.Mutex{},
+		Images: make([]string, 0),
+		Style:  make(map[string][]string),
 	}
+}
 
-	return nil
+// SetDescribe 设置产品详情
+func (_ProductInfo *ProductAttr) SetDescribe(describe string) *ProductAttr {
+	_ProductInfo.Title = describe
+	return _ProductInfo
+}
+
+// SetTitle 设置产品标题
+func (_ProductInfo *ProductAttr) SetTitle(title string) *ProductAttr {
+	_ProductInfo.Title = strings.TrimSpace(title)
+	return _ProductInfo
+}
+
+// SetPrice 设置产品金额
+func (_ProductInfo *ProductAttr) SetPrice(priceStr string) *ProductAttr {
+	// 是否小数点
+	isPoint := false
+	ss := ""
+	for i := 0; i < len(priceStr); i++ {
+		if priceStr[i] == '.' {
+			ss += string(priceStr[i])
+			isPoint = true
+		} else {
+			n, err := strconv.Atoi(string(priceStr[i]))
+			if isPoint && err != nil {
+				break
+			}
+			if err == nil {
+				ss += strconv.Itoa(n)
+			}
+		}
+	}
+	price, _ := strconv.ParseFloat(ss, 64)
+	_ProductInfo.Price = append(_ProductInfo.Price, price)
+	return _ProductInfo
+}
+
+// SetImages 设置产品图片
+func (_ProductInfo *ProductAttr) SetImages(image string) *ProductAttr {
+	index := make([]int, 0)
+	for sum, j := 0, len(image)-1; j > 0; j-- {
+		if image[j] == uint8('.') {
+			index = append(index, j)
+			sum++
+		}
+		if sum == 2 {
+			break
+		}
+	}
+	if len(index) > 0 {
+		image = image[:index[1]+1] + "_SL1500_" + image[index[0]:]
+	}
+	_ProductInfo.Images = append(_ProductInfo.Images, image)
+	return _ProductInfo
+}
+
+// SetStyle 获取现价
+func (_ProductInfo *ProductAttr) SetStyle(key, value string) *ProductAttr {
+	key = strings.Replace(key, ":", "", 1)
+	if key == "*" {
+		key = "Specification"
+	}
+	value = strings.TrimSpace(value)
+	key = strings.TrimSpace(key)
+	_ProductInfo.mutex.Lock()
+	defer _ProductInfo.mutex.Unlock()
+	_ProductInfo.Style[key] = append(_ProductInfo.Style[key], value)
+	return _ProductInfo
+}
+
+// GetStyleLen 获取现价
+func (_ProductInfo *ProductAttr) GetStyleLen(key string) int {
+	key = strings.Replace(key, ":", "", 1)
+	_ProductInfo.mutex.Lock()
+	defer _ProductInfo.mutex.Unlock()
+	styleLen := len(_ProductInfo.Style[key])
+	return styleLen
 }
