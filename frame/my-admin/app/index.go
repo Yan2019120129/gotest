@@ -24,7 +24,6 @@ import (
 // InitServer 初始化服务
 func InitServer() {
 	template.AddComp(chartjs.NewChart())
-	gin.SetMode(gin.DebugMode)
 	gin.DefaultWriter = io.Discard
 	r := gin.Default()
 	admin.InitRouter(r)

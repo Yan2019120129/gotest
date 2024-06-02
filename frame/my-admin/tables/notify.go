@@ -7,11 +7,11 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 )
 
-func GetLangTable(ctx *context.Context) table.Table {
+func GetNotifyTable(ctx *context.Context) table.Table {
 
-	lang := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
+	notify := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
 
-	info := lang.GetInfo().HideFilterArea()
+	info := notify.GetInfo().HideFilterArea()
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
@@ -19,31 +19,31 @@ func GetLangTable(ctx *context.Context) table.Table {
 	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
+	info.AddField("User_id", "user_id", db.Int)
+	info.AddField("Mode", "mode", db.Smallint)
+	info.AddField("Type", "type", db.Smallint)
 	info.AddField("Name", "name", db.Varchar)
-	info.AddField("Alias", "alias", db.Varchar)
-	info.AddField("Symbol", "symbol", db.Varchar)
-	info.AddField("Icon", "icon", db.Varchar)
-	info.AddField("Sort", "sort", db.Tinyint)
+	info.AddField("Content", "content", db.Text)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
 
-	info.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	info.SetTable("notify").SetTitle("Notify").SetDescription("Notify")
 
-	formList := lang.GetForm()
+	formList := notify.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
 	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
+	formList.AddField("User_id", "user_id", db.Int, form.Number)
+	formList.AddField("Mode", "mode", db.Smallint, form.Number)
+	formList.AddField("Type", "type", db.Smallint, form.Number)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
-	formList.AddField("Alias", "alias", db.Varchar, form.Text)
-	formList.AddField("Symbol", "symbol", db.Varchar, form.Text)
-	formList.AddField("Icon", "icon", db.Varchar, form.Text)
-	formList.AddField("Sort", "sort", db.Tinyint, form.Number)
+	formList.AddField("Content", "content", db.Text, form.RichText)
 	formList.AddField("Status", "status", db.Smallint, form.Number)
 	formList.AddField("Data", "data", db.Text, form.RichText)
 
-	formList.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	formList.SetTable("notify").SetTitle("Notify").SetDescription("Notify")
 
-	return lang
+	return notify
 }
