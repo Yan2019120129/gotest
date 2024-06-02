@@ -15,15 +15,14 @@ func GetTranslateTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Lang", "lang", db.Varchar)
 	info.AddField("Name", "name", db.Varchar)
 	info.AddField("Type", "type", db.Tinyint)
 	info.AddField("Field", "field", db.Varchar)
 	info.AddField("Value", "value", db.Text)
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 
 	info.SetTable("translate").SetTitle("Translate").SetDescription("Translate")
 

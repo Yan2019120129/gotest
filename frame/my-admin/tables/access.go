@@ -15,9 +15,6 @@ func GetAccessTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("User_id", "user_id", db.Int)
 	info.AddField("Source_id", "source_id", db.Int)
@@ -27,14 +24,13 @@ func GetAccessTable(ctx *context.Context) table.Table {
 	info.AddField("Route", "route", db.Varchar)
 	info.AddField("Headers", "headers", db.Text)
 	info.AddField("Data", "data", db.Text)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("access").SetTitle("Access").SetDescription("Access")
 
 	formList := access.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
+
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("User_id", "user_id", db.Int, form.Number)
 	formList.AddField("Source_id", "source_id", db.Int, form.Number)
@@ -44,7 +40,6 @@ func GetAccessTable(ctx *context.Context) table.Table {
 	formList.AddField("Route", "route", db.Varchar, form.Text)
 	formList.AddField("Headers", "headers", db.Text, form.RichText)
 	formList.AddField("Data", "data", db.Text, form.RichText)
-
 	formList.SetTable("access").SetTitle("Access").SetDescription("Access")
 
 	return access

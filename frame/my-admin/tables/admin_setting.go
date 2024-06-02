@@ -15,9 +15,6 @@ func GetAdminSettingTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Group_id", "group_id", db.Int)
 	info.AddField("Name", "name", db.Varchar)
@@ -25,14 +22,12 @@ func GetAdminSettingTable(ctx *context.Context) table.Table {
 	info.AddField("Field", "field", db.Varchar)
 	info.AddField("Value", "value", db.Text)
 	info.AddField("Data", "data", db.Text)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("admin_setting").SetTitle("AdminSetting").SetDescription("AdminSetting")
 
 	formList := adminSetting.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Group_id", "group_id", db.Int, form.Number)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
@@ -40,7 +35,6 @@ func GetAdminSettingTable(ctx *context.Context) table.Table {
 	formList.AddField("Field", "field", db.Varchar, form.Text)
 	formList.AddField("Value", "value", db.Text, form.RichText)
 	formList.AddField("Data", "data", db.Text, form.RichText)
-
 	formList.SetTable("admin_setting").SetTitle("AdminSetting").SetDescription("AdminSetting")
 
 	return adminSetting
