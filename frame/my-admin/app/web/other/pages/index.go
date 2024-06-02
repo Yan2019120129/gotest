@@ -3,7 +3,7 @@ package pages
 import (
 	"github.com/GoAdminGroup/go-admin/context"
 	"github.com/GoAdminGroup/go-admin/modules/config"
-	template2 "github.com/GoAdminGroup/go-admin/template"
+	tmpl "github.com/GoAdminGroup/go-admin/template"
 	"github.com/GoAdminGroup/go-admin/template/chartjs"
 	"github.com/GoAdminGroup/go-admin/template/types"
 	"github.com/GoAdminGroup/themes/sword/components/card"
@@ -15,7 +15,7 @@ import (
 
 func GetDashBoard(ctx *context.Context) (types.Panel, error) {
 
-	components := template2.Get(config.GetTheme())
+	components := tmpl.Get(config.GetTheme())
 	colComp := components.Col()
 
 	/**************************
