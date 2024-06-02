@@ -15,9 +15,6 @@ func GetWalletUserTransferTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Sender_id", "sender_id", db.Int)
 	info.AddField("Receiver_id", "receiver_id", db.Int)
@@ -27,14 +24,13 @@ func GetWalletUserTransferTable(ctx *context.Context) table.Table {
 	info.AddField("Fee", "fee", db.Decimal)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 
 	info.SetTable("wallet_user_transfer").SetTitle("WalletUserTransfer").SetDescription("WalletUserTransfer")
 
 	formList := walletUserTransfer.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Sender_id", "sender_id", db.Int, form.Number)
 	formList.AddField("Receiver_id", "receiver_id", db.Int, form.Number)

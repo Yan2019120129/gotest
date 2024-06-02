@@ -15,9 +15,6 @@ func GetArticleTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Image", "image", db.Varchar)
 	info.AddField("Name", "name", db.Varchar)
@@ -26,14 +23,12 @@ func GetArticleTable(ctx *context.Context) table.Table {
 	info.AddField("Type", "type", db.Smallint)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("article").SetTitle("Article").SetDescription("Article")
 
 	formList := article.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Image", "image", db.Varchar, form.Text)
 	formList.AddField("Name", "name", db.Varchar, form.Text)

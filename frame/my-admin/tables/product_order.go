@@ -15,9 +15,6 @@ func GetProductOrderTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("User_id", "user_id", db.Int)
 	info.AddField("Product_id", "product_id", db.Int)
@@ -28,14 +25,13 @@ func GetProductOrderTable(ctx *context.Context) table.Table {
 	info.AddField("Status", "status", db.Tinyint)
 	info.AddField("Data", "data", db.Text)
 	info.AddField("Expired_at", "expired_at", db.Datetime)
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 
 	info.SetTable("product_order").SetTitle("ProductOrder").SetDescription("ProductOrder")
 
 	formList := productOrder.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("User_id", "user_id", db.Int, form.Number)
 	formList.AddField("Product_id", "product_id", db.Int, form.Number)

@@ -15,9 +15,6 @@ func GetCountryTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Name", "name", db.Varchar)
 	info.AddField("Alias", "alias", db.Varchar)
@@ -27,14 +24,12 @@ func GetCountryTable(ctx *context.Context) table.Table {
 	info.AddField("Code", "code", db.Varchar)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("country").SetTitle("Country").SetDescription("Country")
 
 	formList := country.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
 	formList.AddField("Alias", "alias", db.Varchar, form.Text)

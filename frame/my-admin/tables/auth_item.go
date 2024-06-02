@@ -15,22 +15,17 @@ func GetAuthItemTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Name", "name", db.Varchar)
 	info.AddField("Type", "type", db.Tinyint)
 	info.AddField("Desc", "desc", db.Varchar)
 	info.AddField("Rule", "rule", db.Varchar)
 	info.AddField("Data", "data", db.Varchar)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("auth_item").SetTitle("AuthItem").SetDescription("AuthItem")
 
 	formList := authItem.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
 	formList.AddField("Type", "type", db.Tinyint, form.Number)
 	formList.AddField("Desc", "desc", db.Varchar, form.Text)

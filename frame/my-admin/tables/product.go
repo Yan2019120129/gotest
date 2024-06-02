@@ -15,9 +15,6 @@ func GetProductTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Category_id", "category_id", db.Int)
 	info.AddField("Assets_id", "assets_id", db.Int)
@@ -29,14 +26,13 @@ func GetProductTable(ctx *context.Context) table.Table {
 	info.AddField("Status", "status", db.Tinyint)
 	info.AddField("Data", "data", db.Text)
 	info.AddField("Desc", "desc", db.Text)
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 
 	info.SetTable("product").SetTitle("Product").SetDescription("Product")
 
 	formList := product.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Category_id", "category_id", db.Int, form.Number)
 	formList.AddField("Assets_id", "assets_id", db.Int, form.Number)

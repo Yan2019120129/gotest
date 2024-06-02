@@ -15,9 +15,6 @@ func GetAdminLogsTable(ctx *context.Context) table.Table {
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
-	info.AddField("Created_at", "created_at", db.Datetime)
-	info.AddField("Updated_at", "updated_at", db.Datetime)
-	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Ip", "ip", db.Int)
 	info.AddField("Headers", "headers", db.Text)
@@ -25,14 +22,12 @@ func GetAdminLogsTable(ctx *context.Context) table.Table {
 	info.AddField("Route", "route", db.Varchar)
 	info.AddField("Body", "body", db.Text)
 	info.AddField("Data", "data", db.Text)
-
+	info.AddField("Created_at", "created_at", db.Datetime)
+	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.SetTable("admin_logs").SetTitle("AdminLogs").SetDescription("AdminLogs")
 
 	formList := adminLogs.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
-	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
-	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
-	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Ip", "ip", db.Int, form.Ip)
 	formList.AddField("Headers", "headers", db.Text, form.RichText)
@@ -40,7 +35,6 @@ func GetAdminLogsTable(ctx *context.Context) table.Table {
 	formList.AddField("Route", "route", db.Varchar, form.Text)
 	formList.AddField("Body", "body", db.Text, form.RichText)
 	formList.AddField("Data", "data", db.Text, form.RichText)
-
 	formList.SetTable("admin_logs").SetTitle("AdminLogs").SetDescription("AdminLogs")
 
 	return adminLogs
