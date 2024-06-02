@@ -25,7 +25,7 @@
 	"mini_logo": "\u003cb\u003eG\u003c/b\u003eA",
 	"index": "/",
 	"login_url": "/login",
-	"debug": true,
+	"debug": false,
 	"env": "local",
 	"info_log": "./website/public/logs/info.log",
 	"error_log": "./website/public/logs/error.log",

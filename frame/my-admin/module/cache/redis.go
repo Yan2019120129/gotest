@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"log"
-	"my-frame/configs"
+	"my-admin/configs"
 	"sync"
 	"time"
 )

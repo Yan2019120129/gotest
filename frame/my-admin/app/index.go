@@ -9,6 +9,7 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/chartjs"
 	_ "github.com/GoAdminGroup/themes/sword" // ui theme
 	"github.com/gin-gonic/gin"
+	"io"
 	"log"
 	admin "my-admin/app/admin/router"
 	web "my-admin/app/web/router"
@@ -22,12 +23,13 @@ import (
 
 // InitServer 初始化服务
 func InitServer() {
+	template.AddComp(chartjs.NewChart())
+	gin.SetMode(gin.DebugMode)
+	gin.DefaultWriter = io.Discard
 	r := gin.Default()
-	gin.SetMode(gin.ReleaseMode)
 	admin.InitRouter(r)
 
 	adminConfig := configs.GetGoAdmin()
-	template.AddComp(chartjs.NewChart())
 	eng := engine.Default()
 	if err := eng.AddConfigFromJSON(adminConfig.ConfigPath).
 		AddGenerators(tables.Generators).
