@@ -7,11 +7,11 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 )
 
-func GetLangTable(ctx *context.Context) table.Table {
+func GetWalletPaymentTable(ctx *context.Context) table.Table {
 
-	lang := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
+	walletPayment := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
 
-	info := lang.GetInfo().HideFilterArea()
+	info := walletPayment.GetInfo().HideFilterArea()
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
@@ -19,31 +19,39 @@ func GetLangTable(ctx *context.Context) table.Table {
 	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
+	info.AddField("Assets_id", "assets_id", db.Int)
 	info.AddField("Name", "name", db.Varchar)
-	info.AddField("Alias", "alias", db.Varchar)
-	info.AddField("Symbol", "symbol", db.Varchar)
 	info.AddField("Icon", "icon", db.Varchar)
-	info.AddField("Sort", "sort", db.Tinyint)
+	info.AddField("Type", "type", db.Tinyint)
+	info.AddField("Mode", "mode", db.Tinyint)
+	info.AddField("Rate", "rate", db.Decimal)
+	info.AddField("Is_voucher", "is_voucher", db.Tinyint)
+	info.AddField("Level", "level", db.Tinyint)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
+	info.AddField("Desc", "desc", db.Text)
 
-	info.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	info.SetTable("wallet_payment").SetTitle("WalletPayment").SetDescription("WalletPayment")
 
-	formList := lang.GetForm()
+	formList := walletPayment.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
 	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
+	formList.AddField("Assets_id", "assets_id", db.Int, form.Number)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
-	formList.AddField("Alias", "alias", db.Varchar, form.Text)
-	formList.AddField("Symbol", "symbol", db.Varchar, form.Text)
 	formList.AddField("Icon", "icon", db.Varchar, form.Text)
-	formList.AddField("Sort", "sort", db.Tinyint, form.Number)
+	formList.AddField("Type", "type", db.Tinyint, form.Number)
+	formList.AddField("Mode", "mode", db.Tinyint, form.Number)
+	formList.AddField("Rate", "rate", db.Decimal, form.Text)
+	formList.AddField("Is_voucher", "is_voucher", db.Tinyint, form.Number)
+	formList.AddField("Level", "level", db.Tinyint, form.Number)
 	formList.AddField("Status", "status", db.Smallint, form.Number)
 	formList.AddField("Data", "data", db.Text, form.RichText)
+	formList.AddField("Desc", "desc", db.Text, form.RichText)
 
-	formList.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	formList.SetTable("wallet_payment").SetTitle("WalletPayment").SetDescription("WalletPayment")
 
-	return lang
+	return walletPayment
 }

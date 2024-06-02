@@ -7,11 +7,11 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 )
 
-func GetLangTable(ctx *context.Context) table.Table {
+func GetAdminLogsTable(ctx *context.Context) table.Table {
 
-	lang := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
+	adminLogs := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
 
-	info := lang.GetInfo().HideFilterArea()
+	info := adminLogs.GetInfo().HideFilterArea()
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
@@ -19,31 +19,29 @@ func GetLangTable(ctx *context.Context) table.Table {
 	info.AddField("Updated_at", "updated_at", db.Datetime)
 	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
+	info.AddField("Ip", "ip", db.Int)
+	info.AddField("Headers", "headers", db.Text)
 	info.AddField("Name", "name", db.Varchar)
-	info.AddField("Alias", "alias", db.Varchar)
-	info.AddField("Symbol", "symbol", db.Varchar)
-	info.AddField("Icon", "icon", db.Varchar)
-	info.AddField("Sort", "sort", db.Tinyint)
-	info.AddField("Status", "status", db.Smallint)
+	info.AddField("Route", "route", db.Varchar)
+	info.AddField("Body", "body", db.Text)
 	info.AddField("Data", "data", db.Text)
 
-	info.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	info.SetTable("admin_logs").SetTitle("AdminLogs").SetDescription("AdminLogs")
 
-	formList := lang.GetForm()
+	formList := adminLogs.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
 	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
+	formList.AddField("Ip", "ip", db.Int, form.Ip)
+	formList.AddField("Headers", "headers", db.Text, form.RichText)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
-	formList.AddField("Alias", "alias", db.Varchar, form.Text)
-	formList.AddField("Symbol", "symbol", db.Varchar, form.Text)
-	formList.AddField("Icon", "icon", db.Varchar, form.Text)
-	formList.AddField("Sort", "sort", db.Tinyint, form.Number)
-	formList.AddField("Status", "status", db.Smallint, form.Number)
+	formList.AddField("Route", "route", db.Varchar, form.Text)
+	formList.AddField("Body", "body", db.Text, form.RichText)
 	formList.AddField("Data", "data", db.Text, form.RichText)
 
-	formList.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	formList.SetTable("admin_logs").SetTitle("AdminLogs").SetDescription("AdminLogs")
 
-	return lang
+	return adminLogs
 }

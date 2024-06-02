@@ -7,11 +7,11 @@ import (
 	"github.com/GoAdminGroup/go-admin/template/types/form"
 )
 
-func GetLangTable(ctx *context.Context) table.Table {
+func GetWalletAssetsTable(ctx *context.Context) table.Table {
 
-	lang := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
+	walletAssets := table.NewDefaultTable(table.DefaultConfigWithDriver("mysql").SetPrimaryKey("id", db.Bigint))
 
-	info := lang.GetInfo().HideFilterArea()
+	info := walletAssets.GetInfo().HideFilterArea()
 
 	info.AddField("Id", "id", db.Bigint).
 		FieldFilterable()
@@ -20,30 +20,30 @@ func GetLangTable(ctx *context.Context) table.Table {
 	info.AddField("Deleted_at", "deleted_at", db.Datetime)
 	info.AddField("Admin_id", "admin_id", db.Int)
 	info.AddField("Name", "name", db.Varchar)
-	info.AddField("Alias", "alias", db.Varchar)
 	info.AddField("Symbol", "symbol", db.Varchar)
 	info.AddField("Icon", "icon", db.Varchar)
-	info.AddField("Sort", "sort", db.Tinyint)
+	info.AddField("Type", "type", db.Tinyint)
+	info.AddField("Rate", "rate", db.Decimal)
 	info.AddField("Status", "status", db.Smallint)
 	info.AddField("Data", "data", db.Text)
 
-	info.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	info.SetTable("wallet_assets").SetTitle("WalletAssets").SetDescription("WalletAssets")
 
-	formList := lang.GetForm()
+	formList := walletAssets.GetForm()
 	formList.AddField("Id", "id", db.Bigint, form.Default)
 	formList.AddField("Created_at", "created_at", db.Datetime, form.Datetime)
 	formList.AddField("Updated_at", "updated_at", db.Datetime, form.Datetime)
 	formList.AddField("Deleted_at", "deleted_at", db.Datetime, form.Datetime)
 	formList.AddField("Admin_id", "admin_id", db.Int, form.Number)
 	formList.AddField("Name", "name", db.Varchar, form.Text)
-	formList.AddField("Alias", "alias", db.Varchar, form.Text)
 	formList.AddField("Symbol", "symbol", db.Varchar, form.Text)
 	formList.AddField("Icon", "icon", db.Varchar, form.Text)
-	formList.AddField("Sort", "sort", db.Tinyint, form.Number)
+	formList.AddField("Type", "type", db.Tinyint, form.Number)
+	formList.AddField("Rate", "rate", db.Decimal, form.Text)
 	formList.AddField("Status", "status", db.Smallint, form.Number)
 	formList.AddField("Data", "data", db.Text, form.RichText)
 
-	formList.SetTable("lang").SetTitle("Lang").SetDescription("Lang")
+	formList.SetTable("wallet_assets").SetTitle("WalletAssets").SetDescription("WalletAssets")
 
-	return lang
+	return walletAssets
 }

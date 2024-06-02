@@ -13,11 +13,68 @@ import "github.com/GoAdminGroup/go-admin/plugins/admin/modules/table"
 // example:
 //
 // "lang" => http://localhost:9033/admin/info/lang
+// "access" => http://localhost:9033/admin/info/access
+// "admin_logs" => http://localhost:9033/admin/info/admin_logs
+// "admin_menu" => http://localhost:9033/admin/info/admin_menu
+// "admin_setting" => http://localhost:9033/admin/info/admin_setting
+// "admin_user" => http://localhost:9033/admin/info/admin_user
+// "article" => http://localhost:9033/admin/info/article
+// "auth_assignment" => http://localhost:9033/admin/info/auth_assignment
+// "auth_child" => http://localhost:9033/admin/info/auth_child
+// "auth_item" => http://localhost:9033/admin/info/auth_item
+// "category" => http://localhost:9033/admin/info/category
+// "country" => http://localhost:9033/admin/info/country
+// "invite" => http://localhost:9033/admin/info/invite
+// "level" => http://localhost:9033/admin/info/level
+// "menu" => http://localhost:9033/admin/info/menu
+// "notify" => http://localhost:9033/admin/info/notify
+// "product" => http://localhost:9033/admin/info/product
+// "product_order" => http://localhost:9033/admin/info/product_order
+// "setting" => http://localhost:9033/admin/info/setting
+// "translate" => http://localhost:9033/admin/info/translate
+// "user_auth" => http://localhost:9033/admin/info/user_auth
+// "user_level" => http://localhost:9033/admin/info/user_level
+// "wallet_assets" => http://localhost:9033/admin/info/wallet_assets
+// "wallet_payment" => http://localhost:9033/admin/info/wallet_payment
+// "wallet_user_account" => http://localhost:9033/admin/info/wallet_user_account
+// "wallet_user_assets" => http://localhost:9033/admin/info/wallet_user_assets
+// "wallet_user_bill" => http://localhost:9033/admin/info/wallet_user_bill
+// "wallet_user_convert" => http://localhost:9033/admin/info/wallet_user_convert
+// "wallet_user_order" => http://localhost:9033/admin/info/wallet_user_order
+// "wallet_user_transfer" => http://localhost:9033/admin/info/wallet_user_transfer
 //
 // example end
 var Generators = map[string]table.Generator{
-	"user": GetUsersTable,
-	//"lang": GetLangTable,
+	"access": GetAccessTable,
+	//"admin_logs":           GetAdminLogsTable,
+	//"admin_menu":           GetAdminMenuTable,
+	"admin_setting": GetAdminSettingTable,
+	//"admin_user":           GetAdminUserTable,
+	"article":         GetArticleTable,
+	"auth_assignment": GetAuthAssignmentTable,
+	"auth_child":      GetAuthChildTable,
+	"auth_item":       GetAuthItemTable,
+	"category":        GetCategoryTable,
+	"country":         GetCountryTable,
+	"invite":          GetInviteTable,
+	"level":           GetLevelTable,
+	//"menu":                 GetMenuTable,
+	"notify":               GetNotifyTable,
+	"product":              GetProductTable,
+	"product_order":        GetProductOrderTable,
+	"setting":              GetSettingTable,
+	"translate":            GetTranslateTable,
+	"user":                 GetUserTable,
+	"user_auth":            GetUserAuthTable,
+	"user_level":           GetUserLevelTable,
+	"wallet_assets":        GetWalletAssetsTable,
+	"wallet_payment":       GetWalletPaymentTable,
+	"wallet_user_account":  GetWalletUserAccountTable,
+	"wallet_user_assets":   GetWalletUserAssetsTable,
+	"wallet_user_bill":     GetWalletUserBillTable,
+	"wallet_user_convert":  GetWalletUserConvertTable,
+	"wallet_user_order":    GetWalletUserOrderTable,
+	"wallet_user_transfer": GetWalletUserTransferTable,
 
 	// generators end
 }
