@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"gorm.io/gorm/utils"
-	"my-frame/config"
 	"my-frame/module/gorm/database/mysql"
 	"my-frame/module/gorm/database/postgresql"
 	"my-frame/module/logs"
@@ -38,7 +37,7 @@ var DB *gorm.DB
 var databaseOpen gorm.Dialector
 
 // 获取配置文件数据
-var cfg = config.GetGorm()
+var cfg = configs.GetGorm()
 
 // 初始化数据库连接，保证只执行一次
 func init() {
@@ -52,7 +51,7 @@ func init() {
 				},
 				QueryFields: cfg.QueryFields, // 是否全字段映射
 				//Logger: logger.Default.LogMode(logger.Info), // 日志级别
-				Logger: Instance.LogMode(lever[config.GetZap().Level]), // 日志级别
+				Logger: Instance.LogMode(lever[configs.GetZap().Level]), // 日志级别
 			}); err != nil {
 				logs.Logger.Error("gorm", zap.String("method", "init"), zap.Error(err))
 			}
@@ -67,11 +66,11 @@ func init() {
 func InitOpen() {
 	// 选用数据库
 	switch cfg.UseDatabase {
-	case config.DatabaseTypePostgresql:
+	case configs.DatabaseTypePostgresql:
 		// 初始化Postgresql数据库
 		databaseOpen = postgresql.GetOpen()
 
-	case config.DatabaseTypeMysql:
+	case configs.DatabaseTypeMysql:
 		// 初始化mysql数据库
 		databaseOpen = mysql.GetOpen()
 	}

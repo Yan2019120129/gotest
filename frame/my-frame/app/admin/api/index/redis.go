@@ -18,7 +18,6 @@ func Rds(c *gin.Context) {
 	} else {
 		c.JSON(dto.Success(data))
 	}
-
 }
 
 // SubRds 订阅信息
