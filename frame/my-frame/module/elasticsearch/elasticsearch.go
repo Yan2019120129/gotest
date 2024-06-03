@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/bulk"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/delete"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/get"
@@ -14,7 +13,6 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/typedapi/core/update"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 	"log"
-	"my-frame/config"
 	"net"
 	"net/http"
 	"sync"
@@ -33,7 +31,7 @@ var ES *Esearch
 func init() {
 	if ES == nil {
 		once.Do(func() {
-			cfg := config.GetElasticsearch()
+			cfg := configs.GetElasticsearch()
 			// 配置bing创建类型连接
 			var err error
 			ES.Clint, err = elasticsearch.NewTypedClient(

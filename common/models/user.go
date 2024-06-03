@@ -1,14 +1,8 @@
 package models
 
-import (
-	"github.com/brianvoe/gofakeit/v6"
-)
-
 // User 用户表
 type User struct {
 	Model
-	//AdminUser *AdminUser
-	//AdminUserId int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
 	AdminUserId int     `gorm:"-"`
 	AdminId     int     `gorm:"type:int unsigned not null;default:1;comment:管理ID"`
 	ParentId    int     `gorm:"type:int unsigned not null;comment:父级ID"`
@@ -26,39 +20,6 @@ type User struct {
 	Status      int     `gorm:"type:smallint not null default 10;default:10;comment:状态 -2删除 -1冻结 10激活"`
 	Data        string  `gorm:"type:text;comment:数据"`
 	Desc        string  `gorm:"type:text;comment:详情"`
-}
-
-func GetDefaultUser() *User {
-	return &User{
-		UserName:    gofakeit.Name(),
-		NickName:    gofakeit.Name(),
-		Email:       gofakeit.Email(),
-		Telephone:   gofakeit.Phone(),
-		Avatar:      gofakeit.ImageURL(200, 100),
-		Sex:         gofakeit.RandomInt([]int{1, 2}),
-		Password:    gofakeit.Password(true, true, true, false, false, 10),
-		SecurityKey: gofakeit.Password(true, true, true, false, false, 10),
-		Money:       gofakeit.Float64Range(100, 100000),
-		Type:        gofakeit.RandomInt([]int{1, 11, 21}),
-		Status:      gofakeit.RandomInt([]int{-2, -1, 10}),
-		Data:        gofakeit.Sentence(10),
-		Desc:        gofakeit.Sentence(20),
-	}
-}
-
-func (u *User) SetAdminId(adminUserId int) *User {
-	u.AdminUserId = adminUserId
-	return u
-}
-
-func (u *User) SetAdminUser(adminUser *AdminUser) *User {
-	//u.AdminUser = adminUser
-	return u
-}
-
-func (u *User) SetParentId(parentId int) *User {
-	u.ParentId = parentId
-	return u
 }
 
 const (

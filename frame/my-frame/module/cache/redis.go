@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
 	"log"
-	"my-frame/config"
+	"my-frame/configs"
 	"sync"
 	"time"
 )
@@ -24,7 +24,7 @@ var RdsPubSubConn *redis.PubSubConn
 func init() {
 	if RdsPool == nil {
 		_once.Do(func() {
-			var cfg = config.GetRedis()
+			var cfg = configs.GetRedis()
 			RdsPool = &redis.Pool{
 				MaxIdle:     cfg.Pool.MaxIdleConn,
 				MaxActive:   cfg.Pool.MaxOpenConn,
