@@ -1,0 +1,375 @@
+[// 女装时尚
+{
+{
+  "CrawlSettingList": [
+    {
+      "CategoryId": 21,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+fashion&crid=1Y2GZEWI9IJ70&sprefix=men%27s+fashion%2Caps%2C323&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 22,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+t-shirt&crid=26Y8LA77F1F92&sprefix=men%27s+t-shirt%2Caps%2C319&ref=nb_sb_noss_2"
+    },
+    {
+      "CategoryId": 23,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+jacket&crid=2XOYAOQ4ZS2WO&sprefix=men%27s+jacket%2Caps%2C733&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 24,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+jeans&crid=22PV74ZRN3A5H&sprefix=men%27s+jeans%2Caps%2C761&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 25,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+shirt&crid=21QYKXF6NFOV2&sprefix=men%27s+shirt%2Caps%2C754&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 26,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+Suit&crid=3OX819DZNXLJQ&sprefix=men%27s+suit%2Caps%2C777&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 28,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+hat&crid=3J7I51CW3MAL3&sprefix=men%27s+hat%2Caps%2C751&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 29,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+scarf&crid=35ISC1HDK435E&sprefix=men%27s+scarf%2Caps%2C795&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 30,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+sock&crid=12AZKOFKBGRO4&sprefix=men%27s+sock%2Caps%2C810&ref=nb_sb_noss_2"
+    },
+    {
+      "CategoryId": 41,
+      "Type": 2,
+      "PageNum": 1,
+      "Urls": "https://www.amazon.sg/s?k=pc&crid=3H8OP7JWCH8E9&sprefix=pc%2Caps%2C725&ref=nb_sb_noss_1"
+    }
+  ]
+},
+  // 男装时尚
+{
+  "CrawlSettingList": [
+    {
+      "CategoryId": 21,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+fashion&crid=1Y2GZEWI9IJ70&sprefix=men%27s+fashion%2Caps%2C323&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 22,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+t-shirt&crid=26Y8LA77F1F92&sprefix=men%27s+t-shirt%2Caps%2C319&ref=nb_sb_noss_2"
+    },
+    {
+      "CategoryId": 23,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+jacket&crid=2XOYAOQ4ZS2WO&sprefix=men%27s+jacket%2Caps%2C733&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 24,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+jeans&crid=22PV74ZRN3A5H&sprefix=men%27s+jeans%2Caps%2C761&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 25,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+shirt&crid=21QYKXF6NFOV2&sprefix=men%27s+shirt%2Caps%2C754&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 26,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+Suit&crid=3OX819DZNXLJQ&sprefix=men%27s+suit%2Caps%2C777&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 28,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+hat&crid=3J7I51CW3MAL3&sprefix=men%27s+hat%2Caps%2C751&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 29,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+scarf&crid=35ISC1HDK435E&sprefix=men%27s+scarf%2Caps%2C795&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 30,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=men%27s+sock&crid=12AZKOFKBGRO4&sprefix=men%27s+sock%2Caps%2C810&ref=nb_sb_noss_2"
+    },
+    {
+      "CategoryId": 41,
+      "Type": 2,
+      "PageNum": 1,
+      "Urls": "https://www.amazon.sg/s?k=pc&crid=3H8OP7JWCH8E9&sprefix=pc%2Caps%2C725&ref=nb_sb_noss_1"
+    }
+  ]
+},
+  // 电脑配置
+{
+  "CrawlSettingList": [
+    {
+      "CategoryId": 44,
+      "Type": 2,
+      "PageNum": 1,
+      "Urls": "https://www.amazon.sg/s?k=desktop+computer&ref=nb_sb_noss"
+    },
+    {
+      "CategoryId": 45,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=laptop+computer&crid=25C04H4OHNU0G&sprefix=laptop+computer%2Caps%2C806&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 46,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=mouse&crid=1GUJDHHDBP83Z&sprefix=mouse%2Caps%2C705&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 47,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=keyboard&crid=2XPOAEF41ZTNW&sprefix=mouse%2Caps%2C926&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 49,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=router&crid=2RJ4RM167SGE1&sprefix=router%2Caps%2C668&ref=nb_sb_noss_1"
+    },
+    {
+      "CategoryId": 50,
+      "Type": 2,
+      "PageNum": 3,
+      "Urls": "https://www.amazon.sg/s?k=printer&crid=2B5W4RU533GZE&sprefix=printer%2Caps%2C790&ref=nb_sb_noss_2"
+    },
+    {
+      "CategoryId": 51,
+      "Type": 2,
+      "PageNum": 2,
+      "Urls": "https://www.amazon.sg/s?k=Repeater&crid=3VG1UC7GET0LA&sprefix=repeater%2Caps%2C779&ref=nb_sb_noss_1"
+    }
+  ]
+},
+  {
+    "CrawlSettingList": [
+      {
+        "CategoryId": 122,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Pillow+core&crid=2WZ103BA2AHOE&sprefix=pillow+core%2Caps%2C632&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 123,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Quilt&crid=Z4PZG2XMHWX1&sprefix=quilt%2Caps%2C640&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 124,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Mattress&crid=2YX042T5GVW6C&sprefix=mattress%2Caps%2C635&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 125,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=four-piece+bedding+set&crid=5LCDS45JZTM0&sprefix=four-piece+bedding+set%2Caps%2C669&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 127,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=towel+bath+towel&crid=1RJZ351AVNUQZ&sprefix=towel+bath+towel%2Caps%2C652&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 128,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=slippers&crid=2HG364OJ1M267&sprefix=slippers%2Caps%2C691&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 129,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=toilet+brush&crid=207QNDRIH6SQ4&sprefix=toilet+brush%2Caps%2C641&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 132,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=ring&crid=3ITHXKZ52V2H8&sprefix=ring%2Caps%2C750&ref=nb_sb_noss_2"
+      },
+      {
+        "CategoryId": 133,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Bracelet&crid=178YD8M7VCBV7&sprefix=bracelet%2Caps%2C714&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 134,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=necklace&crid=347FX74K7DQJZ&sprefix=necklace%2Caps%2C602&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 135,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=hair+accessories&crid=26KK3WKFEX6ZD&sprefix=hair+accessories%2Caps%2C624&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 136,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=pearl+jewelry&crid=MPWT4H8Q719R&sprefix=pearl+jewelry%2Caps%2C576&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 137,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=earring&crid=3NBQB993PVTY1&sprefix=earring%2Caps%2C622&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 139,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Jewelry+Box&crid=1BXGWS01W8UA1&sprefix=jewelry+box%2Caps%2C626&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 140,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Jewelry+cleaning&crid=2730VP94ZUA9H&sprefix=jewelry+cleaning%2Caps%2C611&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 141,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=loose+diamonds&crid=2PE17PVJYCY7O&sprefix=loose+diamonds%2Caps%2C813&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 152,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=phone&crid=2CWICSLWKD7N3&sprefix=phone%2Caps%2C532&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 153,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=sim+card+tool&crid=38SE0WYOV0CXN&sprefix=sim+card+tool%2Caps%2C768&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 154,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=mobile+phone+accessories&crid=3OVSUWI1QUIMD&sprefix=mobile+phone+accessories%2Caps%2C738&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 155,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=earphone&crid=105PVOQNTTVL&sprefix=earphone%2Caps%2C669&ref=nb_sb_noss_2"
+      },
+      {
+        "CategoryId": 156,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Phone+film&crid=1L4E7JN5XJ2NF&sprefix=phone+film%2Caps%2C588&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 157,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=selfie+stick&crid=3S2VRBIUULG2C&sprefix=selfie+stick%2Caps%2C885&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 158,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=phone+case&crid=KYUI0CWKCNIC&sprefix=phone+case%2Caps%2C710&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 160,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=charger&crid=WP5FRSS0VT0J&sprefix=charger%2Caps%2C581&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 173,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Face+cream+lotion&crid=1QZV5F61TRXTV&sprefix=face+cream+lotion%2Caps%2C629&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 174,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Essence+milk&crid=16KJJH31YYB7J&sprefix=essence+milk%2Caps%2C623&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 175,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=facial+cleansing&crid=WORWM6LN13VD&sprefix=facial+cleansing%2Caps%2C602&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 176,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=sunscreen&crid=1I9JJSG66AB8I&sprefix=sunscreen%2Caps%2C605&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 177,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=lip+balm&crid=34U580JXBFET&sprefix=lip+balm%2Caps%2C663&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 179,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=Shampoo&crid=3E2VCIHNHUHMV&sprefix=shampoo%2Caps%2C712&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 180,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=dye+hair&crid=1XD5UCH3WMU1Z&sprefix=dye+hair%2Caps%2C719&ref=nb_sb_noss_1"
+      },
+      {
+        "CategoryId": 181,
+        "Type": 2,
+        "PageNum": 2,
+        "Urls": "https://www.amazon.sg/s?k=hair+care&crid=HYHHA1ZIDK7J&sprefix=hair+care%2Caps%2C707&ref=nb_sb_noss_1"
+      }
+    ]
+  }
+]
