@@ -7,20 +7,22 @@ import (
 )
 
 type ProductAttr struct {
-	mutex    sync.Mutex
-	Price    []float64
-	Images   []string
-	Style    map[string][]string
-	Title    string
-	Name     string
-	Describe string
+	mutex        sync.Mutex
+	Price        []float64           // 金额
+	Images       []string            // 图片
+	Style        map[string][]string // 样式
+	Title        string              // 标题
+	Name         string              // 产品名
+	Describe     string              // 描述
+	DescribeRich []string            // 详细描述
 }
 
 func NewProductAttr() *ProductAttr {
 	return &ProductAttr{
-		mutex:  sync.Mutex{},
-		Images: make([]string, 0),
-		Style:  make(map[string][]string),
+		mutex:        sync.Mutex{},
+		Images:       make([]string, 0),
+		Style:        make(map[string][]string),
+		DescribeRich: make([]string, 0),
 	}
 }
 
