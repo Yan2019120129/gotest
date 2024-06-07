@@ -1,0 +1,25 @@
+{
+    "language": "zh",
+    "messages": [
+        {
+            "id": "Welcome!",
+            "message": "Welcome!",
+            "translation": "欢迎到来！"
+        },
+        {
+            "id": "Hello {Name}!",
+            "message": "Hello {Name}!",
+            "translation": "你好，{Name}!",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "name"
+                }
+            ]
+        }
+    ]
+}
