@@ -14,10 +14,8 @@ func InitCN() {
 		"lang":          "语言",
 		"country":       "国家",
 		"article":       "文章",
-		"admin_setting": "管理设置",
 
 		"users_manage": "用户管理",
-		"setting":      "设置",
 		"access":       "访问记录",
 		"invite":       "邀请",
 		"auth":         "验证",

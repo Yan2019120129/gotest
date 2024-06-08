@@ -14,10 +14,8 @@ func InitEN() {
 		"lang":          "Lang",
 		"country":       "Country",
 		"article":       "Article",
-		"admin_setting": "Admin setting",
 
 		"users_manage": "Users manage",
-		"setting":      "Setting",
 		"access":       "Access",
 		"invite":       "Invite",
 		"auth":         "Auth",
