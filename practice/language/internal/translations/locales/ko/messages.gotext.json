@@ -1,0 +1,25 @@
+{
+    "language": "ko",
+    "messages": [
+        {
+            "id": "Welcome!",
+            "message": "Welcome!",
+            "translation": "환영!"
+        },
+        {
+            "id": "Hello {Name}!",
+            "message": "Hello {Name}!",
+            "translation": "안녕하세요 {Name}!",
+            "placeholders": [
+                {
+                    "id": "Name",
+                    "string": "%[1]s",
+                    "type": "string",
+                    "underlyingType": "string",
+                    "argNum": 1,
+                    "expr": "name"
+                }
+            ]
+        }
+    ]
+}

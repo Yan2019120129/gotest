@@ -11,10 +11,10 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/{locale}", handleHome)
+	r.HandleFunc("/{name}", handleHome)
 
 	// 使用路由实例启动HTTP服务器。
-	log.Println("starting server on :4018...")
+	log.Println("starting server on http://localhost:4018 ...")
 	if err := http.ListenAndServe(":4018", r); err != nil {
 		log.Fatal(err)
 	}

@@ -27,9 +27,9 @@ func (d *dictionary) Lookup(key string) (data string, ok bool) {
 
 func init() {
 	dict := map[string]catalog.Dictionary{
-		"de_DE": &dictionary{index: de_DEIndex, data: de_DEData},
-		"en_GB": &dictionary{index: en_GBIndex, data: en_GBData},
-		"zh_CN": &dictionary{index: zh_CNIndex, data: zh_CNData},
+		"en": &dictionary{index: enIndex, data: enData},
+		"ko": &dictionary{index: koIndex, data: koData},
+		"zh": &dictionary{index: zhIndex, data: zhData},
 	}
 	fallback := language.MustParse("en-GB")
 	cat, err := catalog.NewFromMap(dict, catalog.Fallback(fallback))
@@ -40,25 +40,28 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"Welcome!\n": 0,
+	"Hello %s!\n": 1,
+	"Welcome!\n":  0,
 }
 
-var de_DEIndex = []uint32{ // 2 elements
-	0x00000000, 0x00000011,
-} // Size: 32 bytes
+var enIndex = []uint32{ // 3 elements
+	0x00000000, 0x0000000e, 0x00000020,
+} // Size: 36 bytes
 
-const de_DEData string = "\x04\x00\x01\n\f\x02Willkommen!"
+const enData string = "\x04\x00\x01\n\t\x02Welcome!\x04\x00\x01\n\r\x02Hello %[1]s!"
 
-var en_GBIndex = []uint32{ // 2 elements
-	0x00000000, 0x0000000e,
-} // Size: 32 bytes
+var koIndex = []uint32{ // 3 elements
+	0x00000000, 0x0000000d, 0x00000029,
+} // Size: 36 bytes
 
-const en_GBData string = "\x04\x00\x01\n\t\x02Welcome!"
+const koData string = "" + // Size: 41 bytes
+	"\x04\x00\x01\x0a\x08\x02환영!\x04\x00\x01\x0a\x17\x02안녕하세요 %[1]s!"
 
-var zh_CNIndex = []uint32{ // 2 elements
-	0x00000000, 0x00000011,
-} // Size: 32 bytes
+var zhIndex = []uint32{ // 3 elements
+	0x00000000, 0x00000015, 0x0000002a,
+} // Size: 36 bytes
 
-const zh_CNData string = "\x04\x00\x01\n\f\x02Bienvenue !"
+const zhData string = "" + // Size: 42 bytes
+	"\x04\x00\x01\x0a\x10\x02欢迎到来！\x04\x00\x01\x0a\x10\x02你好，%[1]s!"
 
-// Total table size 144 bytes (0KiB); checksum: 85795B15
+	// Total table size 223 bytes (0KiB); checksum: DB716DB1
