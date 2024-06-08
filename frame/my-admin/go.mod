@@ -1,6 +1,6 @@
 module my-admin
 
-go 1.20
+go 1.21
 
 require (
 	github.com/GoAdminGroup/filemanager v0.0.6

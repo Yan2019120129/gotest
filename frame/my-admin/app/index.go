@@ -14,6 +14,7 @@ import (
 	admin "my-admin/app/admin/router"
 	web "my-admin/app/web/router"
 	"my-admin/configs"
+	_ "my-admin/module/language"
 	"my-admin/tables"
 	"net/http"
 	"os"
@@ -35,9 +36,11 @@ func InitServer() {
 		Use(r); err != nil {
 		panic(err)
 	}
-	web.InitRouter(eng)
 
+	dbConnection := eng.MysqlConnection()
+	web.InitRouter(eng)
 	ginConfig := configs.GetGin()
+	log.Printf("server start http://localhost%s%s", ginConfig.Port, "/login")
 	if err := r.Run(ginConfig.Port); err != nil && errors.Is(err, http.ErrServerClosed) {
 		log.Printf("listen: %s\n", err)
 	}
@@ -49,5 +52,5 @@ func InitServer() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	eng.MysqlConnection().Close()
+	dbConnection.Close()
 }
