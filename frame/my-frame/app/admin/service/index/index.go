@@ -8,8 +8,8 @@ import (
 
 func Index() (interface{}, error) {
 	rds := cache.RdsPool.Get()
-
 	defer rds.Close()
+
 	_, err := rds.Do("Set", "age", 18)
 	if err != nil {
 		fmt.Println(err)
