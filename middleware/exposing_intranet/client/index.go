@@ -7,10 +7,10 @@ import (
 )
 
 const (
-	publicAddr = "127.0.0.1:4000" // 公网服务器的地址和端口
+	publicAddr = "8.138.57.34:4000" // 公网服务器的地址和端口
 )
 
-func main() {
+func client() {
 	conn, err := net.Dial("tcp", publicAddr)
 	if err != nil {
 		log.Fatalf("Failed to connect to public server: %v", err)
