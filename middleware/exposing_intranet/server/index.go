@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"io"
@@ -11,7 +11,7 @@ const (
 	internalAddr = "localhost:9090" // 内网服务器的地址和端口
 )
 
-func main() {
+func server() {
 	ln, err := net.Listen("tcp", publicAddr)
 	if err != nil {
 		log.Fatalf("Failed to bind address: %v", err)
