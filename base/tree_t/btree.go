@@ -2,31 +2,6 @@ package tree_t
 
 import "fmt"
 
-// TreeNode 数节点
-type TreeNode struct {
-	K     int // 节点存储的值
-	Val   int
-	Left  *TreeNode // 左子树
-	Right *TreeNode // 右子树
-}
-
-// SearchNode 查找节点
-func SearchNode(val int, t *TreeNode, count *int) {
-	if t == nil {
-		return
-	}
-	*count++
-	if t.K == val {
-		fmt.Printf("Found Node: (%d, %d)\n", t.K, t.Val)
-		return
-	}
-	//if val < t.k {
-	SearchNode(val, t.Left, count)
-	//} else {
-	SearchNode(val, t.Right, count)
-	//}
-}
-
 // Key 接口定义了键的比较方法
 type Key interface {
 	Less(Key) bool // 判断当前键是否小于给定键
@@ -143,7 +118,7 @@ func (t *BTree) printInOrder(x *Node, l int) {
 }
 
 // InorderTraversal 二叉树 Morris 遍历算法中序遍历 时间复杂度 O(n)，空间复杂度O(1)
-func InorderTraversal(root *TreeNode) (res []int) {
+func InorderTraversal(root *TowTree) (res []int) {
 	for root != nil {
 		if root.Left != nil {
 
