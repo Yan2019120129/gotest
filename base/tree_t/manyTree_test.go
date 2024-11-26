@@ -21,25 +21,27 @@ func TestInorderManyTree(b *testing.T) {
 	fmt.Printf("val：%d\n", val)
 }
 
-// TestInserterManyTree 多叉数迭代查找值
-// func BenchmarkInserterManyTree(b *testing.B) {
-func TestInserterManyTree(b *testing.T) {
+// TestInserterManyTree 链表转换多叉树
+func BenchmarkInserterManyTree(b *testing.B) {
+	//func TestInserterManyTree(b *testing.T) {
 	manyTree := NewManyTree().ToStack()
-	tmpMap := map[int]*ManyTree{}
-	for _, tree := range manyTree {
-		index := tree.Id
-		tmpMap[index] = tree
-	}
-	rootId := 0
-	for _, tree := range manyTree {
-		index := tree.ParentId
-		if p, ok := tmpMap[index]; ok {
-			if p.ParentId == 0 {
-				rootId = p.Id
-			}
-			p.Client = append(p.Client, tree)
+	fmt.Println("start")
+	for i := 0; i < b.N; i++ {
+		tmpMap := map[int]*ManyTree{}
+		for _, tree := range manyTree {
+			index := tree.Id
+			tmpMap[index] = tree
 		}
+		rootId := 0
+		for _, tree := range manyTree {
+			index := tree.ParentId
+			if p, ok := tmpMap[index]; ok {
+				if p.ParentId == 0 {
+					rootId = p.Id
+				}
+				p.Client = append(p.Client, tree)
+			}
+		}
+		fmt.Println(rootId)
 	}
-	rootNode := tmpMap[rootId]
-	fmt.Println(rootNode)
 }
