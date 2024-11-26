@@ -47,15 +47,16 @@ func TestInserter(t *testing.T) {
 	}
 }
 
-// CreateTable 插入数据,使用自定义结构体
-func TestInserterCustomize(t *testing.T) {
-	userInfo := dto.GetUserInfoDefault().SetUserInfoParent(dto.GetUserInfoDefault()).SetUserInfoParent(dto.GetUserInfoDefault()).SetAdminUserInfo(dto.GetAdminInfoDefault())
-	err := database.DB.Create(userInfo).Error
-	if err != nil {
-		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
-		return
-	}
-}
+//
+//// CreateTable 插入数据,使用自定义结构体
+//func TestInserterCustomize(t *testing.T) {
+//	userInfo := dto.GetUserInfoDefault().SetUserInfoParent(dto.GetUserInfoDefault()).SetUserInfoParent(dto.GetUserInfoDefault()).SetAdminUserInfo(dto.GetAdminInfoDefault())
+//	err := database.DB.Create(userInfo).Error
+//	if err != nil {
+//		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
+//		return
+//	}
+//}
 
 var sqlPaths = []string{
 	"./common/file/productsql/product.sql",
