@@ -1,97 +1,92 @@
 package utils
 
 import (
-	"bytes"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
-	"time"
+	"strings"
 )
 
-// Http Http
 type Http struct {
-	client      *http.Client      //	Client对象
-	headers     map[string]string //	头信息
-	contentType string            // 	参数格式
-	baseURL     string            //	基础URL
+	header     http.Header
+	respHeader http.Header
+	params     url.Values
 }
 
-// NewHttp 创建Http对象
-func NewHttp(baseURL string) *Http {
-	client := &http.Client{
-		Timeout: 30 * time.Second,
-	}
-	return &Http{
-		client:      client,
-		headers:     make(map[string]string),
-		contentType: "application/json",
-		baseURL:     baseURL,
-	}
+func NewHttp() *Http {
+	return &Http{header: make(http.Header)}
 }
 
-// GET Get请求
-func (_Http *Http) GET(url string) ([]byte, error) {
-	req, err := http.NewRequest("GET", _Http.baseURL+url, nil)
+// Set 设置请求头信息
+func (h *Http) Set(key, val string) *Http {
+	h.header.Set(key, val)
+	return h
+}
+
+// AddParam 设置get参数
+func (h *Http) AddParam(key, val string) *Http {
+	if h.params == nil {
+		h.params = make(url.Values)
+	}
+	h.params.Set(key, val)
+	return h
+}
+
+// GetParam 获取get参数
+func (h *Http) GetParam() string {
+	return h.params.Encode()
+}
+
+// GetRHeader 获取http相应头
+func (h *Http) GetRHeader() http.Header {
+	return h.respHeader
+}
+
+// GetHeader 获取http请求头
+func (h *Http) GetHeader() http.Header {
+	return h.header
+}
+
+// ask 发起请求
+func (h *Http) ask(method, url string, body io.Reader) []byte {
+	request, err := http.NewRequest(method, url, body)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-
-	// 设置头信息
-	for k, v := range _Http.headers {
-		req.Header.Set(k, v)
-	}
-
-	resp, err := _Http.client.Do(req)
+	h.header = request.Header
+	do, err := http.DefaultClient.Do(request)
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
-	defer resp.Body.Close()
-	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	return bodyBytes, nil
+	h.respHeader = do.Header
+	return h.result(do.Body)
 }
 
-// POST Post请求
-func (_Http *Http) POST(url string, paramsBytes []byte) ([]byte, error) {
-	resp, err := _Http.client.Post(_Http.baseURL+url, _Http.contentType, bytes.NewBuffer(paramsBytes))
+// Get Get请求
+func (h *Http) Get(path string) []byte {
+	if h.params != nil {
+		path += "?" + h.params.Encode()
+	}
+	return h.ask("GET", path, nil)
+}
+
+// Post Post请求
+func (h *Http) Post(url string, ctxType string, s string) []byte {
+	h.Set("Content-Type", ctxType)
+	var params io.Reader
+	if s != "" {
+		params = strings.NewReader(s)
+	}
+	return h.ask("POST", url, params)
+}
+
+func (h *Http) result(body io.ReadCloser) []byte {
+	defer body.Close()
+	data, err := io.ReadAll(body)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
+		return nil
 	}
-	defer resp.Body.Close()
-	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	return bodyBytes, nil
-}
-
-// HeaderContentJson 内容类型Json
-func (_Http *Http) HeaderContentJson() *Http {
-	_Http.contentType = "application/json"
-	return _Http
-}
-
-// SetHeaderContentType 默认内容类型
-func (_Http *Http) SetHeaderContentType(contentType string) *Http {
-	_Http.contentType = contentType
-	return _Http
-}
-
-// SetHeaders 设置头信息
-func (_Http *Http) SetHeaders(headers map[string]string) *Http {
-	for k, v := range headers {
-		_Http.headers[k] = v
-	}
-	return _Http
-}
-
-// GetHttpHost 获取http服务器地址
-func GetHttpHost(rawUrl string) string {
-	parsedURL, err := url.Parse(rawUrl)
-	if err != nil {
-		return ""
-	}
-	return parsedURL.Scheme + "://" + parsedURL.Host
+	return data
 }
