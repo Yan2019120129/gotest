@@ -1,4 +1,4 @@
-package configs
+package config
 
 import (
 	"gopkg.in/yaml.v3"
@@ -26,11 +26,11 @@ var GenMode = map[string]interface{}{
 }
 
 type Config struct {
-	Gorm          *GormConfig          `yaml:"gorm"`
-	Gin           *GinConfig           `yaml:"gin"`
-	Redis         *RedisConfig         `yaml:"redis"`
-	Elasticsearch *ElasticsearchConfig `yaml:"elasticsearch"`
-	Logs          *LogConfig           `yaml:"logs"`
+	Gorm          GormConfig          `yaml:"gorm"`
+	Gin           GinConfig           `yaml:"gin"`
+	Redis         RedisConfig         `yaml:"redis"`
+	Elasticsearch ElasticsearchConfig `yaml:"elasticsearch"`
+	Logs          LogConfig           `yaml:"logs"`
 }
 
 // ElasticsearchConfig 配置参数。
@@ -170,7 +170,7 @@ func GetConfigPath() string {
 
 // GetGorm  获取gorm 配置
 func GetGorm() *GormConfig {
-	return cfg.Gorm
+	return &cfg.Gorm
 }
 
 // GetGen  获取gen 配置
@@ -190,23 +190,22 @@ func GetPostgres() *DatabaseConfig {
 
 // GetGin  获取gin 配置
 func GetGin() *GinConfig {
-	cfg.Gin.Port = ":" + cfg.Gin.Port
-	return cfg.Gin
+	return &cfg.Gin
 }
 
 // GetRedis  获取redis 配置
 func GetRedis() *RedisConfig {
-	return cfg.Redis
+	return &cfg.Redis
 }
 
 // GetElasticsearch  获取elasticsearch 配置
 func GetElasticsearch() *ElasticsearchConfig {
-	return cfg.Elasticsearch
+	return &cfg.Elasticsearch
 }
 
 // GetLog 获取日志配置
 func GetLog() *LogConfig {
-	return cfg.Logs
+	return &cfg.Logs
 }
 
 // GetZap 获取zap 日志配置
