@@ -21,12 +21,12 @@ const (
 
 func Kline() {
 	instance := utils.NewHttp()
-	instance.AddParam("interval", "1m") // 1分:1m 5分:5m 15分:15m 1小时:1h 1天:1d 1周:1w 1月:1month
+	instance.AddParam("interval", "5m") // 1分:1m 5分:5m 15分:15m 1小时:1h 1天:1d 1周:1w 1月:1month
 	//instance.AddParam("span", "1d")     // 1天:1d 1周:1w 1月:1m 6月:6m 1年:1y 5年:5y 10年:10y 25年:25y 50年:50y
-	instance.AddParam("n", "10") // 1m:300
+	instance.AddParam("n", "20") // 1m:300
 	instance.AddParam("ohlc", "1")
 	instance.AddParam("key", "20240229:nazare")
-	v := instance.Get(klinePath + "/xauusd:cur")
+	v := instance.Get(klinePath + "/jpyusd:cur")
 	val, err := conversion(v)
 	ticker := val[len(val)-1]
 	date := time.Unix(ticker.CreatedAt, 0)

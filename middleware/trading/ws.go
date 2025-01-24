@@ -35,24 +35,7 @@ func Ws() {
 	}
 
 	tmp := []any{"subscribe", map[string][]string{"s": {
-		"xauusd:com",
-		"xagusd:cur",
-		"hg1:com",
-		"jbp:com",
-		"xptusd:cur",
-		"cl1:com",
-		"co1:com",
-		"xb1:com",
-		"ng1:com",
-		"nguk:com",
-		"eurusd:cur",
-		"gbpusd:cur",
-		"audusd:cur",
-		"nzdusd:cur",
-		"usdjpy:cur",
-		"usdcny:cur",
-		"usdchf:cur",
-		"usdmxn:cur",
+		"jpyusd:cur",
 	}}}
 
 	param := url.Values{}
