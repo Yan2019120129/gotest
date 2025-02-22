@@ -2,6 +2,7 @@ package gen
 
 import (
 	"gorm.io/gen"
+	"my-frame/config"
 )
 
 var GenDb *gen.Generator
@@ -10,7 +11,7 @@ var GenDb *gen.Generator
 func init() {
 	GenDb = gen.NewGenerator(gen.Config{
 		//  设置输出路径
-		OutPath: configs.GetGen().OutPath,
+		OutPath: config.GetGen().OutPath,
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // 选择生成模式
 	})
 }

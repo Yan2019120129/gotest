@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
+	"my-frame/config"
 	"os"
 	"strings"
 	"time"
@@ -14,8 +15,14 @@ import (
 var Logger *zap.Logger
 
 const (
+	LogMsgFiber    = "fiber"
+	LogMsgGorm     = "gorm"
+	LogMsgApp      = "app"
+	LogMsgTest     = "test"
+	LogMsgOkx      = "okx"
 	LogModeCustom  = "custom"
 	LogModeProduct = "product"
+	LogModeDevel   = "devel"
 )
 
 var Lever = map[string]zapcore.Level{
@@ -44,7 +51,7 @@ var fileLength = map[string]func(caller zapcore.EntryCaller, enc zapcore.Primiti
 
 // init 初始化zap日志
 func init() {
-	cfg := configs.GetZap()
+	cfg := config.GetZap()
 	encoderConfig := zapcore.EncoderConfig{}
 	switch cfg.Mode {
 
@@ -61,7 +68,7 @@ func init() {
 }
 
 // SetInstance 设置logger实例
-func SetInstance(cfg *configs.ZapConfig, encoderConfig zapcore.EncoderConfig) {
+func SetInstance(cfg *config.ZapConfig, encoderConfig zapcore.EncoderConfig) {
 	var core []zapcore.Core
 	for _, v := range cfg.OutPath {
 		if v == "stderr" {
@@ -82,7 +89,7 @@ func SetInstance(cfg *configs.ZapConfig, encoderConfig zapcore.EncoderConfig) {
 	)
 }
 
-func customConfig(cfg *configs.ZapConfig) zapcore.EncoderConfig {
+func customConfig(cfg *config.ZapConfig) zapcore.EncoderConfig {
 	return zapcore.EncoderConfig{
 		MessageKey:     "msg",   //	输入信息的key名
 		LevelKey:       "level", //	输出日志级别的key名

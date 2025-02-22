@@ -66,28 +66,37 @@ func CamelToSnake(s string) string {
 
 // StringToIntList 字符串转int数组
 func StringToIntList(s string) []int {
+	parts := strings.FieldsFunc(s, func(v rune) bool {
+		return v < 48 || v > 57
+	})
 	intList := make([]int, 0)
-	var tmp []byte
-	for _, v := range []byte(s) {
-		if v < 48 || v > 57 {
-			parseInt, err := strconv.ParseInt(string(tmp), 10, 64)
-			if err != nil {
-				continue
+	for _, part := range parts {
+		if part != "" {
+			parseInt, err := strconv.ParseFloat(part, 64)
+			if err == nil {
+				intList = append(intList, int(parseInt))
 			}
-			intList = append(intList, int(parseInt))
-			tmp = nil
-			continue
 		}
-		tmp = append(tmp, v)
-	}
-	if tmp != nil {
-		parseInt, err := strconv.ParseInt(string(tmp), 10, 64)
-		if err != nil {
-			return intList
-		}
-		intList = append(intList, int(parseInt))
 	}
 	return intList
+}
+
+// StringToFloat64List 字符串转int数组
+func StringToFloat64List(s string) []float64 {
+	parts := strings.FieldsFunc(s, func(r rune) bool {
+		return r != '.' && (r < 48 || r > 57)
+	})
+
+	floatList := make([]float64, 0, len(parts))
+	for _, part := range parts {
+		if part != "" {
+			parseFloat, err := strconv.ParseFloat(part, 64)
+			if err == nil {
+				floatList = append(floatList, parseFloat)
+			}
+		}
+	}
+	return floatList
 }
 
 // StringIntArrayToIntArray 字符串数组转int数组
