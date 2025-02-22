@@ -95,7 +95,12 @@ func (m *ManyTree) ToStack() []*ManyTree {
 		index := len(stack) - 1
 		node := stack[index]
 		stack = stack[:index]
-		tmpStack = append(tmpStack, node)
+		tmpStack = append(tmpStack, &ManyTree{
+			Val:      node.Val,
+			Id:       node.Id,
+			ParentId: node.ParentId,
+			Client:   nil,
+		})
 		for _, tree := range node.Client {
 			stack = append(stack, tree)
 		}
