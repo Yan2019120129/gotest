@@ -14,13 +14,7 @@ type Ws struct {
 	Err    error
 }
 
-func NewWs(u string, proxyUrl string) *Ws {
-	//if proxyUrl != "" {
-	//	proxy, _ := url.Parse(proxyUrl)
-	//	dialer = &websocket.Dialer{Proxy: http.ProxyURL(proxy)}
-	//} else {
-	//}
-
+func NewWs(u string) *Ws {
 	return &Ws{
 		url:    u,
 		dialer: websocket.DefaultDialer,
