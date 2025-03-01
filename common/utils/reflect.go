@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"reflect"
+	"strings"
 )
 
 type Reflect struct {
@@ -82,10 +83,55 @@ func (r *Reflect) GetName() string {
 // GetFields 获取模型字段名
 func (r *Reflect) GetFields() (names []string) {
 	sum := r.modelType.NumField()
-	for i := sum - 1; 0 < i; i-- {
+	for i := sum - 1; 0 <= i; i-- {
 		names = append(names, r.modelType.Field(i).Name)
 	}
 	return
+}
+
+// GetFieldsDesc 获取模型字段注释
+func (r *Reflect) GetFieldsDesc(name, tag, desc string) string {
+	// 提前将 name 转换为小写，避免重复操作
+	lowerName := strings.ToLower(name)
+
+	// 遍历字段
+	for i := r.modelType.NumField() - 1; i >= 0; i-- {
+		field := r.modelType.Field(i)
+
+		// 检查字段名是否匹配
+		if strings.ToLower(field.Name) != lowerName {
+			continue
+		}
+
+		// 获取字段的 tag 值
+		tagVal := field.Tag.Get(tag)
+		if tagVal == "" {
+			return ""
+		}
+
+		// 提取 desc 对应的值
+		return extractDescValue(tagVal, desc)
+	}
+
+	return ""
+}
+
+// extractDescValue 从 tagVal 中提取 desc 对应的值
+func extractDescValue(tagVal, desc string) string {
+	// 查找 desc 的起始位置
+	descStart := strings.Index(tagVal, desc)
+	if descStart == -1 {
+		return ""
+	}
+
+	// 查找 desc 值的结束位置（分号或字符串末尾）
+	descEnd := strings.Index(tagVal[descStart:], ";")
+	if descEnd == -1 {
+		return tagVal[descStart:]
+	}
+
+	// 返回 desc 对应的值
+	return tagVal[descStart : descStart+descEnd]
 }
 
 // GetValue 获取模型字段名
