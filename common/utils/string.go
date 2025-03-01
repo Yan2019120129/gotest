@@ -2,12 +2,29 @@ package utils
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"math/rand"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
 )
+
+// EncryptPassword 使用双重MD5加密用户密码
+func EncryptPassword(password string) string {
+	if password == "" {
+		return ""
+	}
+
+	// 第一次MD5加密
+	firstHash := md5.Sum([]byte(password))
+	firstHashStr := hex.EncodeToString(firstHash[:])
+
+	// 第二次MD5加密
+	secondHash := md5.Sum([]byte(firstHashStr))
+	return hex.EncodeToString(secondHash[:])
+}
 
 // ToHump 转换驼峰方法
 func ToHump(s string) string {
