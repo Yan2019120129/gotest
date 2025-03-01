@@ -16,5 +16,7 @@ func main() {
 		fields[i] = utils.CamelToSnake(field)
 	}
 	tag := reflectInstance.GetFieldsDesc("status", "gorm", "comment:")
-	fmt.Println(modelsName, fields, tag)
+	fieldInfo := reflectInstance.GetFieldInfo("STATUS")
+	fieldValue := reflectInstance.GetValue("Status")
+	fmt.Println(modelsName, fields, tag, fieldInfo, fieldValue)
 }

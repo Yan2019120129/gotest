@@ -75,7 +75,7 @@ func (r *Reflect) GetClientLen() int {
 // GetName 获取模型名
 func (r *Reflect) GetName() string {
 	if r.modelType.Kind() == reflect.Slice {
-
+		return ""
 	}
 	return r.modelType.Name()
 }
@@ -87,6 +87,21 @@ func (r *Reflect) GetFields() (names []string) {
 		names = append(names, r.modelType.Field(i).Name)
 	}
 	return
+}
+
+// GetFieldInfo 获取字段信息
+func (r *Reflect) GetFieldInfo(name string) reflect.StructField {
+	lowerName := strings.ToLower(name)
+	for i := r.modelType.NumField() - 1; i >= 0; i-- {
+		field := r.modelType.Field(i)
+		// 检查字段名是否匹配
+		if strings.ToLower(field.Name) != lowerName {
+			continue
+		}
+
+		return field
+	}
+	return reflect.StructField{}
 }
 
 // GetFieldsDesc 获取模型字段注释
@@ -134,7 +149,7 @@ func extractDescValue(tagVal, desc string) string {
 	return tagVal[descStart : descStart+descEnd]
 }
 
-// GetValue 获取模型字段名
+// GetValue 获取模型字段值
 func (r *Reflect) GetValue(name string) interface{} {
 	return r.value[name]
 }
