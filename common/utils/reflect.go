@@ -89,6 +89,15 @@ func (r *Reflect) GetFields() (names []string) {
 	return
 }
 
+// GetFieldsInfo 获取模型字段信息
+func (r *Reflect) GetFieldsInfo() (fieldsInfo []reflect.StructField) {
+	sum := r.modelType.NumField()
+	for i := sum - 1; 0 <= i; i-- {
+		fieldsInfo = append(fieldsInfo, r.modelType.Field(i))
+	}
+	return
+}
+
 // GetFieldInfo 获取字段信息
 func (r *Reflect) GetFieldInfo(name string) reflect.StructField {
 	lowerName := strings.ToLower(name)
