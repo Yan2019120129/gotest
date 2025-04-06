@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/brianvoe/gofakeit/v6"
 	"github.com/google/uuid"
 	"sync"
 	"sync/atomic"
@@ -52,8 +51,7 @@ var wg sync.WaitGroup
 // 原子操作版加函数
 func atomicAdd() {
 	for i := 0; i < 10; i++ {
-		atomic.AddInt64(&x, gofakeit.Int64())
-
+		atomic.AddInt64(&x, 1)
 	}
 	wg.Done()
 }
@@ -62,7 +60,8 @@ func atomicAdd() {
 func mutexAdd() {
 	for i := 0; i < 10; i++ {
 		l.Lock()
-		x = gofakeit.Int64()
+		x += 1
+		//x = gofakeit.Int64()
 		l.Unlock()
 	}
 	wg.Done()
@@ -71,8 +70,8 @@ func mutexAdd() {
 // 普通版加函数
 func add() {
 	for i := 0; i < 10; i++ {
-		// x = x + 1
-		x = gofakeit.Int64()
+		x += 1
+		//x = gofakeit.Int64()
 	}
 	wg.Done()
 }
@@ -80,7 +79,7 @@ func add() {
 // TestMutexAdd 测试原子操作添加数据
 func TestMutexAdd(t *testing.T) {
 	start := time.Now()
-	for i := 0; i < 100000; i++ {
+	for i := 0; i < 10000; i++ {
 		wg.Add(1)
 		//go add() // 普通版add函数 不是并发安全的
 		//go mutexAdd() // 加锁版add函数 是并发安全的，但是加锁性能开销大
