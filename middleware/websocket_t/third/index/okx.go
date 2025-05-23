@@ -2,10 +2,9 @@ package index
 
 import (
 	"encoding/json"
-	"go.uber.org/zap"
-	"gotest/common/module/gorm/database"
 	"gotest/common/module/logs"
-	"gotest/frame/my-fiber/models"
+
+	"go.uber.org/zap"
 )
 
 const uuidOkx = "okx"
@@ -45,14 +44,6 @@ func (m *OkxManage) GetPersistence(id string, msgType WsMessageType) []Massage {
 			Args: []*Arg{},
 		}
 		var instIds []string
-		if result := database.DB.Model(&models.Product{}).
-			Where("admin_id = ?", 1).
-			Where("type = ?", models.ProductTypeOkex).
-			Where("status = ?", models.ProductStatusActivate).
-			Pluck("symbol", &instIds); result.Error != nil {
-			logs.Logger.Error(logs.LogMsgOkx, zap.String("method", "getInstIds"), zap.Error(result.Error))
-			return nil
-		}
 		for _, v := range instIds {
 			tempData.Args = append(tempData.Args, []*Arg{
 				{Channel: ChannelTicker, InstID: v},

@@ -25,3 +25,4 @@ go.work
 
 # 上传文件不同步
 /.idea
+/.vscode

@@ -6,12 +6,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
-	"golang.org/x/crypto/nacl/secretbox"
 	"gotest/common/utils"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/pkg/errors"
+	"golang.org/x/crypto/nacl/secretbox"
 )
 
 const (
@@ -44,7 +45,7 @@ func Ws() {
 	param.Set("EIO", params.EIO)
 	param.Set("transport", "websocket")
 	param.Set("sid", sid)
-	instance := utils.NewWs(wsPath+"/?"+param.Encode(), "")
+	instance := utils.NewWs(wsPath + "/?" + param.Encode())
 	err := instance.Run().Err
 	if err != nil {
 		fmt.Println("-------------", err)

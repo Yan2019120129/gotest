@@ -1,13 +1,12 @@
 package main
 
 import (
-	"github.com/gocolly/colly/v2"
-	"go.uber.org/zap"
-	"gotest/common/module/cache"
 	"gotest/common/module/logs"
-	"gotest/common/utils"
 	"net/http"
 	"strings"
+
+	"github.com/gocolly/colly/v2"
+	"go.uber.org/zap"
 )
 
 const (
@@ -83,7 +82,7 @@ func NewAmazon() (*Amazon, error) {
 		DisableKeepAlives: true,
 	})
 
-	if err := amazon.collector.SetStorage(NewStorage(cache.RdsPool.Get())); err != nil {
+	if err := amazon.collector.SetStorage(nil); err != nil {
 		zap.L().Error(LogMsg, zap.Error(err))
 		return nil, err
 	}
@@ -281,7 +280,7 @@ func (_Amazon *Amazon) searchClassLink(selector string) (string, func(e *colly.H
 		e.ForEach("div.s-desktop-width-max.s-desktop-content.s-opposite-dir.s-wide-grid-style.sg-row > div.sg-col-20-of-24.s-matching-dir.sg-col-16-of-20.sg-col.sg-col-8-of-12.sg-col-12-of-16 > div > span.rush-component.s-latency-cf-section > div.s-main-slot.s-result-list.s-search-results.sg-row > div", func(i int, element *colly.HTMLElement) {
 			href := element.ChildAttr("a.a-link-normal.s-no-outline", "href")
 			if !isHttpHeader(href) {
-				href = utils.GetHttpHost(_Amazon.rwaUrl) + href
+				// href = utils.GetHttpHost(_Amazon.rwaUrl) + href
 			}
 			productLink = append(productLink, href)
 		})
