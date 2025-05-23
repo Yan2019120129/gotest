@@ -2,14 +2,14 @@ package mysql_t
 
 import (
 	"fmt"
-	"github.com/brianvoe/gofakeit/v6"
-	"go.uber.org/zap"
 	"gotest/common/module/gorm/database"
 	"gotest/common/module/logs"
 	"gotest/middleware/mysql_t/dto"
 	"os"
 	"strings"
 	"testing"
+
+	"go.uber.org/zap"
 )
 
 // GetColumn 获取字段信息
@@ -110,18 +110,18 @@ func TestInserterAttr(t *testing.T) {
 		Preload("AttributeValues").
 		Find(&attributes)
 	productAndSkus := make([]*dto.ProductAndSku, 0)
-	productSku := dto.ProductSku{
-		ProductID:     1,
-		Name:          gofakeit.Name(),
-		Image:         gofakeit.ImageURL(100, 200),
-		Stock:         uint(gofakeit.Number(0, 10)),
-		LockStock:     uint(gofakeit.Number(0, 10)),
-		Sales:         uint(gofakeit.Number(0, 10)),
-		Money:         50,
-		DiscountMoney: 0,
-		Status:        0,
-		Desc:          "",
-	}
+	// productSku := dto.ProductSku{
+	// 	ProductID:     1,
+	// 	Name:          gofakeit.Name(),
+	// 	Image:         gofakeit.ImageURL(100, 200),
+	// 	Stock:         uint(gofakeit.Number(0, 10)),
+	// 	LockStock:     uint(gofakeit.Number(0, 10)),
+	// 	Sales:         uint(gofakeit.Number(0, 10)),
+	// 	Money:         50,
+	// 	DiscountMoney: 0,
+	// 	Status:        0,
+	// 	Desc:          "",
+	// }
 	productAndSku := &dto.ProductAndSku{}
 	for _, attribute := range attributes {
 		for _, v := range attribute.AttributeValues {
