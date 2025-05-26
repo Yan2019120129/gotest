@@ -14,18 +14,21 @@ import (
 )
 
 // ModifyDouYinBandwidth 修改抖音带宽
-func ModifyDouYinBandwidth(hostname string, bandwidth float64) error {
-	if hostname == "" || bandwidth <= 0 {
-		return fmt.Errorf("invalid hostname or bandwidth")
+func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64) ([]byte, error) {
+	if hostname == "" {
+		return nil, fmt.Errorf("The hostname cannot be empty")
 	}
 
-	_, err := DYControlBG(hostname, bandwidth, 2, 2)
-	return err
+	if action == 0 {
+		return nil, fmt.Errorf("The action cannot be zero")
+	}
+
+	return DYControlBG(hostname, bandwidth, 2, 2)
 }
 
 // DYControlBG 控制抖音带宽
 func DYControlBG(hostname string, BandWidth, BandWay float64, from int) ([]byte, error) {
-	hBand := &model.BandHost{Host: hostname, BandWidth: BandWidth, BandWay: BandWay, From: 2}
+	hBand := &model.BandHost{Host: hostname, BandWidth: BandWidth, BandWay: BandWay, From: from}
 
 	u := SignUrl("https://mc-service.vod.snv1.com/index.php", "Node.SetNodeProvideBand", "kmanage", "d683575969b52144f29da0efcf391454")
 

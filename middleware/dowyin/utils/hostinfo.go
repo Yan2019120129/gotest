@@ -2,11 +2,13 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
 func GetAppID() (string, error) {
 	configFile := "/etc/xyapp/recruitResult.json"
+	//configFile := "/home/yan/Documents/file/gofile/gotest/common/file/recruitResult.json"
 	type ResultItem struct {
 		AppID string `json:"appid"`
 	}
@@ -14,17 +16,15 @@ func GetAppID() (string, error) {
 		Result []ResultItem `json:"result"`
 	}
 
-	var ret string = "未知"
 	if _, err := os.Stat(configFile); err == nil {
 		data, err := os.ReadFile(configFile)
-		if err == nil {
-			var result Data
-			if err := json.Unmarshal(data, &result); err == nil && len(result.Result) > 0 {
-				ret = result.Result[0].AppID
-			}
-		} else {
-			return ret, err
+		if err != nil {
+			return "", err
+		}
+		var result Data
+		if err := json.Unmarshal(data, &result); err == nil && len(result.Result) > 0 {
+			return result.Result[0].AppID, nil
 		}
 	}
-	return ret, nil
+	return "", fmt.Errorf("config file %s not found", configFile)
 }

@@ -1,0 +1,19 @@
+  # 定时任务配置文件
+tasks:
+  - name: "run_scripts_bw_limit"
+    type: "command"
+    schedule: "20 */1 * * * *"  # 每分钟执行一次
+    content: "sh /xyapp/system/miner.plugin-zxagent.ipk/scripts/task_g3_limit_bw.sh"
+    enabled: true
+    metadata:
+      description: "每1分钟执行一次的任务, 控制带宽"
+      timeout: 30
+  # 定时任务配置文件
+  - name: "task_dy_limit_bw"
+    type: "command"
+    schedule: "20 */1 * * * *"  # 每分钟执行一次
+    content: "/xyapp/system/miner.plugin-zxagent.ipk/scripts/task_dy_limit_bw >> /xyapp/system/miner.plugin-zxagent.ipk/logs/task_dy_limit_bw.log 2>&1/"
+    enabled: true
+    metadata:
+      description: "每1分钟执行一次的任务, 控制带宽"
+      timeout: 30
