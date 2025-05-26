@@ -1,15 +1,9 @@
-package main
+package utils
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
-
-func main() {
-	v, err := GetAppID()
-	fmt.Println("AppID:", v, err)
-}
 
 func GetAppID() (string, error) {
 	configFile := "/etc/xyapp/recruitResult.json"
