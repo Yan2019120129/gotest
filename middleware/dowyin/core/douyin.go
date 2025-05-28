@@ -7,23 +7,60 @@ import (
 	"encoding/json"
 	"fmt"
 	"gotest/middleware/dowyin/model"
+	"gotest/middleware/dowyin/utils"
 	"io"
+	"math"
 	"net/http"
 	"net/url"
 	"time"
 )
 
 // ModifyDouYinBandwidth 修改抖音带宽
-func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64) ([]byte, error) {
+func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64, networkCard, appID string) ([]byte, error) {
+	if appID == "" {
+		return nil, fmt.Errorf("the appid cannot be empty")
+	}
+
 	if hostname == "" {
-		return nil, fmt.Errorf("The hostname cannot be empty")
+		return nil, fmt.Errorf("the hostname cannot be empty")
 	}
 
 	if action == 0 {
-		return nil, fmt.Errorf("The action cannot be zero")
+		return nil, fmt.Errorf("the action cannot be zero")
 	}
 
-	return DYControlBG(hostname, bandwidth, 2, 2)
+	bwTmp := utils.GetBwTmp(appID)
+	if bwTmp.Bandwidth != 0 && math.Abs(bwTmp.Bandwidth-bandwidth) > 0.2 {
+		return nil, fmt.Errorf("the bandwidth cannot be more than 200M")
+	}
+
+	res, err := DYControlBG(hostname, bandwidth, 2, 2)
+	if err != nil {
+		return nil, err
+	}
+
+	var resMessage model.ResMessage
+	_ = json.Unmarshal(res, &resMessage)
+
+	if resMessage.Code != 0 {
+		return nil, fmt.Errorf("the request is incorrect%s", resMessage.Message)
+	}
+
+	newBwTmp := model.BwTmp{
+		NetworkCard: networkCard,
+		Bandwidth:   bandwidth,
+		AppID:       appID,
+		UpdateAt:    time.Now().Format(time.DateTime),
+	}
+
+	err = utils.SetBwTmp(newBwTmp)
+	if err != nil {
+		return res, fmt.Errorf("set bandwidth fail:%v", err)
+	}
+
+	fmt.Println("save the bw_tmp.json file")
+
+	return res, nil
 }
 
 // DYControlBG 控制抖音带宽

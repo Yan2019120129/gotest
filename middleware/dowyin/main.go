@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	data, err := os.ReadFile(enum.Bw_FILE_Path)
+	data, err := os.ReadFile(enum.PathBwFile)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
@@ -31,30 +31,38 @@ func main() {
 		return
 	}
 
-	fmt.Println("开始请求：", hostname, appID)
+	networkCard := strDataSplit[0]
+	bw_tmp := strDataSplit[1]
+	action_tmp := strDataSplit[2]
+	bw, _ := strconv.ParseFloat(bw_tmp, 64)
+	action, _ := strconv.ParseInt(action_tmp, 10, 64)
+
 	switch appID {
-	case enum.Business_Type_Doun_YIN:
-		networkCard := strDataSplit[0]
-		bw_tmp := strDataSplit[1]
-		action_tmp := strDataSplit[2]
-		//appid := strDataSplit[3]
-		fmt.Printf("Network Card: %s, Bandwidth: %s, Action: %s, App ID: %s\n", networkCard, bw_tmp, action_tmp, appID)
-		bw, _ := strconv.ParseFloat(bw_tmp, 64)
-		if bw <= 0 {
-			fmt.Println("Invalid bandwidth value:", bw_tmp)
+	case enum.BusinessTypeDounYIN:
+		fmt.Printf("Ready to get started：hostname：%s ，App ID:：%s，Network Card: %s, Bandwidth: %s, Action: %s", hostname, appID, networkCard, bw_tmp, action_tmp)
+		v, err := core.ModifyDouYinBandwidth(hostname, bw, action, networkCard, appID)
+		if err != nil {
+			fmt.Println("Error:", string(v), err)
+			return
+		}
+		fmt.Println("Return：", string(v))
+	case enum.BusinessTypeMixRun:
+		if len(strDataSplit) < 3 {
+			fmt.Println("not find bw value")
+			return
+		}
+		bwSum_tmp := strDataSplit[3]
+		bwSum, _ := strconv.ParseFloat(bwSum_tmp, 64)
+		dockerInstanceInfo, err := utils.GetDockerInstanceInfo()
+		if err != nil {
+			fmt.Println("get docker instance info error:", err)
 			return
 		}
 
-		action, err := strconv.ParseInt(action_tmp, 10, 64)
+		err = core.ReportMinRunBandwidth(hostname, appID, bwSum, dockerInstanceInfo)
 		if err != nil {
-			fmt.Println("Invalid bandwidth value:", bw_tmp)
+			fmt.Println("report min run bandwidth error:", err)
+			return
 		}
-		v, err := core.ModifyDouYinBandwidth(hostname, bw, action)
-		if err != nil {
-			fmt.Println("请求失败:", string(v), err)
-		}
-		fmt.Println("请求成功:", string(v), err)
-	case enum.Business_Type_MIX_RUN:
-		// modifyDouYinBandwidth(*result)
 	}
 }

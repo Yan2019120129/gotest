@@ -1,0 +1,10 @@
+# 程序配置文件
+bandwidth:
+  check_interval: 60
+  bandwidth_interval: 1
+  bandwidth_interval_desc: "带宽修改频率"
+  network_file: /etc/xyvod/network_v2.json
+  network_file_desc:  "获取本地调度带宽"
+
+agent_sche:
+  url: "http://111.63.205.238:80"
