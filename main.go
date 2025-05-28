@@ -1,36 +1,22 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
+)
+
+const (
+	RootPath               = "/xyapp/system/miner.plugin-zxagent.ipk"
+	Log_FiLE_Path          = RootPath + "/logs/app.log"
+	Bw_FILE_Path           = RootPath + "/bw"
+	Bw_tmp_FILE_Path       = RootPath + "/bw_tmp"
+	Business_Type_Doun_YIN = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
+	Business_Type_MIX_RUN  = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
 )
 
 func main() {
-	v, err := GetAppID()
-	fmt.Println("AppID:", v, err)
-}
-
-func GetAppID() (string, error) {
-	configFile := "/etc/xyapp/recruitResult.json"
-	type ResultItem struct {
-		AppID string `json:"appid"`
+	var v uint8
+	for i := 0; i < 100; i++ {
+		v += uint8(i)
+		fmt.Println(i)
 	}
-	type Data struct {
-		Result []ResultItem `json:"result"`
-	}
-
-	var ret string = "未知"
-	if _, err := os.Stat(configFile); err == nil {
-		data, err := os.ReadFile(configFile)
-		if err == nil {
-			var result Data
-			if err := json.Unmarshal(data, &result); err == nil && len(result.Result) > 0 {
-				ret = result.Result[0].AppID
-			}
-		} else {
-			return ret, err
-		}
-	}
-	return ret, nil
 }

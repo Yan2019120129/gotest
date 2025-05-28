@@ -1,10 +1,47 @@
 package enum
 
+//// 模拟测试环境
+//const (
+//	Env       = "dev"
+//	PathRoot  = "/home/yan/Documents/file/gofile/gotest/middleware/dowyin" // zxagent 跟路径
+//	PathXYAPP = PathRoot
+//)
+
+// 正式环境
 const (
-	RootPath               = "/xyapp/system/miner.plugin-zxagent.ipk"
-	Log_FiLE_Path          = RootPath + "/logs/app.log"
-	Bw_FILE_Path           = RootPath + "/bw"
-	Bw_tmp_FILE_Path       = RootPath + "/bw_tmp"
-	Business_Type_Doun_YIN = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
-	Business_Type_MIX_RUN  = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
+	Env = "pro"
+	//PathRoot zxagent 根路径
+	PathRoot = "/xyapp/system/miner.plugin-zxagent.ipk"
+
+	//PathXYAPP 配置文件路径
+	PathXYAPP = "/etc/xyapp"
+)
+
+// 配置文件路径常量
+const (
+	// PathLogFile zxagent 日志路径
+	PathLogFile = PathRoot + "/logs/app.log"
+
+	// PathBwFile zxagent 数据传输路径
+	PathBwFile = PathRoot + "/bw"
+
+	// PathBwTmpFile zxagent 存储临时数据路径
+	PathBwTmpFile = PathRoot + "/bw_tmp.json"
+
+	// PathBaseFile zxagent 存储临时数据路径
+	PathBaseFile = PathRoot + "/base.yaml"
+
+	// PathRecruitResultFile 存储不同类型业务的appid，如抖音，混跑，g3
+	PathRecruitResultFile = PathXYAPP + "/recruitResult.json"
+
+	PathBusinessMacFile = PathXYAPP + "/businessMac.json"
+	PathNetworkV2File   = PathXYAPP + "/network_v2.json"
+
+	DefaultNic = "eth0"
+)
+
+// 业务标识
+const (
+	BusinessTypeDounYIN = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
+	BusinessTypeMixRun  = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
 )
