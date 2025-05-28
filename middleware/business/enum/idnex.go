@@ -3,7 +3,7 @@ package enum
 //// 模拟测试环境
 //const (
 //	Env       = "dev"
-//	PathRoot  = "/home/yan/Documents/file/gofile/gotest/middleware/dowyin" // zxagent 跟路径
+//	PathRoot  = "/home/yan/Documents/file/gofile/gotest/middleware/business" // zxagent 跟路径
 //	PathXYAPP = PathRoot
 //)
 

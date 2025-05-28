@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gotest/middleware/dowyin/enum"
-	"gotest/middleware/dowyin/model"
+	"gotest/middleware/business/enum"
+	"gotest/middleware/business/model"
 	"os"
 	"os/exec"
 	"runtime"
@@ -50,22 +50,25 @@ func examineBwTmpFile(path string) error {
 }
 
 // GetBwTmp 获取带宽临时文件数据
-func GetBwTmp(appid string) model.BwTmp {
+func GetBwTmp(appid string) (model.BwTmp, bool) {
 	v := model.BwTmp{}
 	err := examineBwTmpFile(enum.PathBwTmpFile)
 	if err != nil {
-		return v
+		fmt.Println("Err:", err)
+		return v, false
 	}
 
 	file, err := os.ReadFile(enum.PathBwTmpFile)
 	if err != nil {
-		return v
+		fmt.Println("Err:", err)
+		return v, false
 	}
 
 	bwTmp := make(map[string]model.BwTmp)
 	_ = json.Unmarshal(file, &bwTmp)
+	v, ok := bwTmp[appid]
 
-	return bwTmp[appid]
+	return v, ok
 }
 
 // GetBwTmpAll 获取全部带宽临时文件数据
@@ -131,12 +134,12 @@ func SetBwTmp(bwTmp model.BwTmp) error {
 
 	bwTmpList[bwTmp.AppID] = bwTmp
 
-	bytes, err := json.Marshal(bwTmpList)
+	valBytes, err := json.Marshal(bwTmpList)
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile(enum.PathBwTmpFile, bytes, os.ModePerm)
+	err = os.WriteFile(enum.PathBwTmpFile, valBytes, os.ModePerm)
 	if err != nil {
 		return err
 	}

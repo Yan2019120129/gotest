@@ -3,8 +3,8 @@ package utils
 import (
 	"fmt"
 	"gopkg.in/yaml.v3"
-	"gotest/middleware/dowyin/enum"
-	"gotest/middleware/dowyin/model"
+	"gotest/middleware/business/enum"
+	"gotest/middleware/business/model"
 	"os"
 )
 

@@ -6,8 +6,8 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"gotest/middleware/dowyin/model"
-	"gotest/middleware/dowyin/utils"
+	"gotest/middleware/business/model"
+	"gotest/middleware/business/utils"
 	"io"
 	"math"
 	"net/http"
@@ -29,8 +29,10 @@ func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64, net
 		return nil, fmt.Errorf("the action cannot be zero")
 	}
 
-	bwTmp := utils.GetBwTmp(appID)
-	if bwTmp.Bandwidth != 0 && math.Abs(bwTmp.Bandwidth-bandwidth) > 0.2 {
+	bwTmp, ok := utils.GetBwTmp(appID)
+	abs := math.Abs(bwTmp.Bandwidth - bandwidth)
+	fmt.Printf("bandwidth abs: 【|%f-%f|=%v】 \n", bwTmp.Bandwidth, bandwidth, abs)
+	if ok && bwTmp.Bandwidth != 0 && abs < 0.2 {
 		return nil, fmt.Errorf("the bandwidth cannot be more than 200M")
 	}
 
@@ -39,7 +41,7 @@ func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64, net
 		return nil, err
 	}
 
-	var resMessage model.ResMessage
+	resMessage := model.ResMessage{}
 	_ = json.Unmarshal(res, &resMessage)
 
 	if resMessage.Code != 0 {
