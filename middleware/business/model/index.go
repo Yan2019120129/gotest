@@ -1,5 +1,7 @@
 package model
 
+import "encoding/json"
+
 // BandHost 抖音带宽控制接口参数
 type BandHost struct {
 	Host      string  `json:"host"`      // 节点host
@@ -37,15 +39,35 @@ type AgentSchedule struct {
 	URL string `yaml:"url"` // 调度接口地址
 }
 
-// ReportHostInfo 上报机房带宽信息
-type ReportHostInfo struct {
+// HostInfoReport 上报机房带宽信息
+type HostInfoReport struct {
 	HostName  string  `json:"hostname"`
 	BandWidth float64 `json:"bandwidth"`
 	Appid     string  `json:"appid"`
 }
 
+// HostInfoParams 获取机房带宽信息
+type HostInfoParams struct {
+	HostName string `json:"hostname"`
+	Appid    string `json:"appid"`
+}
+
 // ResMessage 接口相应信息
 type ResMessage struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code    int             `json:"code"`
+	Message string          `json:"message"`
+	Data    json.RawMessage `json:"data"`
+}
+
+// BandwidthInfo 控制带宽信息
+type BandwidthInfo struct {
+	Bandwidth     float64 `json:"bandwidth"`
+	BandwidthOrig float64 `json:"bandwidth_orig"`
+	LastBandwidth float64 `json:"last_bandwidth"`
+	Ret           int     `json:"ret"`
+}
+
+// BizConf 容器控制实例
+type BizConf struct {
+	InstanceCount uint16 `json:"instance_count"`
 }

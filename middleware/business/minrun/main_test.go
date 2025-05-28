@@ -71,7 +71,7 @@ func TestMain04(t *testing.T) {
 func TestMain05(t *testing.T) {
 	pathUrl := "http://111.63.205.238:80" + "/agent/report/host_info"
 
-	params := model.ReportHostInfo{
+	params := model.HostInfoReport{
 		HostName:  "m-jiangsu-yangzhou-user3-1677888060-051",
 		BandWidth: 0,
 		Appid:     "be37b71de68ba3339cc196b6ef802706_2698d6c20affd188754ca34f17f43918",
@@ -95,4 +95,12 @@ func TestMain06(t *testing.T) {
 		fmt.Println(v, ok)
 		time.Sleep(1 * time.Second)
 	}
+}
+
+func TestMain07(t *testing.T) {
+	m := map[int]model.BizConf{}
+	for i := 0; i < 100; i++ {
+		m[i] = model.BizConf{InstanceCount: 2}
+	}
+	fmt.Println(m)
 }

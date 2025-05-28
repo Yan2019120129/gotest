@@ -3,13 +3,9 @@ package utils
 import (
 	"business/enum"
 	"business/model"
-	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
-	"os/exec"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -157,7 +153,8 @@ func GetDockerInstanceInfo() ([][]any, error) {
      30 be37b71de68ba3339cc196b6ef802706
 `
 	} else {
-		dockerInstance, err = execDockerCommand()
+		command := "docker ps | awk '{print $NF}'| awk -F '[._]' '{print $3}' | sort | uniq -c"
+		dockerInstance, err = ExecCommand(command)
 		if err != nil {
 			return nil, err
 		}
@@ -180,33 +177,29 @@ func GetDockerInstanceInfo() ([][]any, error) {
 	return dockerInstanceInfo, nil
 }
 
-// execDockerCommand 执行docker命令
-func execDockerCommand() (string, error) {
-	command := "docker ps | awk '{print $NF}'| awk -F '[._]' '{print $3}' | sort | uniq -c"
-	shell := "/bin/sh"
-	if runtime.GOOS == "windows" {
-		shell = "cmd"
-	}
-	cmd := exec.Command(shell, "-c", command)
-
-	// 捕获标准输出和标准错误
-	var stdout, stderr bytes.Buffer
-
-	// 标准输出
-	cmd.Stdout = &stdout
-
-	// 标准错误
-	cmd.Stderr = &stderr
-
-	var err error
-	// 执行命令
-	err = cmd.Run()
+// GetBizConf 获取容器控制文件
+func GetBizConf() (map[string]model.BizConf, error) {
+	err := examineBwTmpFile(enum.PathBizConfFile)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	if stderr.String() != "" {
-		return "", errors.New(stderr.String())
+	file, err := os.ReadFile(enum.PathBizConfFile)
+	zxbiz := make(map[string]model.BizConf)
+	_ = json.Unmarshal(file, &zxbiz)
+	return zxbiz, nil
+}
+
+// SaveBizConf 保存容器控制文件
+func SaveBizConf(val map[string]model.BizConf) error {
+	byteList, err := json.Marshal(val)
+	if err != nil {
+		return err
 	}
-	return stdout.String(), nil
+
+	err = os.WriteFile(enum.PathBizConfFile, byteList, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
 }
