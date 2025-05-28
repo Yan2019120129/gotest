@@ -1,10 +1,10 @@
 package core
 
 import (
+	"business/model"
+	"business/utils"
 	"encoding/json"
 	"fmt"
-	"gotest/middleware/business/model"
-	"gotest/middleware/business/utils"
 	"time"
 )
 
@@ -85,11 +85,11 @@ func ReportMinRunBandwidth(hostname, appid string, bwSum float64, dockerInstance
 		}
 
 		paramsStr := utils.ObjToString(params)
-
 		httpInstance := utils.NewHttp()
 		respByte := httpInstance.Post(pathUrl, paramsStr)
 		resp := model.ResMessage{}
 		_ = json.Unmarshal(respByte, &resp)
+		fmt.Printf("report host info【bwSum:%f， Count:%f，HostName:%s，BandWidth::%f，Appid:%s\n，Resp：%v】", bwSum, count, hostname, bandWidth, businessAppid, resp)
 		if resp.Code != 0 {
 			return fmt.Errorf("report min run bandwidth err ,value:%v,resp:%v", params, resp.Message)
 		}

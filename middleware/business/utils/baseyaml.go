@@ -1,10 +1,10 @@
 package utils
 
 import (
+	"business/enum"
+	"business/model"
 	"fmt"
 	"gopkg.in/yaml.v3"
-	"gotest/middleware/business/enum"
-	"gotest/middleware/business/model"
 	"os"
 )
 

@@ -1,10 +1,10 @@
 package main
 
 import (
+	"business/core"
+	"business/enum"
+	"business/utils"
 	"fmt"
-	"gotest/middleware/business/core"
-	"gotest/middleware/business/enum"
-	"gotest/middleware/business/utils"
 	"math"
 	"os"
 	"strconv"
