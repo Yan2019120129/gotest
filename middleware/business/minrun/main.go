@@ -1,10 +1,10 @@
 package main
 
 import (
+	"business/core"
+	"business/enum"
+	"business/utils"
 	"fmt"
-	"gotest/middleware/business/core"
-	"gotest/middleware/business/enum"
-	"gotest/middleware/business/utils"
 	"os"
 	"strconv"
 	"strings"
@@ -40,17 +40,22 @@ func main() {
 	}
 
 	networkCard := strDataSplit[0]
-	bw_tmp := strDataSplit[1]
-	action_tmp := strDataSplit[2]
-	bw, _ := strconv.ParseFloat(bw_tmp, 64)
-	action, _ := strconv.ParseInt(action_tmp, 10, 64)
+	bwTmp := strDataSplit[1]
+	actionTmp := strDataSplit[2]
+	bw, _ := strconv.ParseFloat(bwTmp, 64)
+	action, _ := strconv.ParseInt(actionTmp, 10, 64)
 	if enum.BusinessTypeMixRun == appID {
 		if len(strDataSplit) <= 3 {
 			fmt.Println("not find total bandwidth")
 			return
 		}
-		bwSum_tmp := strDataSplit[3]
-		bwSum, _ := strconv.ParseFloat(bwSum_tmp, 64)
+		bwSumTmp := strings.ReplaceAll(strDataSplit[3], "\n", "")
+		bwSum, err := strconv.ParseFloat(bwSumTmp, 64)
+		if bwSum <= 0 || err != nil {
+			fmt.Printf("bandwidth sum is %v", bwSumTmp)
+			return
+		}
+
 		fmt.Printf("Ready to get started：hostname：%s ，App ID:：%s，Network Card: %s, Bandwidth: %f, Action: %d, Bandwidth Sum:%f\n", hostname, appID, networkCard, bw, action, bwSum)
 		dockerInstanceInfo, err := utils.GetDockerInstanceInfo()
 		if err != nil {
@@ -58,6 +63,7 @@ func main() {
 			return
 		}
 
+		fmt.Println("docker instance info", dockerInstanceInfo)
 		err = core.ReportMinRunBandwidth(hostname, appID, bwSum, dockerInstanceInfo)
 		if err != nil {
 			fmt.Println("report min run bandwidth error:", err)

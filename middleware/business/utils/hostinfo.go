@@ -1,12 +1,12 @@
 package utils
 
 import (
+	"business/enum"
+	"business/model"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gotest/middleware/business/enum"
-	"gotest/middleware/business/model"
 	"os"
 	"os/exec"
 	"runtime"

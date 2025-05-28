@@ -2,10 +2,10 @@ package utils
 
 import (
 	"bufio"
+	"business/enum"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gotest/middleware/business/enum"
 	"io/fs"
 	"net"
 	"os"
