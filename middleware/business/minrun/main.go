@@ -64,10 +64,25 @@ func main() {
 		}
 
 		fmt.Println("docker instance info", dockerInstanceInfo)
-		err = core.ReportMinRunBandwidth(hostname, appID, bwSum, dockerInstanceInfo)
+		baseConfig, err := utils.GetBaseConfig()
+		if err != nil {
+			fmt.Printf("GetBaseConfig error: %v\n", err)
+			return
+		}
+
+		// 上报带宽
+		err = core.ReportMinRunBandwidth(baseConfig.AgentSche.URL, hostname, appID, bwSum, dockerInstanceInfo)
 		if err != nil {
 			fmt.Println("report min run bandwidth error:", err)
 			return
 		}
+
+		// 调整带宽
+		err = core.ModifyMinRunBandwidth(baseConfig.AgentSche.URL, hostname, bw, bwSum, action, networkCard, appID, dockerInstanceInfo)
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		fmt.Println("Return Succeed")
 	}
 }
