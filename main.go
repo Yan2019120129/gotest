@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 const (
@@ -14,9 +15,8 @@ const (
 )
 
 func main() {
-	var v uint8
-	for i := 0; i < 100; i++ {
-		v += uint8(i)
-		fmt.Println(i)
-	}
+	// 执行计算并保留两位小数
+	bw := 4.2
+	bw = math.Round(bw/0.85*100) / 100
+	fmt.Println("bw:", bw)
 }

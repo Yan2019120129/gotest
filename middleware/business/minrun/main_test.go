@@ -1,9 +1,10 @@
 package main_test
 
 import (
+	"encoding/json"
 	"fmt"
-	"gotest/middleware/dowyin/model"
-	"gotest/middleware/dowyin/utils"
+	"gotest/middleware/business/model"
+	"gotest/middleware/business/utils"
 	"math"
 	"testing"
 	"time"
@@ -16,7 +17,7 @@ func TestMain01(t *testing.T) {
 }
 
 func TestMain02(t *testing.T) {
-	v := utils.GetBwTmp("ljljsadlfjlajfl")
+	v, _ := utils.GetBwTmp("ljljsadlfjlajfl")
 	fmt.Println(v)
 	v.Bandwidth = 1000000
 	err := utils.SetBwTmp(v)
@@ -40,8 +41,6 @@ func TestMain03(t *testing.T) {
 
 func TestMain04(t *testing.T) {
 	netInfo := utils.NewNetWorkInfo()
-
-	netInfo.GetInterfaceStats()
 
 	// 获取所有物理网卡
 	ifaces, err := netInfo.GetInterfaces()
@@ -67,4 +66,33 @@ func TestMain04(t *testing.T) {
 
 	// 保持主程序运行
 	time.Sleep(30 * time.Second)
+}
+
+func TestMain05(t *testing.T) {
+	pathUrl := "http://111.63.205.238:80" + "/agent/report/host_info"
+
+	params := model.ReportHostInfo{
+		HostName:  "m-jiangsu-yangzhou-user3-1677888060-051",
+		BandWidth: 0,
+		Appid:     "be37b71de68ba3339cc196b6ef802706_2698d6c20affd188754ca34f17f43918",
+	}
+
+	paramsStr := utils.ObjToString(params)
+
+	httpInstance := utils.NewHttp()
+	respByte := httpInstance.Post(pathUrl, paramsStr)
+	resp := model.ResMessage{}
+	_ = json.Unmarshal(respByte, &resp)
+	if resp.Code != 0 {
+		panic(fmt.Errorf("ReportMinRunBandwidth err %v", resp.Message))
+	}
+	fmt.Println(resp)
+}
+
+func TestMain06(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		v, ok := utils.GetBwTmp("be37b71de68ba3339cc196b6ef802706_2698d6c20affd188754ca34f17f43918")
+		fmt.Println(v, ok)
+		time.Sleep(1 * time.Second)
+	}
 }

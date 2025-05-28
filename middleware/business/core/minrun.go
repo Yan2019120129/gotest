@@ -3,8 +3,8 @@ package core
 import (
 	"encoding/json"
 	"fmt"
-	"gotest/middleware/dowyin/model"
-	"gotest/middleware/dowyin/utils"
+	"gotest/middleware/business/model"
+	"gotest/middleware/business/utils"
 	"time"
 )
 
@@ -84,12 +84,14 @@ func ReportMinRunBandwidth(hostname, appid string, bwSum float64, dockerInstance
 			Appid:     businessAppid,
 		}
 
+		paramsStr := utils.ObjToString(params)
+
 		httpInstance := utils.NewHttp()
-		respByte := httpInstance.Post(pathUrl, utils.ObjToString(params))
+		respByte := httpInstance.Post(pathUrl, paramsStr)
 		resp := model.ResMessage{}
 		_ = json.Unmarshal(respByte, &resp)
 		if resp.Code != 0 {
-			return fmt.Errorf("ReportMinRunBandwidth err %v", resp.Message)
+			return fmt.Errorf("report min run bandwidth err ,value:%v,resp:%v", params, resp.Message)
 		}
 	}
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gotest/middleware/dowyin/enum"
+	"gotest/middleware/business/enum"
 	"io/fs"
 	"net"
 	"os"
