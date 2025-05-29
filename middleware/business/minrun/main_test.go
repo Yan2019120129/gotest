@@ -104,3 +104,11 @@ func TestMain07(t *testing.T) {
 	}
 	fmt.Println(m)
 }
+
+func TestMain08(t *testing.T) {
+	data := []float64{2.434, 2.525, 2.999, 2.010}
+	for _, v := range data {
+		vTmp := utils.Round(v, 2)
+		fmt.Println(v, vTmp)
+	}
+}

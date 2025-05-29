@@ -41,14 +41,14 @@ func main() {
 	}
 
 	networkCard := strDataSplit[0]
-	bw_tmp := strDataSplit[1]
-	action_tmp := strDataSplit[2]
-	bw, _ := strconv.ParseFloat(bw_tmp, 64)
-	action, _ := strconv.ParseInt(action_tmp, 10, 64)
+	bwTmp := strDataSplit[1]
+	actionTmp := strDataSplit[2]
+	bw, _ := strconv.ParseFloat(bwTmp, 64)
+	action, _ := strconv.ParseInt(actionTmp, 10, 64)
 	if enum.BusinessTypeDounYIN == appID {
-		// 针对抖音特殊处理，除以85%恢复到原值
+		// 针对抖音特殊处理，除以85%恢复到原值,并保留两位小数
 		bw = math.Round(bw/0.85*100) / 100
-		fmt.Printf("Ready to get started：hostname：%s ，App ID:：%s，Network Card: %s, Bandwidth: %f, Action: %s\n", hostname, appID, networkCard, bw, action_tmp)
+		fmt.Printf("Ready to get started：hostname：%s ，App ID:：%s，Network Card: %s, Bandwidth: %f, Action: %s\n", hostname, appID, networkCard, bw, actionTmp)
 		v, err := core.ModifyDouYinBandwidth(hostname, bw, action, networkCard, appID)
 		if err != nil {
 			fmt.Println("Error:", string(v), err)

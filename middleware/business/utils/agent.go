@@ -15,12 +15,12 @@ func NewAgent() *Agent {
 
 // Start 启动Agent
 func (a *Agent) Start() (string, error) {
-	return ExecCommand(enum.PathStartScriptsFile)
+	return ExecShell(enum.PathStartScriptsFile)
 }
 
 // Stop 关闭Agent
 func (a *Agent) Stop() (string, error) {
-	return ExecCommand(enum.PathStopScriptsFile)
+	return ExecShell(enum.PathStopScriptsFile)
 }
 
 // Reboot 重启Agent

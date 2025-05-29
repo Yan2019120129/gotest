@@ -13,7 +13,7 @@ import (
 func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, dockerInstanceInfoList [][]any) error {
 	bwTmp, err := utils.GetBwTmpAll()
 	if err != nil {
-		return fmt.Errorf("GetBwTmpAll error: %v", err)
+		return fmt.Errorf("get bw tmp all error: %v", err)
 	}
 
 	// 记录存储文件是否为空，如果为空设置初始比例
@@ -38,7 +38,7 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 		// 保存初始数据
 		err = utils.SaveBwTmpAll(bwTmp)
 		if err != nil {
-			return fmt.Errorf("SaveBwTmpAll error: %v", err)
+			return fmt.Errorf("save bw tmp all error: %v", err)
 		}
 	}
 
@@ -53,7 +53,7 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
 		if len(dockerInstanceInfo) <= 1 {
-			fmt.Println("dockerInstanceInfo is not out of specifications")
+			fmt.Println("docker instance info is not out of specifications")
 			continue
 		}
 
@@ -63,12 +63,11 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 
 		bwTmpVal, ok := bwTmp[splicingBusinessAppid]
 		if !ok {
-			return fmt.Errorf("bwTmpVal not exist")
+			return fmt.Errorf("bw tmp val not exist")
 		}
 
 		// 占比/总量*总带宽=业务总带宽
 		businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
-		dockerInstanceInfo = append(dockerInstanceInfo, businessBwSum)
 
 		params := model.HostInfoReport{
 			HostName:  hostname,
@@ -82,7 +81,7 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 		respByte := httpInstance.Post(pathUrl, paramsStr)
 		resp := model.ResMessage{}
 		_ = json.Unmarshal(respByte, &resp)
-		fmt.Printf("report host info【bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s\n，Resp：%v】", bwSum, count, hostname, businessBwSum, businessAppid, resp)
+		fmt.Printf("report host info [bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, resp)
 		if resp.Code != 0 {
 			return fmt.Errorf("report min run bandwidth err ,value:%v,resp:%v", params, resp.Message)
 		}
@@ -92,7 +91,7 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 }
 
 // ModifyMinRunBandwidth 修改混跑带宽
-func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, action int64, networkCard, appid string, dockerInstanceInfoList [][]any) error {
+func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard, appid string, dockerInstanceInfoList [][]any) error {
 	if appid == "" {
 		return fmt.Errorf("the appid cannot be empty")
 	}
@@ -103,7 +102,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 
 	bwTmp, err := utils.GetBwTmpAll()
 	if err != nil {
-		return fmt.Errorf("GetBwTmpAll error: %v", err)
+		return fmt.Errorf("get bw tmp all error: %v", err)
 	}
 
 	// 记录存储文件是否为空，如果为空设置初始比例
@@ -111,7 +110,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 	if isBwTmpIsNull {
 		for _, dockerInstanceInfo := range dockerInstanceInfoList {
 			if len(dockerInstanceInfo) <= 1 {
-				fmt.Println("dockerInstanceInfo is not out of specifications")
+				fmt.Println("docker instance info is not out of specifications")
 				continue
 			}
 
@@ -128,7 +127,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 		// 保存初始数据
 		err = utils.SaveBwTmpAll(bwTmp)
 		if err != nil {
-			return fmt.Errorf("SaveBwTmpAll error: %v", err)
+			return fmt.Errorf("save bw tmp all error: %v", err)
 		}
 	}
 
@@ -152,7 +151,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
 		if len(dockerInstanceInfo) <= 1 {
-			fmt.Println("dockerInstanceInfo is not out of specifications")
+			fmt.Println("docker instance info is not out of specifications")
 			continue
 		}
 
@@ -177,35 +176,53 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 		bandwidthInfo := model.BandwidthInfo{}
 		_ = json.Unmarshal(resp.Data, &bandwidthInfo)
 
+		bwTmpVal, ok := bwTmp[splicingBusinessAppid]
+		if !ok {
+			return fmt.Errorf("bw tmp val not exist")
+		}
+
+		// 占比/总量*总带宽=业务总带宽
+		businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
+
 		switch bandwidthInfo.Ret {
 		case 0:
 			continue
 		case 1: // 根据带宽控制实例数
-			bwTmpVal, ok := bwTmp[splicingBusinessAppid]
-			if !ok {
-				return fmt.Errorf("bwTmpVal not exist")
-			}
-
-			// 占比/总量*总带宽=业务总带宽
-			businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
 
 			// 业务总带宽/容器数量=每个容器的带宽
 			averageBandwidth := businessBwSum / count
 
 			// 目标带宽/单个实例带宽量=实例数
 			count = math.Round(bandwidthInfo.Bandwidth / averageBandwidth)
+
+			// 更新临时文件
+			bwTmpVal.Bandwidth = bandwidthInfo.Bandwidth
+			bwTmpVal.NetworkCard = networkCard
+			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
+			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
 			isRebootAgent = true
 		case -1: // 强制设置为0个实例
 			count = 0
+			bwTmpVal.Bandwidth = 0
+			bwTmpVal.NetworkCard = networkCard
+			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
+
 			isRebootAgent = true
+			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
 		}
 
+		bwTmp[splicingBusinessAppid] = bwTmpVal
 		bizConf[businessAppid] = model.BizConf{
 			InstanceCount: uint16(count),
 		}
 	}
 
 	if isRebootAgent {
+		err = utils.SaveBwTmpAll(bwTmp)
+		if err != nil {
+			return fmt.Errorf("save bw tmp all error: %v", err)
+		}
+
 		err = utils.SaveBizConf(bizConf)
 		if err != nil {
 			return fmt.Errorf("save zx_biz error: %v", err)
@@ -214,9 +231,9 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bandwidth, bwSum float64, a
 		agent := utils.NewAgent()
 		v, err := agent.Reboot()
 		if err != nil {
-			return fmt.Errorf("reboot error: %v", err)
+			return fmt.Errorf("reboot error: %v-%v", err, v)
 		}
-		fmt.Printf("reboot success %s\n", v)
+		fmt.Println("bw_tmp.json biz_conf.json file is successfully saved")
 	}
 
 	return nil
