@@ -65,12 +65,14 @@ const (
 const (
 	BusinessTypeDounYIN = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
 	BusinessTypeMixRun  = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
+	BusinessTypeMixRun0 = "2698d6c20affd188754ca34f17f43918" // 混跑 容器appid0 标识
+	BusinessTypeMixRun1 = "be37b71de68ba3339cc196b6ef802706" // 混跑 容器appid0 标识
 )
 
 // 默认值
 const (
 	//DefaultContainerMax 容器数量最大值
-	DefaultContainerMax uint8 = 65
+	DefaultContainerMax uint8 = 60
 
 	// DefaultNic 网卡默认值
 	DefaultNic = "eth0"

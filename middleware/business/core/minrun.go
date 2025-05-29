@@ -151,8 +151,16 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 		// 占比/总量*总带宽=业务总带宽【根据主程序获取到的机器当前总带宽计算的业务带宽值】
 		businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
 
+		var limitCount float64
+
+		// 判断使用那个容器的最大值限制
 		// 限制：根据业务比例，限制容器数量
-		limitCount := float64(bwTmpVal.Percentage) / float64(percentageSum) * float64(enum.DefaultContainerMax)
+		switch businessAppid {
+		case enum.BusinessTypeMixRun0:
+			limitCount = 25
+		case enum.BusinessTypeMixRun1:
+			limitCount = 35
+		}
 
 		switch bandwidthInfo.Ret {
 		case 0:
@@ -165,10 +173,15 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			// 目标带宽/单个实例带宽量=实例数
 			targetCount := math.Round(bandwidthInfo.Bandwidth / averageBandwidth)
 
+			// 不能超过最大值
 			if targetCount > limitCount {
 				targetCount = limitCount
 			}
-			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f,", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
+
+			// 不能低于最小值
+			if targetCount < 1 {
+				targetCount = 1
+			}
 
 			// 更新临时文件
 			bwTmpVal.Count = uint16(targetCount)
@@ -176,6 +189,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
 			isRebootAgent = true
+			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f,", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		case -1: // 强制设置为0个实例
 			count = 0
 			bwTmpVal.Count = 0
