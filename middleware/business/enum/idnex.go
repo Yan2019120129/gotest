@@ -6,6 +6,9 @@ package enum
 //
 //	PathRoot = "/home/yan/Documents/file/gofile/gotest/middleware/business" // zxagent 跟路径
 //
+//	// PathRootMinion minion跟目录
+//	PathRootMinion = PathRoot
+//
 //	PathXYAPP = PathRoot
 //
 //	// PathRootAgent agent跟目录文件
@@ -23,6 +26,9 @@ const (
 
 	// PathRootAgent agent跟目录文件
 	PathRootAgent = "/xyapp/system/miner.plugin-agent.ipk"
+
+	// PathRootMinion minion跟目录
+	PathRootMinion = "/xyapp/system/miner.plugin-minion.ipk"
 
 	//PathXYAPP 配置文件路径
 	PathXYAPP = "/etc/xyapp"
@@ -56,6 +62,9 @@ const (
 
 	// PathBizConfFile 容器控制文件
 	PathBizConfFile = PathXYAPP + "/biz_conf.json"
+
+	// PathMinionLogFile minion 日志文件路径
+	PathMinionLogFile = PathRootMinion + "/logs/minion.log"
 
 	// PathZXBIZFile 容器控制文件
 	PathZXBIZFile = PathTmp + "/zx_biz"

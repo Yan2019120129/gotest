@@ -112,3 +112,26 @@ func TestMain08(t *testing.T) {
 		fmt.Println(v, vTmp)
 	}
 }
+
+func TestMain09(t *testing.T) {
+	v, _ := utils.GetMinionInfo()
+	val := 0.0
+	for _, f := range v {
+		tmp := f * 8 / 1000 / 1000 / 60
+		fmt.Println(tmp, f)
+		val += tmp
+	}
+	fmt.Println(val)
+}
+
+// GetDockerData 获取docker数据
+func TestMain10(t *testing.T) {
+	v, err := utils.GetDockerInstanceKeys()
+
+	fmt.Println(v, err, len(v))
+}
+
+// GetDockerData 获取docker数据
+func TestMain11(t *testing.T) {
+	fmt.Println(75879651 / 1000 / 1000)
+}
