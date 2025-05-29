@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -87,7 +88,7 @@ func GetBwTmpAll() (map[string]model.BwTmp, error) {
 // SaveBwTmpAll 保存全部带宽临时文件数据
 func SaveBwTmpAll(val map[string]model.BwTmp) error {
 	if len(val) == 0 {
-		return fmt.Errorf("The value cannot be empty")
+		return fmt.Errorf("the value cannot be empty")
 	}
 
 	for _, v := range val {
@@ -205,4 +206,71 @@ func SaveBizConf(val map[string]model.BizConf) error {
 		return err
 	}
 	return nil
+}
+
+// GetDockerInstanceKeys 获取容器信息
+func GetDockerInstanceKeys() ([][]any, error) {
+	var command string
+	if enum.Env == "dev" {
+		command = "cat /home/yan/Documents/file/gofile/gotest/middleware/business/tmp.txt | tail -n +2 | awk '{print $1, $NF}'"
+	} else {
+		command = "docker ps | tail -n +2 | awk '{print $1, $NF}'"
+	}
+
+	dockerInstance, err := ExecCommand(command)
+	if err != nil {
+		return nil, err
+	}
+
+	var dockerInstanceKeys [][]any
+	dockerLines := strings.Split(dockerInstance, "\n")
+	for _, line := range dockerLines {
+		if len(line) <= 20 {
+			continue
+		}
+		spaceIndex := strings.Index(line, " ")
+		underIndex := strings.LastIndex(line, "_")
+		dotIndex := strings.LastIndex(line, ".")
+		key := strings.TrimSpace(line[:spaceIndex+1])
+		appid := strings.TrimSpace(line[underIndex+1 : dotIndex])
+		dockerInstanceKeys = append(dockerInstanceKeys, []any{key, appid})
+	}
+	return dockerInstanceKeys, nil
+}
+
+// GetMinionInfo 获取Minion信息
+func GetMinionInfo() (map[string]float64, error) {
+	nowTime := time.Now()
+	second := nowTime.Second()
+	if second < 55 {
+		nowTime = nowTime.Add(-1 * time.Minute)
+	}
+	nowTimeStr := nowTime.Format("2006-01-02 15:04")
+	if enum.Env == "dev" {
+		nowTimeStr = "2025-05-29 18:26"
+	}
+	v, err := ExecCommand(fmt.Sprintf("tail -1000 %s | grep '%s.*containerId'", enum.PathMinionLogFile, nowTimeStr))
+	if err != nil {
+		return nil, err
+	}
+
+	logLines := strings.Split(v, "\n")
+
+	// 编译正则表达式
+	re := regexp.MustCompile(`containerId:([a-f0-9]{12})\].*?Tx:(\d+)`)
+
+	txMap := make(map[string]float64)
+
+	// 处理每行日志
+	for _, line := range logLines {
+		matches := re.FindStringSubmatch(line)
+		if len(matches) >= 3 { // 完整匹配+两个捕获组
+			flowID := matches[1]
+			txValue := matches[2]
+			txValueF, _ := strconv.ParseFloat(txValue, 64)
+			txMap[flowID] = txValueF
+		}
+	}
+
+	return txMap, nil
 }
