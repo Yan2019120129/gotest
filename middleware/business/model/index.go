@@ -15,6 +15,7 @@ type BwTmp struct {
 	Percentage  uint8   `json:"percentage"`  // 占比只用填 【1:1，1/2】、【1:2,1/3】
 	NetworkCard string  `json:"networkCard"` // 网卡名
 	Bandwidth   float64 `json:"bandwidth"`   // 带宽大小
+	Count       uint16  `json:"count"`       // 容器数量
 	AppID       string  `json:"appID"`       // appID
 	UpdateAt    string  `json:"updateAt"`    // 修改时间
 }

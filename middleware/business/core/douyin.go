@@ -52,6 +52,7 @@ func ModifyDouYinBandwidth(hostname string, bandwidth float64, action int64, net
 		NetworkCard: networkCard,
 		Bandwidth:   bandwidth,
 		AppID:       appID,
+		Count:       1,
 		UpdateAt:    time.Now().Format(time.DateTime),
 	}
 

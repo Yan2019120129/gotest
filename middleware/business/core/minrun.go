@@ -196,19 +196,21 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			count = math.Round(bandwidthInfo.Bandwidth / averageBandwidth)
 
 			// 更新临时文件
+			bwTmpVal.Count = uint16(count)
 			bwTmpVal.Bandwidth = bandwidthInfo.Bandwidth
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
-			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
+			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s，Resp：%v]\n", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
 			isRebootAgent = true
 		case -1: // 强制设置为0个实例
 			count = 0
+			bwTmpVal.Count = 0
 			bwTmpVal.Bandwidth = 0
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
 
 			isRebootAgent = true
-			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
+			fmt.Printf("Modify host info [BwSum:%f， Count:%f，HostName:%s，BusinessBwSum:%f，Appid:%s，Resp：%v]\n", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, bandwidthInfo)
 		}
 
 		bwTmp[splicingBusinessAppid] = bwTmpVal
@@ -220,12 +222,12 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 	if isRebootAgent {
 		err = utils.SaveBwTmpAll(bwTmp)
 		if err != nil {
-			return fmt.Errorf("save bw tmp all error: %v", err)
+			return fmt.Errorf("save bw_tmp.json error: %v", err)
 		}
 
 		err = utils.SaveBizConf(bizConf)
 		if err != nil {
-			return fmt.Errorf("save zx_biz error: %v", err)
+			return fmt.Errorf("save biz_conf.josn error: %v", err)
 		}
 
 		agent := utils.NewAgent()
