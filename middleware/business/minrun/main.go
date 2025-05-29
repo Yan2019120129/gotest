@@ -11,15 +11,6 @@ import (
 )
 
 func main() {
-	agent := utils.NewAgent()
-	v, err := agent.Reboot()
-	if err != nil {
-		fmt.Printf("reboot error: %v-%v\n", err, v)
-	}
-	fmt.Printf("reboot succeed: %v-%v\n", err, v)
-}
-
-func main1() {
 	appID, err := utils.GetAppID()
 	if err != nil {
 		fmt.Println("Error getting app id:", err)
