@@ -94,6 +94,9 @@ func SaveBwTmpAll(val map[string]model.BwTmp) error {
 		if v.Percentage == 0 {
 			v.Percentage = 1
 		}
+		if v.UpdateAt == "" {
+			v.UpdateAt = time.Now().Format(time.Now().Format(time.DateTime))
+		}
 	}
 
 	byteList, err := json.Marshal(val)
