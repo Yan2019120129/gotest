@@ -72,10 +72,10 @@ const (
 
 // 业务标识
 const (
-	BusinessTypeDounYIN = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
-	BusinessTypeMixRun  = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
-	BusinessTypeMixRun0 = "2698d6c20affd188754ca34f17f43918" // 混跑 容器appid0 标识
-	BusinessTypeMixRun1 = "be37b71de68ba3339cc196b6ef802706" // 混跑 容器appid0 标识
+	BusinessTypeDounYIN  = "52d531d3ea193a292485d06517b4b5fd" // 抖音 appid 标识
+	BusinessTypeMixRun   = "be37b71de68ba3339cc196b6ef802706" // 混跑 appid 标识
+	BusinessTypeMixRunBZ = "2698d6c20affd188754ca34f17f43918" // B站业务 容器appid0 标识
+	BusinessTypeMixRunG3 = "be37b71de68ba3339cc196b6ef802706" // G3业务 容器appid0 标识
 )
 
 // 默认值
