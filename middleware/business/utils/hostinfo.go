@@ -147,6 +147,33 @@ func SetBwTmp(bwTmp model.BwTmp) error {
 	return nil
 }
 
+// GetBizConf 获取容器控制文件
+func GetBizConf() (map[string]model.BizConf, error) {
+	err := examineBwTmpFile(enum.PathBizConfFile)
+	if err != nil {
+		return nil, err
+	}
+
+	file, err := os.ReadFile(enum.PathBizConfFile)
+	zxbiz := make(map[string]model.BizConf)
+	_ = json.Unmarshal(file, &zxbiz)
+	return zxbiz, nil
+}
+
+// SaveBizConf 保存容器控制文件
+func SaveBizConf(val map[string]model.BizConf) error {
+	byteList, err := json.Marshal(val)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(enum.PathBizConfFile, byteList, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // GetDockerInstanceInfo 获取docker 实例信息
 func GetDockerInstanceInfo() ([][]any, error) {
 	var dockerInstance string
@@ -178,34 +205,41 @@ func GetDockerInstanceInfo() ([][]any, error) {
 		dockerInstanceInfo = append(dockerInstanceInfo, tmp)
 	}
 
-	return dockerInstanceInfo, nil
-}
-
-// GetBizConf 获取容器控制文件
-func GetBizConf() (map[string]model.BizConf, error) {
-	err := examineBwTmpFile(enum.PathBizConfFile)
+	dockerInstanceKeys, err := GetDockerInstanceKeys()
 	if err != nil {
 		return nil, err
 	}
 
-	file, err := os.ReadFile(enum.PathBizConfFile)
-	zxbiz := make(map[string]model.BizConf)
-	_ = json.Unmarshal(file, &zxbiz)
-	return zxbiz, nil
-}
-
-// SaveBizConf 保存容器控制文件
-func SaveBizConf(val map[string]model.BizConf) error {
-	byteList, err := json.Marshal(val)
+	minionInfo, err := GetMinionInfo()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	err = os.WriteFile(enum.PathBizConfFile, byteList, os.ModePerm)
-	if err != nil {
-		return err
+	dockerInstanceMap := map[string]float64{}
+
+	// 添加每个容器的上行数据
+	for i, v := range dockerInstanceKeys {
+		if len(v) == 1 {
+			continue
+		}
+		keyStr, _ := v[0].(string)
+		appidStr, _ := v[1].(string)
+		tx, ok := minionInfo[keyStr]
+		if ok {
+			tx = tx * 8 / 1000 / 1000 / 60
+			dockerInstanceKeys[i] = append(dockerInstanceKeys[i], tx)
+		}
+		dockerInstanceMap[appidStr] += tx
 	}
-	return nil
+
+	// 统计每个实例的总量
+	for i, v := range dockerInstanceInfo {
+		keyStr, _ := v[1].(string)
+		sumBw := dockerInstanceMap[keyStr]
+		dockerInstanceInfo[i] = append(dockerInstanceInfo[i], sumBw)
+	}
+
+	return dockerInstanceInfo, nil
 }
 
 // GetDockerInstanceKeys 获取容器信息
@@ -249,7 +283,8 @@ func GetMinionInfo() (map[string]float64, error) {
 	if enum.Env == "dev" {
 		nowTimeStr = "2025-05-29 18:26"
 	}
-	v, err := ExecCommand(fmt.Sprintf("tail -1000 %s | grep '%s.*containerId'", enum.PathMinionLogFile, nowTimeStr))
+	command := fmt.Sprintf("tail -1000 %s | grep '%s.*containerId'", enum.PathMinionLogFile, nowTimeStr)
+	v, err := ExecCommand(command)
 	if err != nil {
 		return nil, err
 	}
@@ -257,7 +292,7 @@ func GetMinionInfo() (map[string]float64, error) {
 	logLines := strings.Split(v, "\n")
 
 	// 编译正则表达式
-	re := regexp.MustCompile(`containerId:([a-f0-9]{12})\].*?Tx:(\d+)`)
+	re := regexp.MustCompile(`containerId:([a-f0-9]{12}).*?Tx:(\d+)`)
 
 	txMap := make(map[string]float64)
 
