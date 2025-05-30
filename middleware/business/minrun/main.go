@@ -11,53 +11,6 @@ import (
 )
 
 func main() {
-	dockerInstanceInfo, err := utils.GetDockerInstanceInfo()
-	if err != nil {
-		fmt.Println("get docker instance info error:", err)
-		return
-	}
-
-	dockerInstanceKeys, err := utils.GetDockerInstanceKeys()
-	if err != nil {
-		fmt.Println("get docker instance keys error:", err)
-		return
-	}
-
-	minionInfo, err := utils.GetMinionInfo()
-	if err != nil {
-		fmt.Println("get docker instance info error:", err)
-		return
-	}
-
-	dockerInstance := map[string]float64{}
-
-	// 添加每个容器的上行数据
-	for i, v := range dockerInstanceKeys {
-		if len(v) == 1 {
-			continue
-		}
-		keyStr, _ := v[0].(string)
-		appidStr, _ := v[1].(string)
-		tx, ok := minionInfo[keyStr]
-		if ok {
-			tx = tx * 8 / 1000 / 1000 / 60
-			dockerInstanceKeys[i] = append(dockerInstanceKeys[i], tx)
-		}
-		dockerInstance[appidStr] += tx
-	}
-
-	// 统计每个实例的总量
-	for i, v := range dockerInstanceInfo {
-		keyStr, _ := v[1].(string)
-		sumBw := dockerInstance[keyStr]
-		dockerInstanceInfo[i] = append(dockerInstanceInfo[i], sumBw)
-	}
-	for _, v := range dockerInstanceInfo {
-		fmt.Println("dockerInstanceInfo", v)
-	}
-}
-
-func main1() {
 	appID, err := utils.GetAppID()
 	if err != nil {
 		fmt.Println("Error getting app id:", err)

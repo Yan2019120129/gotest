@@ -275,21 +275,25 @@ func GetDockerInstanceKeys() ([][]any, error) {
 // GetMinionInfo 获取Minion信息
 func GetMinionInfo() (map[string]float64, error) {
 	nowTime := time.Now()
-	second := nowTime.Second()
-	if second < 55 {
-		nowTime = nowTime.Add(-1 * time.Minute)
-	}
 	nowTimeStr := nowTime.Format("2006-01-02 15:04")
 	if enum.Env == "dev" {
 		nowTimeStr = "2025-05-29 18:26"
 	}
+	var val string
+	var err error
+
 	command := fmt.Sprintf("tail -1000 %s | grep '%s.*containerId'", enum.PathMinionLogFile, nowTimeStr)
-	v, err := ExecCommand(command)
+	val, err = ExecCommand(command)
 	if err != nil {
-		return nil, err
+		nowTimeStr = nowTime.Add(-time.Minute).Format("2006-01-02 15:04")
+		command = fmt.Sprintf("tail -2000 %s | grep '%s.*containerId'", enum.PathMinionLogFile, nowTimeStr)
+		val, err = ExecCommand(command)
+		if err != nil {
+			return nil, fmt.Errorf("get minion error:%v", err)
+		}
 	}
 
-	logLines := strings.Split(v, "\n")
+	logLines := strings.Split(val, "\n")
 
 	// 编译正则表达式
 	re := regexp.MustCompile(`containerId:([a-f0-9]{12}).*?Tx:(\d+)`)
