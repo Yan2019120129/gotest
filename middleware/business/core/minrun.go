@@ -153,8 +153,11 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			continue
 		case 1: // 根据带宽控制实例数
 
-			// 业务总带宽/容器数量=每个容器的带宽
-			averageBandwidth := bandwidthInfo.BandwidthOrig / count
+			// 业务总带宽(服务端计算值)/容器数量=每个容器的带宽
+			//averageBandwidth := bandwidthInfo.BandwidthOrig / count
+
+			// 业务总带宽(本地计算值)/容器数量=每个容器的带宽
+			averageBandwidth := businessBwSum / count
 
 			// 目标带宽/单个实例带宽量=实例数
 			targetCount := math.Round(bandwidthInfo.Bandwidth / averageBandwidth)
