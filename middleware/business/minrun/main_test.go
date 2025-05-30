@@ -137,3 +137,12 @@ func TestMain11(t *testing.T) {
 	v, _ := utils.GetDockerInstanceInfo()
 	fmt.Println(v)
 }
+
+// GetDockerData 获取docker数据
+func TestMain12(t *testing.T) {
+	nowTime := time.Now()
+	nowTimeStr := nowTime.Format("2006-01-02 15:04")
+	fmt.Println(nowTimeStr)
+	nowTimeStr = nowTime.Add(-time.Minute).Format("2006-01-02 15:04")
+	fmt.Println(nowTimeStr)
+}

@@ -33,29 +33,15 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 	}
 
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
-		if len(dockerInstanceInfo) <= 1 {
+		if len(dockerInstanceInfo) < 2 {
 			fmt.Println("docker instance info is not out of specifications")
 			continue
 		}
 
 		count, _ := dockerInstanceInfo[0].(float64)
 		businessAppid, _ := dockerInstanceInfo[1].(string)
+		businessBwSum, _ := dockerInstanceInfo[2].(float64)
 		splicingBusinessAppid := appid + "_" + businessAppid
-
-		bwTmpVal, ok := bwTmp[splicingBusinessAppid]
-		if !ok {
-			return fmt.Errorf("%sbw tmp val not exist", splicingBusinessAppid)
-		}
-
-		// 占比/总量*总带宽=业务总带宽
-		businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
-
-		// 限制：根据业务比例，限制容器数量
-		limitCount := float64(bwTmpVal.Percentage) / float64(percentageSum) * float64(enum.DefaultContainerMax)
-		if count > limitCount {
-			// 取整数，舍弃小数
-			count = limitCount
-		}
 
 		params := model.HostInfoReport{
 			HostName:  hostname,
@@ -116,7 +102,6 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 	pathUrl := baseUrl + "/agent/get/host_sched_bandwidth"
 
 	isRebootAgent := false
-
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
 		if len(dockerInstanceInfo) <= 1 {
 			fmt.Println("docker instance info is not out of specifications")
@@ -125,6 +110,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 
 		count, _ := dockerInstanceInfo[0].(float64)
 		businessAppid, _ := dockerInstanceInfo[1].(string)
+		businessBwSum, _ := dockerInstanceInfo[2].(float64)
 		splicingBusinessAppid := appid + "_" + businessAppid
 
 		param := model.HostInfoParams{
@@ -148,8 +134,8 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			return fmt.Errorf("bw_tmp.json val not exist")
 		}
 
-		// 占比/总量*总带宽=业务总带宽【根据主程序获取到的机器当前总带宽计算的业务带宽值】
-		businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
+		//// 占比/总量*总带宽=业务总带宽【根据主程序获取到的机器当前总带宽计算的业务带宽值】
+		//businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
 
 		var limitCount float64
 
@@ -202,7 +188,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 
 		bwTmp[splicingBusinessAppid] = bwTmpVal
 		bizConf[businessAppid] = model.BizConf{
-			InstanceCount: uint16(count),
+			InstanceCount: bwTmpVal.Count,
 		}
 	}
 

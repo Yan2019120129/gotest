@@ -12,10 +12,6 @@ import (
 )
 
 func main() {
-	v := 520709961.0
-	fmt.Printf("%f", v/1000/1000/1000)
-	return
-
 	data, err := os.ReadFile(enum.PathBwFile)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
