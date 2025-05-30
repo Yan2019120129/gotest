@@ -172,14 +172,20 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 				targetCount = 1
 			}
 
+			if bwTmpVal.Count != uint16(targetCount) {
+				isRebootAgent = true
+			}
+
 			// 更新临时文件
 			bwTmpVal.Count = uint16(targetCount)
 			bwTmpVal.Bandwidth = bandwidthInfo.Bandwidth
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
-			isRebootAgent = true
 			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f,", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		case -1: // 强制设置为0个实例
+			if bwTmpVal.Count != 0 {
+				isRebootAgent = true
+			}
 			count = 0
 			bwTmpVal.Count = 0
 			bwTmpVal.Bandwidth = 0
