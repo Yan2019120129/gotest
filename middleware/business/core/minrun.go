@@ -55,7 +55,7 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 		respByte := httpInstance.Post(pathUrl, paramsStr)
 		resp := model.ResMessage{}
 		_ = json.Unmarshal(respByte, &resp)
-		fmt.Printf("report host info [bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s\n，Resp：%v]", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, resp)
+		fmt.Printf("report host info [bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s，Resp：%v]\n", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, resp)
 		if resp.Code != 0 {
 			return fmt.Errorf("report min run bandwidth err ,value:%v,resp:%v", params, resp.Message)
 		}
@@ -103,7 +103,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 
 	isRebootAgent := false
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
-		if len(dockerInstanceInfo) <= 1 {
+		if len(dockerInstanceInfo) < 2 {
 			fmt.Println("docker instance info is not out of specifications")
 			continue
 		}
@@ -181,7 +181,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.Bandwidth = bandwidthInfo.Bandwidth
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
-			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f,", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
+			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		case -1: // 强制设置为0个实例
 			if bwTmpVal.Count != 0 {
 				isRebootAgent = true
@@ -192,7 +192,7 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
 			isRebootAgent = true
-			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f,", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, 0.0, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
+			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, 0.0, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		}
 
 		bwTmp[splicingBusinessAppid] = bwTmpVal
