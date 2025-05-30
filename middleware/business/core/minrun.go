@@ -55,7 +55,8 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 		respByte := httpInstance.Post(pathUrl, paramsStr)
 		resp := model.ResMessage{}
 		_ = json.Unmarshal(respByte, &resp)
-		fmt.Printf("report host info [bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s，Resp：%v]\n", bwSum, count, hostname, businessBwSum, splicingBusinessAppid, resp)
+		fmt.Printf("report host info [bwSum:%f， Count:%f，HostName:%s，BusinessBwSum::%f，Appid:%s，Resp：%v]\n",
+			bwSum, count, hostname, businessBwSum, splicingBusinessAppid, resp)
 		if resp.Code != 0 {
 			return fmt.Errorf("report min run bandwidth err ,value:%v,resp:%v", params, resp.Message)
 		}
@@ -142,10 +143,10 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 		// 判断使用那个容器的最大值限制
 		// 限制：根据业务比例，限制容器数量
 		switch businessAppid {
-		case enum.BusinessTypeMixRun0:
-			limitCount = 25
-		case enum.BusinessTypeMixRun1:
-			limitCount = 35
+		case enum.BusinessTypeMixRunBZ:
+			limitCount = 30
+		case enum.BusinessTypeMixRunG3:
+			limitCount = 60
 		}
 
 		switch bandwidthInfo.Ret {
@@ -181,7 +182,8 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.Bandwidth = bandwidthInfo.Bandwidth
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
-			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
+			fmt.Printf("request information-%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n",
+				splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		case -1: // 强制设置为0个实例
 			if bwTmpVal.Count != 0 {
 				isRebootAgent = true
@@ -192,7 +194,8 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
 			isRebootAgent = true
-			fmt.Printf("%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n", splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, 0.0, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
+			fmt.Printf("request information-%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n",
+				splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, 0.0, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
 		}
 
 		bwTmp[splicingBusinessAppid] = bwTmpVal
