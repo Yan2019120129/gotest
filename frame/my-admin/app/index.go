@@ -2,13 +2,6 @@ package app
 
 import (
 	"errors"
-	_ "github.com/GoAdminGroup/go-admin/adapter/gin" // web framework adapter
-	"github.com/GoAdminGroup/go-admin/engine"
-	_ "github.com/GoAdminGroup/go-admin/modules/db/drivers/mysql" // sql driver
-	"github.com/GoAdminGroup/go-admin/template"
-	"github.com/GoAdminGroup/go-admin/template/chartjs"
-	_ "github.com/GoAdminGroup/themes/sword" // ui theme
-	"github.com/gin-gonic/gin"
 	"io"
 	"log"
 	admin "my-admin/app/admin/router"
@@ -20,6 +13,14 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/GoAdminGroup/go-admin/adapter/gin" // web framework adapter
+	"github.com/GoAdminGroup/go-admin/engine"
+	_ "github.com/GoAdminGroup/go-admin/modules/db/drivers/mysql" // sql driver
+	"github.com/GoAdminGroup/go-admin/template"
+	"github.com/GoAdminGroup/go-admin/template/chartjs"
+	_ "github.com/GoAdminGroup/themes/sword" // ui theme
+	"github.com/gin-gonic/gin"
 )
 
 // InitServer 初始化服务
