@@ -4,8 +4,9 @@ import (
 	"business/enum"
 	"business/model"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 func GetBaseConfig() (*model.Config, error) {

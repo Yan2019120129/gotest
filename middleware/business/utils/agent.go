@@ -4,8 +4,6 @@ import "business/enum"
 
 // Agent 实例
 type Agent struct {
-	path   string
-	status int
 }
 
 // NewAgent 创建Agent 实例
