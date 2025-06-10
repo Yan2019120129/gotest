@@ -92,9 +92,6 @@ func SaveBwTmpAll(val map[string]model.BwTmp) error {
 	}
 
 	for _, v := range val {
-		if v.Percentage == 0 {
-			v.Percentage = 1
-		}
 		if v.UpdateAt == "" {
 			v.UpdateAt = time.Now().Format(time.Now().Format(time.DateTime))
 		}
@@ -117,10 +114,6 @@ func SaveBwTmpAll(val map[string]model.BwTmp) error {
 func SetBwTmp(bwTmp model.BwTmp) error {
 	if bwTmp.AppID == "" {
 		return fmt.Errorf("the AppID can't be empty")
-	}
-
-	if bwTmp.Percentage == 0 {
-		bwTmp.Percentage = 1
 	}
 
 	bwTmpList, err := GetBwTmpAll()
@@ -157,7 +150,7 @@ func GetBizConf() (map[string]model.BizConf, error) {
 	file, err := os.ReadFile(enum.PathBizConfFile)
 	zxbiz := make(map[string]model.BizConf)
 	_ = json.Unmarshal(file, &zxbiz)
-	return zxbiz, nil
+	return zxbiz, err
 }
 
 // SaveBizConf 保存容器控制文件
@@ -312,4 +305,23 @@ func GetMinionInfo() (map[string]float64, error) {
 	}
 
 	return txMap, nil
+}
+
+// GetBZInstanceCount 获取bi站最大实例数
+func GetBZInstanceCount() uint8 {
+	instanceCountStr, err := ExecCommand(fmt.Sprintf("lsblk |grep %s |wc -l", enum.BusinessTypeMixRunBZ))
+	if err != nil {
+		fmt.Println("GetBZInstanceCount exec command error: ", err)
+		return enum.DefaultContainerMaxBZ
+	}
+
+	instanceCountStr = strings.ReplaceAll(instanceCountStr, "\n", "")
+
+	instanceCountInt64, err := strconv.ParseInt(instanceCountStr, 10, 64)
+	if err != nil {
+		fmt.Println("GetBZInstanceCount parse int error: ", err)
+		return enum.DefaultContainerMaxBZ
+	}
+
+	return uint8(instanceCountInt64)
 }

@@ -81,7 +81,7 @@ const (
 // 默认值
 const (
 	//DefaultContainerMax 容器数量最大值
-	DefaultContainerMax uint8 = 60
+	DefaultContainerMaxBZ uint8 = 30
 
 	// DefaultNic 网卡默认值
 	DefaultNic = "eth0"

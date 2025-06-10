@@ -23,15 +23,6 @@ func ReportMinRunBandwidth(baseUrl, hostname, appid string, bwSum float64, docke
 		return err
 	}
 
-	//  percentageSum 占比总和
-	var percentageSum uint8 = 0
-	for _, v := range bwTmp {
-		if v.Percentage == 0 {
-			v.Percentage = 1
-		}
-		percentageSum += v.Percentage
-	}
-
 	for _, dockerInstanceInfo := range dockerInstanceInfoList {
 		if len(dockerInstanceInfo) < 2 {
 			fmt.Println("docker instance info is not out of specifications")
@@ -86,15 +77,6 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 		return err
 	}
 
-	//  percentageSum 占比总和
-	var percentageSum uint8 = 0
-	for _, v := range bwTmp {
-		if v.Percentage == 0 {
-			v.Percentage = 1
-		}
-		percentageSum += v.Percentage
-	}
-
 	bizConf, err := utils.GetBizConf()
 	if err != nil {
 		return fmt.Errorf("get bizConf error: %v", err)
@@ -135,22 +117,20 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			return fmt.Errorf("bw_tmp.json val not exist")
 		}
 
-		//// 占比/总量*总带宽=业务总带宽【根据主程序获取到的机器当前总带宽计算的业务带宽值】
-		//businessBwSum := float64(bwTmpVal.Percentage) / float64(percentageSum) * bwSum
-
-		var limitCount float64
+		var limitCount uint8
 
 		// 判断使用那个容器的最大值限制
 		// 限制：根据业务比例，限制容器数量
 		switch businessAppid {
 		case enum.BusinessTypeMixRunBZ:
-			limitCount = 30
+			limitCount = utils.GetBZInstanceCount()
 		case enum.BusinessTypeMixRunG3:
 			limitCount = 60
 		}
 
 		switch bandwidthInfo.Ret {
 		case 0:
+			fmt.Printf("the corresponding code is zero:%v\n", bandwidthInfo)
 			continue
 		case 1: // 根据带宽控制实例数
 
@@ -164,8 +144,8 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			targetCount := math.Round(bandwidthInfo.Bandwidth / averageBandwidth)
 
 			// 不能超过最大值
-			if targetCount > limitCount {
-				targetCount = limitCount
+			if targetCount > float64(limitCount) {
+				targetCount = float64(limitCount)
 			}
 
 			// 不能低于最小值
@@ -184,12 +164,12 @@ func ModifyMinRunBandwidth(baseUrl, hostname string, bwSum float64, networkCard,
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
 			fmt.Printf("request information-%s ref:%d, count:%f，maxcount:%f,targetCount:%f,actualBw:%f,bw:%f,targetBw:%f\n",
 				splicingBusinessAppid, bandwidthInfo.Ret, count, limitCount, targetCount, businessBwSum, bandwidthInfo.BandwidthOrig, bandwidthInfo.Bandwidth)
-		case -1: // 强制设置为0个实例
+		case -1: // 强制设置为2个实例
 			if bwTmpVal.Count != 0 {
 				isRebootAgent = true
 			}
-			count = 0
-			bwTmpVal.Count = 0
+			count = 2
+			bwTmpVal.Count = 2
 			bwTmpVal.Bandwidth = 0
 			bwTmpVal.NetworkCard = networkCard
 			bwTmpVal.UpdateAt = time.Now().Format(time.DateTime)
@@ -240,9 +220,8 @@ func detectIsInitBwTmp(appid string, bwTmp map[string]model.BwTmp, dockerInstanc
 			splicingBusinessAppid := appid + "_" + businessAppid
 
 			bwTmp[splicingBusinessAppid] = model.BwTmp{
-				Percentage: 1,
-				AppID:      splicingBusinessAppid,
-				UpdateAt:   time.Now().Format(time.DateTime),
+				AppID:    splicingBusinessAppid,
+				UpdateAt: time.Now().Format(time.DateTime),
 			}
 		}
 
