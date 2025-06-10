@@ -1,5 +1,6 @@
 package enum
 
 const (
-	ClientBandwidthSummary = "/api/bandwidth_summary/client"
+	RouterNetInfo      = "/net_info"
+	RouterReportDCInfo = "/agent/report/dc_info"
 )

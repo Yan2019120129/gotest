@@ -2,17 +2,15 @@ package main
 
 import (
 	"bandwidth_summary/conf"
+	logs "bandwidth_summary/core/log"
 	"bandwidth_summary/core/scheduled"
-	"context"
 )
 
 func main() {
-	ctx := context.Background()
-	config, err := conf.LoadConf()
+	config, err := conf.LoadConf("./conf/config.yaml")
 	if err != nil {
 		panic("Failed to load configuration: " + err.Error())
 	}
-	ctx = context.WithValue(ctx, "checkInterval", config.Base.CheckInterval)
-	ctx = context.WithValue(ctx, "addrs", config.Client.Address)
-	scheduled.InitScheduled(ctx)
+	logs.InitLog(config.Base.Log.Dir, config.Base.Log.MaxSize, config.Base.Log.MaxBackups, config.Base.Log.MaxAge, config.Base.Log.Compress)
+	scheduled.InitScheduled(config)
 }

@@ -1,27 +1,39 @@
 package scheduled
 
 import (
-	"context"
+	"bandwidth_summary/conf"
+	"log"
 	"time"
 )
 
 // InitScheduled 初始化定时任务
-func InitScheduled(ctx context.Context) {
-	internal, ok := ctx.Value("checkInterval").(int)
-	if !ok {
-		panic("checkInterval not found in context")
+func InitScheduled(c *conf.Config) {
+	if c.Base.CheckInterval == 0 {
+		log.Fatal("checkInterval cannot be zero")
 	}
 
-	addrs, ok := ctx.Value("addrs").([]string)
-	if !ok {
-		panic("checkInterval not found in context")
+	if len(c.Client.Address) == 0 {
+		log.Fatal("address cannot be zero")
 	}
+
+	if c.Base.KgGroup == "" {
+		log.Fatal("kg_group cannot be empty")
+	}
+
+	log.Println("custom_switch start success")
 	// 定时任务
-	ticker := time.NewTicker(time.Duration(internal) * time.Second)
+	ticker := time.NewTicker(time.Duration(c.Base.CheckInterval) * time.Second)
 	for {
 		// 获取客户端带宽数据
-		GetClentBwSummary(addrs)
+		reportTcInfo := GetClentBwSummary(c.Base.KgGroup, c.Client.Address)
+
+		log.Println("reportTcInfo:", reportTcInfo)
+
+		// 上报带宽
+		err := ReportTcInfo(c.Base.TargetServer, reportTcInfo)
+		if err != nil {
+			log.Println("reportTcInfo error:", reportTcInfo)
+		}
 		<-ticker.C
 	}
-	ctx.Done()
 }
