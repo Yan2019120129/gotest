@@ -56,6 +56,7 @@ func NewFileManager(path string) (*File, error) {
 	if err != nil {
 		return nil, err
 	}
+	info.path = path
 	info.Name = fileInfo.Name()
 	info.Size = fileInfo.Size()
 	info.IsDir = fileInfo.IsDir()
@@ -75,8 +76,8 @@ func (f *File) ToBytes() []byte {
 	return data
 }
 
-// ToBytes 转换为结构体
-func (f *File) ToStruct(param any) error {
+// JsonToStruct 转换为结构体
+func (f *File) JsonToStruct(param any) error {
 	data, _ := os.ReadFile(f.path)
 	return json.Unmarshal(data, &param)
 }
