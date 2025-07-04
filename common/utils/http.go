@@ -11,17 +11,24 @@ import (
 type Http struct {
 	header     http.Header
 	respHeader http.Header
+	client     http.Client
 	params     url.Values
 }
 
 func NewHttp() *Http {
-	return &Http{header: make(http.Header)}
+	return &Http{header: make(http.Header),
+		client: *http.DefaultClient}
 }
 
 // Set 设置请求头信息
 func (h *Http) Set(key, val string) *Http {
 	h.header.Set(key, val)
 	return h
+}
+
+// SetTransport 设置连接信息
+func (h *Http) SetTransport(t *http.Transport) {
+	h.client.Transport = t
 }
 
 // AddParam 设置get参数
@@ -56,7 +63,7 @@ func (h *Http) ask(method, url string, body io.Reader) ([]byte, error) {
 		return nil, err
 	}
 	h.header = request.Header
-	do, err := http.DefaultClient.Do(request)
+	do, err := h.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
