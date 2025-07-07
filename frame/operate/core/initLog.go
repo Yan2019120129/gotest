@@ -1,8 +1,8 @@
-package logs
+package core
 
 import (
 	"log"
-	"tx_script/utils"
+	"operate/utils"
 
 	"github.com/natefinch/lumberjack"
 )

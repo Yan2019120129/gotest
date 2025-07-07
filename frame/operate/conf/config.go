@@ -2,7 +2,7 @@ package conf
 
 import (
 	"fmt"
-	"tx_script/utils"
+	"operate/utils"
 )
 
 // 基础配置文件
@@ -27,23 +27,18 @@ type Log struct {
 	Compress   bool   `yaml:"compress"`
 }
 
-func LoadConf(path string) (*Config, error) {
-	conf := Config{}
+var Conf Config
+
+func InitConf(path string) error {
 	isntance, err := utils.NewFileManager(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to load configuration file: %s", err.Error())
+		return fmt.Errorf("failed to load configuration file: %s", err.Error())
 	}
 
 	// 转换为结构体
-	err = isntance.YamlToStruct(&conf)
+	err = isntance.YamlToStruct(&Conf)
 	if err != nil {
-		return nil, fmt.Errorf("failed to struct err: %s", err.Error())
+		return fmt.Errorf("failed to struct err: %s", err.Error())
 	}
-
-	// 检查必需的配置项
-	if conf.Base.TargetServer == "" || conf.Base.SDK == "" {
-		return nil, fmt.Errorf("invalid configuration: TargetServer and SDK must be set")
-	}
-
-	return &conf, nil
+	return nil
 }
