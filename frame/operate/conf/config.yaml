@@ -2,6 +2,10 @@ base:
   # 上报服务起地址
   target_server: "http://tw10b0135.onething.net:9999"
 
+  jump_server:
+    port: 2222
+    user: yanjiajie
+
 # 日志基本配置
 log:
   # 日志文件路径
