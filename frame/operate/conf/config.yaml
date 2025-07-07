@@ -1,6 +1,6 @@
 base:
   # 上报服务起地址
-  target_server: "tw10b0135.onething.net:9999"
+  target_server: "http://tw10b0135.onething.net:9999"
 
 # 日志基本配置
 log:

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"embed"
+	"operate/cmd"
+	"operate/conf"
 )
 
-//go:embed conf/config.yaml
-var fs embed.FS
-
 func main() {
-
+	if err := conf.InitConf("./conf/config.yaml"); err != nil {
+		panic(err)
+	}
+	cmd.Execute()
 }
