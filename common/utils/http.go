@@ -1,10 +1,13 @@
 package utils
 
 import (
+	"bytes"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -62,7 +65,7 @@ func (h *Http) ask(method, url string, body io.Reader) ([]byte, error) {
 		log.Fatal(err)
 		return nil, err
 	}
-	h.header = request.Header
+	request.Header = h.header
 	do, err := h.client.Do(request)
 	if err != nil {
 		return nil, err
@@ -92,6 +95,35 @@ func (h *Http) PostFormat(url string, ctxType string, s string) ([]byte, error) 
 		params = strings.NewReader(s)
 	}
 	return h.ask("POST", url, params)
+}
+
+// PostFile 发起 multipart/form-data 文件上传请求
+func (h *Http) PostFile(targetURL, filePath string) ([]byte, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var requestBody bytes.Buffer
+	writer := multipart.NewWriter(&requestBody)
+
+	part, err := writer.CreateFormFile("upload", file.Name())
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := io.Copy(part, file); err != nil {
+		return nil, err
+	}
+
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+
+	h.Set("Content-Type", writer.FormDataContentType())
+
+	return h.ask("POST", targetURL, &requestBody)
 }
 
 func (h *Http) result(body io.ReadCloser) ([]byte, error) {
