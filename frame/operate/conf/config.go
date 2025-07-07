@@ -13,9 +13,14 @@ type Config struct {
 
 // 基础配置
 type BaseConfig struct {
-	TargetServer  string `yaml:"target_server"`  // 目标服务器
-	CheckInterval int    `yaml:"check_interval"` // 检测间隔
-	SDK           string `yaml:"sdk"`            // 机房SDK
+	TargetServer string     `yaml:"target_server"` // 目标服务器
+	JumpServer   JumpServer `yaml:"jump_server"`   // jumpserver用户名
+}
+
+// JumpServer 配置
+type JumpServer struct {
+	Port string `yaml:"port"`
+	User string `yaml:"user"`
 }
 
 // 日志配置
