@@ -2,6 +2,7 @@ base:
   # 上报服务起地址
   target_server: "http://tw10b0135.onething.net:9999"
 
+  # jumpserver 文件配置路径
   jump_server:
     port: 2222
     user: yanjiajie
@@ -9,7 +10,7 @@ base:
 # 日志基本配置
 log:
   # 日志文件路径
-  dir: "logs/app.log"
+  dir: "/tmp/val"
 
   # 文件最大保留大小，单位MB
   max_size: 10

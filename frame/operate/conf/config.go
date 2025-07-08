@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"fmt"
-	"operate/utils"
+	"embed"
+	"gopkg.in/yaml.v3"
 )
 
 // 基础配置文件
@@ -34,16 +34,16 @@ type Log struct {
 
 var Conf Config
 
-func InitConf(path string) error {
-	isntance, err := utils.NewFileManager(path)
+func InitConf(fs embed.FS) error {
+	file, err := fs.ReadFile("conf/config.yaml")
 	if err != nil {
-		return fmt.Errorf("failed to load configuration file: %s", err.Error())
+		return err
 	}
 
-	// 转换为结构体
-	err = isntance.YamlToStruct(&Conf)
+	err = yaml.Unmarshal(file, &Conf)
 	if err != nil {
-		return fmt.Errorf("failed to struct err: %s", err.Error())
+		return err
 	}
+
 	return nil
 }

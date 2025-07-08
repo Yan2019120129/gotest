@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"operate/conf"
 	"operate/utils"
 )
@@ -27,7 +28,8 @@ func Up(path string) error {
 	_ = json.Unmarshal(v, &resp)
 
 	for _, fileName := range resp.Files {
-		fmt.Println(fileName)
+		val := "curl -O " + fileName
+		log.Println(HistoryTypeUpload+":", val)
 	}
 
 	return nil
