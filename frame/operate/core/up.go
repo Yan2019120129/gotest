@@ -29,6 +29,7 @@ func Up(path string) error {
 
 	for _, fileName := range resp.Files {
 		val := "curl -O " + fileName
+		fmt.Println(val)
 		log.Println(HistoryTypeUpload+":", val)
 	}
 
