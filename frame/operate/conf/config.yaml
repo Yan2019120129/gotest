@@ -1,0 +1,22 @@
+base:
+  # 上报服务起地址
+  target_server: "tw10b0135.onething.net:9999"
+
+# 日志基本配置
+log:
+  # 日志文件路径
+  dir: "logs/app.log"
+
+  # 文件最大保留大小，单位MB
+  max_size: 10
+
+  # 日志最大保留数量，单位份
+  max_backups: 5
+
+  # 日志最大保留时间，单位天
+  max_age: 30
+
+  # 是否压缩文件
+  compress: false
+
+  
