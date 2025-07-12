@@ -1,10 +1,14 @@
 package utils
 
 import (
+	"bytes"
+	"fmt"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
@@ -55,7 +59,7 @@ func (h *Http) ask(method, url string, body io.Reader) ([]byte, error) {
 		log.Fatal(err)
 		return nil, err
 	}
-	h.header = request.Header
+	request.Header = h.header
 	do, err := http.DefaultClient.Do(request)
 	if err != nil {
 		return nil, err
@@ -85,6 +89,42 @@ func (h *Http) PostFormat(url string, ctxType string, s string) ([]byte, error) 
 		params = strings.NewReader(s)
 	}
 	return h.ask("POST", url, params)
+}
+
+// PostFile 发起 multipart/form-data 文件上传请求
+func (h *Http) PostFile(targetURL, filePath string) ([]byte, error) {
+	// 打开文件
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("打开文件失败: %w", err)
+	}
+	defer file.Close()
+
+	// 创建 multipart 表单体
+	var requestBody bytes.Buffer
+	writer := multipart.NewWriter(&requestBody)
+
+	// 添加文件字段
+	part, err := writer.CreateFormFile("upload", file.Name())
+	if err != nil {
+		return nil, fmt.Errorf("创建文件字段失败: %w", err)
+	}
+
+	// 拷贝文件内容
+	if _, err := io.Copy(part, file); err != nil {
+		return nil, fmt.Errorf("写入文件内容失败: %w", err)
+	}
+
+	// 关闭 multipart writer（自动添加 boundary）
+	if err := writer.Close(); err != nil {
+		return nil, fmt.Errorf("关闭 multipart writer 失败: %w", err)
+	}
+
+	// 设置请求头
+	h.Set("Content-Type", writer.FormDataContentType())
+
+	// 发起 POST 请求
+	return h.ask("POST", targetURL, &requestBody)
 }
 
 func (h *Http) result(body io.ReadCloser) ([]byte, error) {

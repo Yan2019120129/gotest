@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"fmt"
-	"tx_script/utils"
+	"embed"
+	"gopkg.in/yaml.v3"
 )
 
 // 基础配置文件
@@ -13,9 +13,14 @@ type Config struct {
 
 // 基础配置
 type BaseConfig struct {
-	TargetServer  string `yaml:"target_server"`  // 目标服务器
-	CheckInterval int    `yaml:"check_interval"` // 检测间隔
-	SDK           string `yaml:"sdk"`            // 机房SDK
+	TargetServer string     `yaml:"target_server"` // 目标服务器
+	JumpServer   JumpServer `yaml:"jump_server"`   // jumpserver用户名
+}
+
+// JumpServer 配置
+type JumpServer struct {
+	Port string `yaml:"port"`
+	User string `yaml:"user"`
 }
 
 // 日志配置
@@ -27,23 +32,18 @@ type Log struct {
 	Compress   bool   `yaml:"compress"`
 }
 
-func LoadConf(path string) (*Config, error) {
-	conf := Config{}
-	isntance, err := utils.NewFileManager(path)
+var Conf Config
+
+func InitConf(fs embed.FS) error {
+	file, err := fs.ReadFile("conf/config.yaml")
 	if err != nil {
-		return nil, fmt.Errorf("failed to load configuration file: %s", err.Error())
+		return err
 	}
 
-	// 转换为结构体
-	err = isntance.YamlToStruct(&conf)
+	err = yaml.Unmarshal(file, &Conf)
 	if err != nil {
-		return nil, fmt.Errorf("failed to struct err: %s", err.Error())
+		return err
 	}
 
-	// 检查必需的配置项
-	if conf.Base.TargetServer == "" || conf.Base.SDK == "" {
-		return nil, fmt.Errorf("invalid configuration: TargetServer and SDK must be set")
-	}
-
-	return &conf, nil
+	return nil
 }
