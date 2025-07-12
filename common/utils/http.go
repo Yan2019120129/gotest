@@ -1,27 +1,37 @@
 package utils
 
 import (
+	"bytes"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
 )
 
 type Http struct {
 	header     http.Header
 	respHeader http.Header
+	client     http.Client
 	params     url.Values
 }
 
 func NewHttp() *Http {
-	return &Http{header: make(http.Header)}
+	return &Http{header: make(http.Header),
+		client: *http.DefaultClient}
 }
 
 // Set 设置请求头信息
 func (h *Http) Set(key, val string) *Http {
 	h.header.Set(key, val)
 	return h
+}
+
+// SetTransport 设置连接信息
+func (h *Http) SetTransport(t *http.Transport) {
+	h.client.Transport = t
 }
 
 // AddParam 设置get参数
@@ -55,8 +65,8 @@ func (h *Http) ask(method, url string, body io.Reader) ([]byte, error) {
 		log.Fatal(err)
 		return nil, err
 	}
-	h.header = request.Header
-	do, err := http.DefaultClient.Do(request)
+	request.Header = h.header
+	do, err := h.client.Do(request)
 	if err != nil {
 		return nil, err
 	}
@@ -85,6 +95,35 @@ func (h *Http) PostFormat(url string, ctxType string, s string) ([]byte, error) 
 		params = strings.NewReader(s)
 	}
 	return h.ask("POST", url, params)
+}
+
+// PostFile 发起 multipart/form-data 文件上传请求
+func (h *Http) PostFile(targetURL, filePath string) ([]byte, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	var requestBody bytes.Buffer
+	writer := multipart.NewWriter(&requestBody)
+
+	part, err := writer.CreateFormFile("upload", file.Name())
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := io.Copy(part, file); err != nil {
+		return nil, err
+	}
+
+	if err := writer.Close(); err != nil {
+		return nil, err
+	}
+
+	h.Set("Content-Type", writer.FormDataContentType())
+
+	return h.ask("POST", targetURL, &requestBody)
 }
 
 func (h *Http) result(body io.ReadCloser) ([]byte, error) {
