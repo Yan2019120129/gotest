@@ -13,3 +13,8 @@ CGO_ENABLED=0  GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o op main.go
 
 mv op ./build
 ```
+
+```shell
+[[ -f /usr/bin/op ]] && sudo rm -f /usr/bin/op
+sudo mv ./build/op /usr/bin/
+```
