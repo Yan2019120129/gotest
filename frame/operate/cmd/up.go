@@ -13,7 +13,7 @@ var (
 
 // 上传文件命令
 var upCmd = &cobra.Command{
-	Use:   "up",
+	Use:   "u",
 	Short: "Upload",
 	PreRun: func(cmd *cobra.Command, args []string) {
 		if fileName == "" {

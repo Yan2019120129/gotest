@@ -10,8 +10,14 @@ GOOS=linux GOARCH=amd64 go build -o main
 CGO_ENABLED=0  GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o op main.go
 
 [[ -d ./build ]] || mkdir ./build
-
+[[ -f ./build/op ]] && rm -rf ./build/op
 mv op ./build
+```
+
+```shell
+timestamp=$(date "+%Y-%m-%d_%H:%M:%S")
+mv /usr/bin/op /tmp/op_${timestamp}
+cp  ./build/op /usr/bin/
 ```
 
 ```shell
