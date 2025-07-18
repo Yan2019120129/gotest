@@ -7,12 +7,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 const maxFileSize = 5 * 1024 * 1024 // 5MB
 
 // OutFile 输出文件内容到控制台或 targetPath
-func OutFile(targetPath, path string, n int64) error {
+func OutFile(targetPath, path string, exclude []string, n int64) error {
 	fi, err := os.Stat(path)
 	if err != nil {
 		return fmt.Errorf("stat failed: %w", err)
@@ -22,7 +23,6 @@ func OutFile(targetPath, path string, n int64) error {
 	var targetFile *os.File
 
 	if targetPath != "" {
-		// 打开或创建 targetPath 文件（以追加方式写入）
 		targetFile, err = os.OpenFile(targetPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 		if err != nil {
 			return fmt.Errorf("failed to open target file: %w", err)
@@ -32,6 +32,12 @@ func OutFile(targetPath, path string, n int64) error {
 	}
 
 	if fi.IsDir() {
+		// 检查目录最后一级名是否包含 exclude 中任意值
+		dirName := filepath.Base(path)
+		if containsExclude(dirName, exclude) {
+			return nil // 跳过整个目录
+		}
+
 		entries, err := os.ReadDir(path)
 		if err != nil {
 			return fmt.Errorf("read dir failed: %w", err)
@@ -41,20 +47,27 @@ func OutFile(targetPath, path string, n int64) error {
 			if entry.IsDir() {
 				continue
 			}
+			fileName := entry.Name()
+			if containsExclude(fileName, exclude) {
+				continue
+			}
 
-			filePath := filepath.Join(path, entry.Name())
+			filePath := filepath.Join(path, fileName)
 			if _, err := fmt.Fprintf(outputWriter, ">>> [%s] <<<\n", filePath); err != nil {
 				return fmt.Errorf("write header failed: %w", err)
 			}
 
-			err := processFile(filePath, n, outputWriter)
-			if err != nil {
+			if err := processFile(filePath, n, outputWriter); err != nil {
 				return fmt.Errorf("error in file %s: %w", filePath, err)
 			}
 		}
 	} else {
-		err := processFile(path, n, outputWriter)
-		if err != nil {
+		fileName := filepath.Base(path)
+		if containsExclude(fileName, exclude) {
+			return nil // 文件被排除，跳过
+		}
+
+		if err := processFile(path, n, outputWriter); err != nil {
 			return err
 		}
 	}
@@ -124,4 +137,14 @@ func readLines(reader io.Reader, n int64) ([]string, error) {
 	default:
 		return nil, errors.New("invalid n value")
 	}
+}
+
+// containsExclude 检查目标字符串是否包含 exclude 中任意子串
+func containsExclude(target string, exclude []string) bool {
+	for _, ex := range exclude {
+		if ex != "" && strings.Contains(target, ex) {
+			return true
+		}
+	}
+	return false
 }
