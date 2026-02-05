@@ -39,7 +39,7 @@ func (h *Http) AddParam(key, val string) *Http {
 	if h.params == nil {
 		h.params = make(url.Values)
 	}
-	h.params.Set(key, val)
+	h.params.Add(key, val)
 	return h
 }
 
