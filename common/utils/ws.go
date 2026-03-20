@@ -1,9 +1,11 @@
 package utils
 
 import (
-	"github.com/gorilla/websocket"
 	"net/http"
+	"net/url"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 type Ws struct {
@@ -11,7 +13,7 @@ type Ws struct {
 	dialer *websocket.Dialer
 	conn   *websocket.Conn
 	url    string
-	Err    error
+	params url.Values
 }
 
 func NewWs(u string) *Ws {
@@ -22,11 +24,24 @@ func NewWs(u string) *Ws {
 }
 
 func (i *Ws) Run() *Ws {
+	if i.params != nil {
+		i.url += "?" + i.params.Encode()
+	}
+
 	var err error
 	i.conn, _, err = i.dialer.Dial(i.url, i.header)
 	if err != nil {
-		i.Err = err
+		panic(err)
 	}
+	return i
+}
+
+// AddParam 添加请求参数
+func (i *Ws) AddParam(key string, val string) *Ws {
+	if i.params == nil {
+		i.params = make(url.Values)
+	}
+	i.params.Set(key, val)
 	return i
 }
 
@@ -66,7 +81,6 @@ func (i *Ws) Read(fu func([]byte)) {
 		_, message, err := i.conn.ReadMessage()
 		if err != nil {
 			_ = i.conn.Close()
-			i.Err = err
 			return
 		}
 		fu(message)
