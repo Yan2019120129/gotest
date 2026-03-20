@@ -1,9 +1,8 @@
 package http_t
 
 import (
+	"encoding/json"
 	"errors"
-	"github.com/goccy/go-json"
-	"go.uber.org/zap"
 	"gotest/common/module/logs"
 	"gotest/common/utils"
 	"gotest/practice/http_t/dto"
@@ -11,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 const ServerAddrHttpEh = "https://ieforex.com/dmarket/dsymbol"
@@ -70,7 +71,7 @@ func Post(instId, bar string) ([]byte, error) {
 
 	//	接口是否正常
 	respData := new(dto.RspData)
-	err = json.Unmarshal(body, &respData)
+	json.Unmarshal(body, &respData)
 	if err != nil {
 		logs.Logger.Error(logs.LogMsgApp, zap.Error(err))
 		return nil, err
