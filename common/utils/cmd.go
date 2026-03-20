@@ -4,9 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"os/exec"
+	"strings"
 )
-
-type cmdType int
 
 // ExecCommand 执行脚本命令
 func ExecCommand(command string) (string, error) {
@@ -34,8 +33,10 @@ func Exec(cmd *exec.Cmd) (string, error) {
 		return "", err
 	}
 
-	if stderr.String() != "" {
+	val := stderr.String()
+	val = strings.Trim(val, "\n")
+	if val != "" {
 		return "", errors.New(stderr.String())
 	}
-	return stdout.String(), nil
+	return val, nil
 }
