@@ -10,8 +10,7 @@ import (
 )
 
 func main() {
-	// apiKey := os.Getenv("GEMINI_API_KEY")
-	apiKey := "REMOVED_API_KEY"
+	apiKey := os.Getenv("GEMINI_API_KEY")
 	if apiKey == "" {
 		fmt.Println("环境变量 GEMINI_API_KEY 未设置")
 	} else {
