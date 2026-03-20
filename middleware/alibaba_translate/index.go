@@ -4,15 +4,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"gotest/common/models"
+	"gotest/common/module/gorm/database"
+	"gotest/common/module/logs"
+	"strings"
+
 	alimt20181012 "github.com/alibabacloud-go/alimt-20181012/v2/client"
 	openapi "github.com/alibabacloud-go/darabonba-openapi/v2/client"
 	util "github.com/alibabacloud-go/tea-utils/v2/service"
 	"github.com/alibabacloud-go/tea/tea"
 	"go.uber.org/zap"
-	"gotest/common/models"
-	"gotest/common/module/gorm/database"
-	"gotest/common/module/logs"
-	"strings"
 )
 
 const (

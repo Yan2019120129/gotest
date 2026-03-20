@@ -26,7 +26,7 @@ func Kline() {
 	instance.AddParam("n", "20") // 1m:300
 	instance.AddParam("ohlc", "1")
 	instance.AddParam("key", "20240229:nazare")
-	v := instance.Get(klinePath + "/jpyusd:cur")
+	v, _ := instance.Get(klinePath + "/jpyusd:cur")
 	val, err := conversion(v)
 	ticker := val[len(val)-1]
 	date := time.Unix(ticker.CreatedAt, 0)

@@ -1,11 +1,12 @@
 package dh
 
 import (
-	"github.com/gocolly/colly/v2"
 	"gotest/practice/okex/utils"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/gocolly/colly/v2"
 )
 
 const (

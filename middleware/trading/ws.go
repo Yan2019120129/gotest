@@ -46,7 +46,7 @@ func Ws() {
 	param.Set("transport", "websocket")
 	param.Set("sid", sid)
 	instance := utils.NewWs(wsPath + "/?" + param.Encode())
-	err := instance.Run().Err
+	err := instance.Run()
 	if err != nil {
 		fmt.Println("-------------", err)
 		return
@@ -96,7 +96,7 @@ func GetSid(params Params) string {
 	instance.AddParam("EIO", params.EIO)
 	instance.AddParam("transport", "polling")
 	instance.AddParam("t", params.T)
-	val := instance.Get(httpPath + "/")
+	val, _ := instance.Get(httpPath + "/")
 	response := WsResponse{}
 	if len(val) > 0 {
 		err := json.Unmarshal(val[1:], &response)

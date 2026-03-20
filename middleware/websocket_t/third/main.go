@@ -1,13 +1,14 @@
 package main
 
 import (
-	"github.com/goccy/go-json"
-	"go.uber.org/zap"
 	"gotest/common/module/logs"
 	"gotest/middleware/websocket_t/third/index"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/goccy/go-json"
+	"go.uber.org/zap"
 )
 
 const (
