@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 // ================= 数据结构 =================
@@ -203,35 +204,112 @@ func startTCPProxy() {
 			logger.Println("[ERROR] accept失败:", err)
 			continue
 		}
-		go handleConn(conn)
+		go handleConnWrapper(conn)
 	}
 }
 
 func handleConn(client net.Conn) {
-	defer client.Close()
-
 	ip := getTCPClientIP(client.RemoteAddr().String())
 	logger.Printf("[TCP CONNECT] ip=%s", ip)
 
+	defer func() {
+		client.Close()
+		logger.Printf("[TCP CLOSE] ip=%s", ip)
+	}()
+
+	// IP鉴权
 	if !isIPAllowed(ip) {
 		logger.Printf("[TCP REJECT] ip=%s 未授权", ip)
 		return
 	}
 
 	targetAddr := config.Server.Target
-	logger.Printf("[TCP ALLOW] ip=%s -> %s", ip, targetAddr)
 
 	target, err := net.Dial("tcp", targetAddr)
 	if err != nil {
-		logger.Printf("[TCP ERROR] 连接目标失败 err=%v", err)
+		logger.Printf("[TCP ERROR] 连接目标失败 ip=%s err=%v", ip, err)
 		return
 	}
 	defer target.Close()
 
-	go io.Copy(target, client)
-	io.Copy(client, target)
+	logger.Printf("[TCP ALLOW] ip=%s -> %s", ip, targetAddr)
 
-	logger.Printf("[TCP CLOSE] ip=%s", ip)
+	// ====== TCP优化 ======
+	setTCPOptions(client)
+	setTCPOptions(target)
+
+	// ====== 双向代理 ======
+	proxy(client, target)
+}
+
+func proxy(a, b net.Conn) {
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// a -> b
+	go func() {
+		defer wg.Done()
+		copyBuffer(b, a)
+		closeWrite(b)
+	}()
+
+	// b -> a
+	go func() {
+		defer wg.Done()
+		copyBuffer(a, b)
+		closeWrite(a)
+	}()
+
+	wg.Wait()
+}
+func copyBuffer(dst, src net.Conn) {
+	buf := make([]byte, 32*1024)
+
+	for {
+		// 设置读超时（防假死）
+		_ = src.SetReadDeadline(time.Now().Add(5 * time.Minute))
+
+		n, err := src.Read(buf)
+		if n > 0 {
+			_ = dst.SetWriteDeadline(time.Now().Add(30 * time.Second))
+
+			_, werr := dst.Write(buf[:n])
+			if werr != nil {
+				logger.Printf("[WRITE ERROR] %v", werr)
+				return
+			}
+		}
+
+		if err != nil {
+			if err != io.EOF {
+				logger.Printf("[READ ERROR] %v", err)
+			}
+			return
+		}
+	}
+}
+
+func closeWrite(conn net.Conn) {
+	if tcp, ok := conn.(*net.TCPConn); ok {
+		tcp.CloseWrite()
+	}
+}
+
+func setTCPOptions(conn net.Conn) {
+	if tcp, ok := conn.(*net.TCPConn); ok {
+		tcp.SetKeepAlive(true)
+		tcp.SetKeepAlivePeriod(30 * time.Second)
+		tcp.SetNoDelay(true) // 减少延迟（游戏/实时通信很重要）
+	}
+}
+
+var connLimit = make(chan struct{}, 1000) // 最大1000连接
+
+func handleConnWrapper(conn net.Conn) {
+	connLimit <- struct{}{}
+	defer func() { <-connLimit }()
+
+	handleConn(conn)
 }
 
 // ================= 主函数 =================
