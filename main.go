@@ -1,258 +1,281 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"io"
+	"gotest/common/utils"
 	"log"
-	"net"
-	"net/http"
-	"os"
-	"strings"
 	"sync"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
-// ================= 数据结构 =================
+// ================== DB ==================
 
-type User struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
+var db *sql.DB
 
-type Client struct {
-	IP string `json:"ip"`
-}
+func initDB() {
+	dsn := "root:password@tcp(127.0.0.1:3306)/craw?charset=utf8mb4&parseTime=True&loc=Local"
 
-type ServerConfig struct {
-	WebPort int    `json:"web_port"` // Web端口
-	TCPPort int    `json:"tcp_port"` // TCP监听端口
-	Target  string `json:"target"`   // 转发地址 127.0.0.1:25565
-}
-
-type Config struct {
-	Server  ServerConfig `json:"server"`
-	Users   []User       `json:"users"`
-	Clients []Client     `json:"clients"`
-}
-
-var config Config
-var mu sync.Mutex
-var logger *log.Logger
-
-// ================= 初始化 =================
-
-func initLogger() {
-	file, _ := os.OpenFile("app.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
-	logger = log.New(io.MultiWriter(os.Stdout, file), "", log.LstdFlags)
-}
-
-// ================= 配置读写 =================
-
-func loadConfig() {
-	file, err := os.ReadFile("config.json")
+	var err error
+	db, err = sql.Open("mysql", dsn)
 	if err != nil {
-		// 默认配置
-		config = Config{
-			Server: ServerConfig{
-				WebPort: 8080,
-				TCPPort: 1040,
-				Target:  "127.0.0.1:25565",
-			},
-			Users: []User{
-				{Username: "admin", Password: "123456"},
-			},
+		log.Fatal(err)
+	}
+
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
+}
+
+// ================== 通用模型 ==================
+
+type Product struct {
+	SourceSite string
+	SourceID   int64
+	Name       string
+	Price      float64
+	Image      string
+}
+
+// ================== WTAPS API结构 ==================
+
+type WTAPSResponse struct {
+	Products []WTAPSProduct `json:"products"`
+}
+
+type WTAPSProduct struct {
+	ID       int64          `json:"id"`
+	Title    string         `json:"title"`
+	Images   []WTAPSImage   `json:"images"`
+	Variants []WTAPSVariant `json:"variants"`
+}
+
+type WTAPSImage struct {
+	Src string `json:"src"`
+}
+
+type WTAPSVariant struct {
+	Price string `json:"price"`
+}
+
+// ================== 站点定义 ==================
+
+type Site struct {
+	Name  string
+	Fetch func() ([]Product, error)
+}
+
+type Result struct {
+	Site  string
+	Count int
+	Err   error
+}
+
+// ================== WTAPS 爬取 ==================
+
+const (
+	WTAPSBaseURL = "https://wtaps.com/en/collections/all/products.json"
+)
+
+func fetchWTAPS() ([]Product, error) {
+	var resultAll []Product
+
+	h := utils.NewHttp()
+	req, err := h.Get(WTAPSBaseURL)
+	if err != nil {
+		return nil, err
+	}
+
+	var res WTAPSResponse
+	err = json.Unmarshal(req, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(res.Products) == 0 {
+		return nil, errors.New("no products found")
+	}
+
+	for _, p := range res.Products {
+		resultAll = append(resultAll, convertWTAPS(p))
+	}
+
+	return resultAll, nil
+}
+
+func convertWTAPS(p WTAPSProduct) Product {
+	var img string
+	if len(p.Images) > 0 {
+		img = p.Images[0].Src
+	}
+
+	var minPrice float64
+	first := true
+
+	for _, v := range p.Variants {
+		var price float64
+		fmt.Sscanf(v.Price, "%f", &price)
+
+		if first || price < minPrice {
+			minPrice = price
+			first = false
 		}
-		saveConfig()
-		return
 	}
 
-	json.Unmarshal(file, &config)
-}
-
-func saveConfig() {
-	mu.Lock()
-	defer mu.Unlock()
-
-	data, _ := json.MarshalIndent(config, "", "  ")
-	os.WriteFile("config.json", data, 0644)
-}
-
-// ================= 工具函数 =================
-
-func getClientIP(r *http.Request) string {
-	ip := r.Header.Get("X-Real-IP")
-	if ip == "" {
-		ip = r.Header.Get("X-Forwarded-For")
+	return Product{
+		SourceSite: "wtaps.com",
+		SourceID:   p.ID,
+		Name:       p.Title,
+		Price:      minPrice,
+		Image:      img,
 	}
-	if ip == "" {
-		ip = strings.Split(r.RemoteAddr, ":")[0]
-	}
-	return ip
 }
 
-func getTCPClientIP(addr string) string {
-	return strings.Split(addr, ":")[0]
+// ================== 其他站点（占位） ==================
+
+func fetchStoneIsland() ([]Product, error) {
+	return nil, fmt.Errorf("stoneisland not implemented")
 }
 
-func isIPAllowed(ip string) bool {
-	for _, c := range config.Clients {
-		if c.IP == ip {
-			return true
-		}
-	}
-	return false
+func fetchBAPE() ([]Product, error) {
+	return nil, fmt.Errorf("bape not implemented")
 }
 
-// ================= Web中间件 =================
-
-func logMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip := getClientIP(r)
-		logger.Printf("[WEB] %s %s IP=%s", r.Method, r.URL.Path, ip)
-		next.ServeHTTP(w, r)
-	})
+func fetchSupreme() ([]Product, error) {
+	return nil, fmt.Errorf("supreme not implemented")
 }
 
-func writeHTML(w http.ResponseWriter, html string) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Write([]byte(html))
-}
+// ================== 入库 ==================
 
-// ================= Web部分 =================
-
-// 登录页面
-func loginPage(w http.ResponseWriter, r *http.Request) {
-	html := `
-	<h2>登录</h2>
-	<form method="POST" action="/login">
-	账号: <input name="username"><br>
-	密码: <input name="password" type="password"><br>
-	<button type="submit">登录</button>
-	</form>
+func saveProducts(products []Product) error {
+	sqlStr := `
+	INSERT INTO craw_products (source_id, source_site, name, price, main_image_url)
+	VALUES (?, ?, ?, ?, ?)
+	ON DUPLICATE KEY UPDATE
+	name = VALUES(name),
+	price = VALUES(price),
+	main_image_url = VALUES(main_image_url)
 	`
-	writeHTML(w, html)
-}
 
-// 登录处理
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	ip := getClientIP(r)
-
-	for _, u := range config.Users {
-		if u.Username == username && u.Password == password {
-			logger.Printf("[LOGIN SUCCESS] user=%s ip=%s", username, ip)
-			http.Redirect(w, r, "/auth", 302)
-			return
-		}
-	}
-
-	logger.Printf("[LOGIN FAIL] user=%s ip=%s", username, ip)
-	w.Write([]byte("登录失败"))
-}
-
-// 授权页面
-func authPage(w http.ResponseWriter, r *http.Request) {
-	ip := getClientIP(r)
-
-	html := fmt.Sprintf(`
-	<h2>授权页面</h2>
-	<p>你的IP: %s</p>
-	<form method="POST" action="/authorize">
-	<button type="submit">授权访问</button>
-	</form>
-	`, ip)
-
-	writeHTML(w, html)
-}
-
-// 授权接口
-func authorizeHandler(w http.ResponseWriter, r *http.Request) {
-	ip := getClientIP(r)
-
-	for _, c := range config.Clients {
-		if c.IP == ip {
-			logger.Printf("[AUTH] 已存在 ip=%s", ip)
-			w.Write([]byte("已授权过"))
-			return
-		}
-	}
-
-	config.Clients = append(config.Clients, Client{IP: ip})
-	saveConfig()
-
-	logger.Printf("[AUTH SUCCESS] ip=%s", ip)
-	w.Write([]byte("授权成功: " + ip))
-}
-
-// ================= TCP代理 =================
-
-func startTCPProxy() {
-	addr := fmt.Sprintf(":%d", config.Server.TCPPort)
-
-	ln, err := net.Listen("tcp", addr)
+	stmt, err := db.Prepare(sqlStr)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	defer stmt.Close()
 
-	logger.Printf("[SYSTEM] TCP监听端口 %d", config.Server.TCPPort)
-
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			logger.Println("[ERROR] accept失败:", err)
+	for _, p := range products {
+		if p.Name == "" || p.SourceID == 0 {
 			continue
 		}
-		go handleConn(conn)
+
+		_, err := stmt.Exec(p.SourceID, p.SourceSite, p.Name, p.Price, p.Image)
+		if err != nil {
+			log.Println("DB error:", err)
+		}
+	}
+
+	return nil
+}
+
+// ================== 站点注册 ==================
+
+func getSites() []Site {
+	return []Site{
+		{
+			Name:  "wtaps.com",
+			Fetch: fetchWTAPS,
+		},
+		{
+			Name:  "stoneisland.com",
+			Fetch: fetchStoneIsland,
+		},
+		{
+			Name:  "bape.com",
+			Fetch: fetchBAPE,
+		},
+		{
+			Name:  "supreme",
+			Fetch: fetchSupreme,
+		},
 	}
 }
 
-func handleConn(client net.Conn) {
-	defer client.Close()
+// ================== 并发执行 ==================
 
-	ip := getTCPClientIP(client.RemoteAddr().String())
-	logger.Printf("[TCP CONNECT] ip=%s", ip)
+func runAllSites() []Result {
+	sites := getSites()
 
-	if !isIPAllowed(ip) {
-		logger.Printf("[TCP REJECT] ip=%s 未授权", ip)
-		return
+	var wg sync.WaitGroup
+	resultCh := make(chan Result, len(sites))
+
+	for _, s := range sites {
+		wg.Add(1)
+
+		go func(site Site) {
+			defer wg.Done()
+
+			products, err := site.Fetch()
+
+			if err != nil {
+				resultCh <- Result{
+					Site:  site.Name,
+					Err:   err,
+					Count: 0,
+				}
+				return
+			}
+
+			// 入库
+			if len(products) > 0 {
+				for _, product := range products {
+					fmt.Println(product)
+				}
+				//_ = saveProducts(products)
+				fmt.Println("len(products):", len(products))
+			}
+
+			resultCh <- Result{
+				Site:  site.Name,
+				Count: len(products),
+				Err:   nil,
+			}
+		}(s)
 	}
 
-	targetAddr := config.Server.Target
-	logger.Printf("[TCP ALLOW] ip=%s -> %s", ip, targetAddr)
+	wg.Wait()
+	close(resultCh)
 
-	target, err := net.Dial("tcp", targetAddr)
-	if err != nil {
-		logger.Printf("[TCP ERROR] 连接目标失败 err=%v", err)
-		return
+	var results []Result
+	for r := range resultCh {
+		results = append(results, r)
 	}
-	defer target.Close()
 
-	go io.Copy(target, client)
-	io.Copy(client, target)
-
-	logger.Printf("[TCP CLOSE] ip=%s", ip)
+	return results
 }
 
-// ================= 主函数 =================
+// ================== main ==================
 
 func main() {
-	initLogger()
-	loadConfig()
+	log.Println("🚀 Multi-site crawler started")
 
-	// Web路由
-	http.HandleFunc("/", loginPage)
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/auth", authPage)
-	http.HandleFunc("/authorize", authorizeHandler)
+	initDB()
 
-	// 启动Web
-	go func() {
-		addr := fmt.Sprintf(":%d", config.Server.WebPort)
-		logger.Printf("[SYSTEM] Web启动端口 %d", config.Server.WebPort)
-		http.ListenAndServe(addr, logMiddleware(http.DefaultServeMux))
-	}()
+	results := runAllSites()
 
-	// 启动TCP
-	startTCPProxy()
+	success := 0
+	fail := 0
+
+	for _, r := range results {
+		if r.Err != nil {
+			log.Printf("❌ [%s] failed: %v", r.Site, r.Err)
+			fail++
+		} else {
+			log.Printf("✅ [%s] success, %d items", r.Site, r.Count)
+			success++
+		}
+	}
+
+	log.Printf("🎯 DONE: success=%d fail=%d", success, fail)
 }

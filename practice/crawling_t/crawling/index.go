@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gocolly/colly"
+	"github.com/gomodule/redigo/redis"
 	"go.uber.org/zap"
 )
 
@@ -14,7 +15,8 @@ const (
 
 type Crawling struct {
 	*colly.Collector
-	err error
+	rdsConn redis.Conn
+	err     error
 }
 
 // NewCrawling 新建实例
@@ -29,7 +31,6 @@ func NewCrawling() (*Crawling, error) {
 		DisableKeepAlives: true,
 	})
 
-	InitRedis("127.0.0.1:6379", "", 0)
 	if err := amazon.SetStorage(NewStorage("crawling")); err != nil {
 		zap.L().Error(LogMsg, zap.Error(err))
 		return nil, err

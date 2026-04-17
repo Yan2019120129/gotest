@@ -23,6 +23,20 @@ type Storage struct {
 	mu      sync.RWMutex
 }
 
+// NewStorage 新建存储实例
+func NewStorage(prefix string) *Storage {
+	return &Storage{
+		Expires: 5,
+		prefix:  prefix,
+		mu:      sync.RWMutex{},
+	}
+}
+
+// Init 实现初始化redis storage 接口
+func (s *Storage) Init() error {
+	return nil
+}
+
 // InitRedis 初始化 Redis 客户端（推荐在 main() 或初始化逻辑中调用）
 func InitRedis(addr, password string, db int) error {
 	rdb = redis.NewClient(&redis.Options{
@@ -45,24 +59,7 @@ func InitRedis(addr, password string, db int) error {
 	return nil
 }
 
-// NewStorage 新建存储实例
-func NewStorage(prefix string) *Storage {
-	return &Storage{
-		Expires: 5 * time.Minute, // 过期时间 5 分钟
-		prefix:  prefix,
-		mu:      sync.RWMutex{},
-	}
-}
-
-// Init 实现初始化接口
-func (s *Storage) Init() error {
-	if rdb == nil {
-		return errors.New("Redis 未初始化，请先调用 InitRedis()")
-	}
-	return nil
-}
-
-// Visited 标记请求已访问
+// Visited 验证
 func (s *Storage) Visited(requestID uint64) error {
 	ctx := context.Background()
 	key := s.getIDStr(requestID)
@@ -73,7 +70,7 @@ func (s *Storage) Visited(requestID uint64) error {
 	return err
 }
 
-// IsVisited 判断请求是否访问过
+// IsVisited 否通过验证
 func (s *Storage) IsVisited(requestID uint64) (bool, error) {
 	ctx := context.Background()
 	key := s.getIDStr(requestID)
@@ -116,7 +113,7 @@ func (s *Storage) Cookies(u *url.URL) string {
 	return cookiesStr
 }
 
-// AddRequest 添加请求信息
+// AddRequest 添加请求头信息
 func (s *Storage) AddRequest(r []byte) error {
 	ctx := context.Background()
 	key := s.getQueueID()
@@ -138,7 +135,7 @@ func (s *Storage) GetRequest() ([]byte, error) {
 	return val, err
 }
 
-// QueueSize 获取队列长度
+// QueueSize 获取队列大小
 func (s *Storage) QueueSize() (int, error) {
 	ctx := context.Background()
 	key := s.getQueueID()
@@ -149,19 +146,22 @@ func (s *Storage) QueueSize() (int, error) {
 	return int(size), err
 }
 
-// 内部辅助方法
+// getIDStr 获取请求Key
 func (s *Storage) getIDStr(ID uint64) string {
 	return fmt.Sprintf("%s:request:%d", s.getPrefix(), ID)
 }
 
+// getCookieID 获取cookie key
 func (s *Storage) getCookieID(c string) string {
 	return fmt.Sprintf("%s:cookie:%s", s.getPrefix(), c)
 }
 
+// getCookieID 获取队列key
 func (s *Storage) getQueueID() string {
 	return fmt.Sprintf("%s:queue", s.getPrefix())
 }
 
+// getPrefix 获取域名作为前缀
 func (s *Storage) getPrefix() string {
 	return s.prefix
 }

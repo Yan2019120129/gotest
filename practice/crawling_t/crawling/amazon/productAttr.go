@@ -1,35 +1,25 @@
-package main
+package amazon
 
 import (
+	"gotest/practice/crawling_t/crawling"
 	"strconv"
 	"strings"
 	"sync"
 )
 
 type ProductAttr struct {
-	mutex        sync.Mutex
-	Price        []float64           // 金额
-	Images       []string            // 图片
-	Style        map[string][]string // 样式
-	Title        string              // 标题
-	Name         string              // 产品名
-	Describe     string              // 描述
-	DescribeRich []string            // 详细描述
+	mutex sync.Mutex
+	crawling.ProductAttr
 }
 
 func NewProductAttr() *ProductAttr {
 	return &ProductAttr{
-		mutex:        sync.Mutex{},
-		Images:       make([]string, 0),
-		Style:        make(map[string][]string),
-		DescribeRich: make([]string, 0),
+		mutex: sync.Mutex{},
+		ProductAttr: crawling.ProductAttr{
+			Images: make([]string, 0),
+			Style:  make(map[string][]string),
+		},
 	}
-}
-
-// SetDescribe 设置产品详情
-func (_ProductInfo *ProductAttr) SetDescribe(describe string) *ProductAttr {
-	_ProductInfo.Title = describe
-	return _ProductInfo
 }
 
 // SetTitle 设置产品标题
@@ -57,26 +47,23 @@ func (_ProductInfo *ProductAttr) SetPrice(priceStr string) *ProductAttr {
 			}
 		}
 	}
+
 	price, _ := strconv.ParseFloat(ss, 64)
-	_ProductInfo.Price = append(_ProductInfo.Price, price)
+
+	// 将最小的价格赋予现价，最高的价格赋予原价，避免出现现价比原价高的情况
+	if _ProductInfo.CurrentPrice == 0 {
+		_ProductInfo.CurrentPrice = price
+	} else if _ProductInfo.CurrentPrice > price {
+		_ProductInfo.OriginalPrice = _ProductInfo.CurrentPrice
+		_ProductInfo.CurrentPrice = price
+	} else {
+		_ProductInfo.OriginalPrice = price
+	}
 	return _ProductInfo
 }
 
 // SetImages 设置产品图片
 func (_ProductInfo *ProductAttr) SetImages(image string) *ProductAttr {
-	index := make([]int, 0)
-	for sum, j := 0, len(image)-1; j > 0; j-- {
-		if image[j] == uint8('.') {
-			index = append(index, j)
-			sum++
-		}
-		if sum == 2 {
-			break
-		}
-	}
-	if len(index) > 0 {
-		image = image[:index[1]+1] + "_SL1500_" + image[index[0]:]
-	}
 	_ProductInfo.Images = append(_ProductInfo.Images, image)
 	return _ProductInfo
 }
@@ -91,7 +78,9 @@ func (_ProductInfo *ProductAttr) SetStyle(key, value string) *ProductAttr {
 	key = strings.TrimSpace(key)
 	_ProductInfo.mutex.Lock()
 	defer _ProductInfo.mutex.Unlock()
-	_ProductInfo.Style[key] = append(_ProductInfo.Style[key], value)
+	if value != "Select" {
+		_ProductInfo.Style[key] = append(_ProductInfo.Style[key], value)
+	}
 	return _ProductInfo
 }
 
@@ -102,4 +91,10 @@ func (_ProductInfo *ProductAttr) GetStyleLen(key string) int {
 	defer _ProductInfo.mutex.Unlock()
 	styleLen := len(_ProductInfo.Style[key])
 	return styleLen
+}
+
+// SetDescribe 设置产品详情
+func (_ProductInfo *ProductAttr) SetDescribe(Describe string) *ProductAttr {
+	_ProductInfo.Describe = strings.TrimSpace(Describe)
+	return _ProductInfo
 }
