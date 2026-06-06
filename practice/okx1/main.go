@@ -14,6 +14,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/natefinch/lumberjack"
 )
 
 func main() {
@@ -48,6 +50,14 @@ func main() {
 		configPath = args[0]
 		symbols = strings.Split(args[1], ",")
 	}
+
+	log.SetOutput(&lumberjack.Logger{
+		Filename:   "./logs/app.log",
+		MaxSize:    50, // MB
+		MaxBackups: 1,  // 保留1个备份
+		MaxAge:     1,  // 保留1天
+		Compress:   false,
+	})
 
 	config.Init(configPath)
 	cfg := config.GetConfig()
@@ -132,6 +142,6 @@ func main() {
 		symbol := okxTickers[0].InstId
 		latestPrice[symbol] = price
 
-		fmt.Printf("%s: %.2f\n", symbol, price)
+		log.Printf("%s: %.2f\n", symbol, price)
 	})
 }
