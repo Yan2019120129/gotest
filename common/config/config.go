@@ -80,6 +80,7 @@ type GenConfig struct {
 
 // GinConfig gin配置参数
 type GinConfig struct {
+	Proxy          string `yaml:"proxy"`          // 代理端口
 	Port           string `yaml:"port"`           // gin端口号
 	ReadTimeout    int    `yaml:"readTimeout"`    // 读取超时时间
 	WriteTimeout   int    `yaml:"writeTimeout"`   // 写入超时时间
@@ -149,11 +150,11 @@ var _once sync.Once
 // 定义全局变量config，并初始化为nil
 var cfg *Config
 
-func init() {
+func Init(path string) {
 	if cfg == nil {
 		_once.Do(
 			func() {
-				path := GetConfigPath()
+				//path := GetConfigPath()
 				configByte, err := os.ReadFile(path)
 				if err != nil {
 					log.Print("config init err:", err)
@@ -182,6 +183,10 @@ func GetConfigPath() string {
 
 	// 修改为配置文件路径并返回
 	return strings.ReplaceAll(absolutePath, ".go", ".yml")
+}
+
+func GetConfig() *Config {
+	return cfg
 }
 
 // GetGorm  获取gorm 配置

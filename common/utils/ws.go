@@ -27,6 +27,9 @@ func NewWs(u string, arg ...map[string]any) *Ws {
 	}
 
 	for _, a := range arg {
+		if a == nil {
+			continue
+		}
 		if v, ok := a["proxy"]; ok {
 			u, _ = v.(string)
 			proxyURL, _ := url.Parse(

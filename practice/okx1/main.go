@@ -10,13 +10,49 @@ import (
 	"gotest/practice/okx1/enum"
 	"gotest/practice/okx1/monitor"
 	"log"
+	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
 func main() {
-	cfg := config.GetMailConfig()
-	emailCfg := cfg.Providers[cfg.Default]
+	fmt.Println("./okx config.yml BTC-USDT,DOGE-USDT")
+	defaultConfigPath := "/home/yan/Documents/file/gofile/gotest/common/config/config.yml"
+	defaultSymbols := []string{"ETH-USDT"}
+
+	args := os.Args[1:]
+
+	var (
+		configPath string
+		symbols    []string
+	)
+
+	// 解析参数
+	switch len(args) {
+	case 0:
+		configPath = defaultConfigPath
+		symbols = defaultSymbols
+
+	case 1:
+		// 只传一个参数：可能是 config，也可能是 symbol
+		if strings.Contains(args[0], ".yml") || strings.Contains(args[0], ".yaml") {
+			configPath = args[0]
+			symbols = defaultSymbols
+		} else {
+			configPath = defaultConfigPath
+			symbols = strings.Split(args[0], ",")
+		}
+
+	default:
+		configPath = args[0]
+		symbols = strings.Split(args[1], ",")
+	}
+
+	config.Init(configPath)
+	cfg := config.GetConfig()
+
+	emailCfg := cfg.Mail.Providers[cfg.Mail.Default]
 	mailClient := email.NewClient(
 		emailCfg.Host,
 		emailCfg.Port,
@@ -25,52 +61,61 @@ func main() {
 		"行情监控",
 	)
 
-	symbol := "ETH-USDT"
-	// 监控器
-	pm := monitor.NewPriceMonitor(
-		symbol,
-		monitor.DefaultConfigs[symbol],
-		mailClient,
-		[]string{
-			"1556403682@qq.com",
-		},
-	)
+	// 最新价格缓存（多 symbol）
+	latestPrice := make(map[string]float64)
 
-	var latestPrice float64
-
-	// 每分钟采样一次
+	// 每分钟采样
 	go func() {
-
 		ticker := time.NewTicker(time.Minute)
 		defer ticker.Stop()
 
 		for range ticker.C {
+			for _, symbol := range symbols {
+				price := latestPrice[symbol]
+				if price <= 0 {
+					continue
+				}
 
-			if latestPrice <= 0 {
-				continue
+				pm := monitor.NewPriceMonitor(
+					symbol,
+					monitor.DefaultConfigs[symbol],
+					mailClient,
+					[]string{"1556403682@qq.com"},
+				)
+
+				pm.Add(price)
+
+				log.Printf("采样 %s: %f\n", symbol, price)
 			}
-
-			pm.Add(latestPrice)
-
-			log.Printf(
-				"采样价格: %.2f\n",
-				latestPrice,
-			)
 		}
 	}()
 
-	okxWs := utils.NewWs(enum.TradesWsUrlOKX, map[string]any{
-		"proxy": "http://127.0.0.1:7890",
-	})
-	subParams := dto.NewSubscribe().
-		SetSubParams(enum.OKXChannelTicker, symbol).
-		Subscribe()
+	wsConfig := make(map[string]any)
+	if cfg.Gin.Proxy != "" {
+		wsConfig["proxy"] = cfg.Gin.Proxy
+	}
+
+	okxWs := utils.NewWs(enum.TradesWsUrlOKX, wsConfig)
+
 	okxWs.Run()
-	okxWs.Send(subParams.ToString())
+
+	// 为每个 symbol 订阅
+	for _, symbol := range symbols {
+		subParams := dto.NewSubscribe().
+			SetSubParams(enum.OKXChannelTicker, symbol).
+			Subscribe()
+
+		okxWs.Send(subParams.ToString())
+	}
+
+	// websocket 回调
 	okxWs.Read(func(msg []byte) {
 		var resp dto.RespJson
-
 		if err := json.Unmarshal(msg, &resp); err != nil {
+			return
+		}
+
+		if len(resp.Data) == 0 {
 			return
 		}
 
@@ -79,24 +124,14 @@ func main() {
 			return
 		}
 
-		if len(resp.Data) == 0 {
-			return
-		}
-
-		price, err := strconv.ParseFloat(
-			okxTickers[0].Last,
-			64,
-		)
-
+		price, err := strconv.ParseFloat(okxTickers[0].Last, 64)
 		if err != nil {
 			return
 		}
 
-		latestPrice = price
+		symbol := okxTickers[0].InstId
+		latestPrice[symbol] = price
 
-		fmt.Printf(
-			symbol+": %.2f\n",
-			price,
-		)
+		fmt.Printf("%s: %.2f\n", symbol, price)
 	})
 }
