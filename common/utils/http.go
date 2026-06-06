@@ -20,7 +20,8 @@ type Http struct {
 
 func NewHttp() *Http {
 	return &Http{header: make(http.Header),
-		client: *http.DefaultClient}
+		client: *http.DefaultClient,
+	}
 }
 
 // Set 设置请求头信息

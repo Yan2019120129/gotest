@@ -7,6 +7,31 @@ gin:
   # 请求头的最大字节数
   max-header-bytes: 1048576
 
+mail:
+  default: qq
+  providers:
+    qq:
+      host: smtp.qq.com
+      port: 465
+      username: 1556403682@qq.com
+      password: dlogwcjjuhfzhdce
+      from: 1556403682@qq.com
+      ssl: true
+    gmail:
+      host: smtp.gmail.com
+      port: 465
+      username: test@gmail.com
+      password: xxxxxxxxxxxxxxxx
+      from: test@gmail.com
+      ssl: true
+    outlook:
+      host: smtp.office365.com
+      port: 587
+      username: test@outlook.com
+      password: xxxxxxxxxxxxxxxx
+      from: test@outlook.com
+      ssl: false
+
 gorm:
   # 全字段查询
   query-fields: true

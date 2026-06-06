@@ -1,14 +1,15 @@
 package config
 
 import (
-	"gopkg.in/yaml.v3"
-	"gorm.io/gen"
 	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
+
+	"gopkg.in/yaml.v3"
+	"gorm.io/gen"
 )
 
 const (
@@ -31,6 +32,21 @@ type Config struct {
 	Redis         RedisConfig         `yaml:"redis"`
 	Elasticsearch ElasticsearchConfig `yaml:"elasticsearch"`
 	Logs          LogConfig           `yaml:"logs"`
+	Mail          MailConfig          `yaml:"mail"`
+}
+
+type MailProvider struct {
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	From     string `yaml:"from"`
+	SSL      bool   `yaml:"ssl"`
+}
+
+type MailConfig struct {
+	Default   string                  `yaml:"default"`
+	Providers map[string]MailProvider `yaml:"providers"`
 }
 
 // ElasticsearchConfig 配置参数。
@@ -211,4 +227,9 @@ func GetLog() *LogConfig {
 // GetZap 获取zap 日志配置
 func GetZap() *ZapConfig {
 	return &cfg.Logs.Instance.Zap
+}
+
+// GetMailConfig 获取邮箱配置
+func GetMailConfig() *MailConfig {
+	return &cfg.Mail
 }

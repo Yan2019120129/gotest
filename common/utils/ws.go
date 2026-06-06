@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"time"
@@ -16,11 +17,26 @@ type Ws struct {
 	params url.Values
 }
 
-func NewWs(u string) *Ws {
-	return &Ws{
-		url:    u,
-		dialer: websocket.DefaultDialer,
+func NewWs(u string, arg ...map[string]any) *Ws {
+	ws := &Ws{
+		url: u,
+		dialer: &websocket.Dialer{
+			Proxy:            http.ProxyFromEnvironment,
+			HandshakeTimeout: 45 * time.Second,
+		},
 	}
+
+	for _, a := range arg {
+		if v, ok := a["proxy"]; ok {
+			u, _ = v.(string)
+			proxyURL, _ := url.Parse(
+				u,
+			)
+			ws.dialer.Proxy = http.ProxyURL(proxyURL)
+		}
+
+	}
+	return ws
 }
 
 func (i *Ws) Run() *Ws {
@@ -28,11 +44,16 @@ func (i *Ws) Run() *Ws {
 		i.url += "?" + i.params.Encode()
 	}
 
-	var err error
-	i.conn, _, err = i.dialer.Dial(i.url, i.header)
+	conn, resp, err := i.dialer.Dial(i.url, i.header)
 	if err != nil {
+		if resp != nil {
+			fmt.Println("status:", resp.Status)
+		}
 		panic(err)
 	}
+
+	i.conn = conn
+
 	return i
 }
 
