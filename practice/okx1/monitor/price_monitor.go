@@ -99,6 +99,32 @@ var DefaultConfigs = map[string]MonitorConfig{
 			Cooldown:  2 * time.Hour,
 		},
 	},
+	"ALLO-USDT": {
+		OneMinute: AlertRule{
+			Threshold: 2.5,
+			Cooldown:  3 * time.Minute,
+		},
+
+		FiveMinute: AlertRule{
+			Threshold: 5,
+			Cooldown:  10 * time.Minute,
+		},
+
+		FifteenMin: AlertRule{
+			Threshold: 10,
+			Cooldown:  20 * time.Minute,
+		},
+
+		OneHour: AlertRule{
+			Threshold: 18,
+			Cooldown:  40 * time.Minute,
+		},
+
+		SixHour: AlertRule{
+			Threshold: 30,
+			Cooldown:  2 * time.Hour,
+		},
+	},
 }
 
 type AlertRule struct {

@@ -147,6 +147,6 @@ func main() {
 		symbol := okxTickers[0].InstId
 		latestPrice[symbol] = price
 
-		log.Printf("%s: %.2f\n", symbol, price)
+		log.Printf("%s: %f\n", symbol, price)
 	})
 }

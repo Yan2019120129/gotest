@@ -113,3 +113,24 @@ func TestPrice(t *testing.T) {
 	}
 	fmt.Println(string(v))
 }
+
+func TestAccountBalance(t *testing.T) {
+	client := monitor.NewClient(
+		"xxx",
+		"xxx",
+		"xxx",
+	)
+
+	// 获取全部资产
+	res, err := client.GetAccountBalance("")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("账户总权益:", res.Data[0].TotalEq)
+
+	for _, d := range res.Data[0].Details {
+		fmt.Printf("币种: %s 余额: %s 可用: %s\n",
+			d.Ccy, d.CashBal, d.AvailBal)
+	}
+}
