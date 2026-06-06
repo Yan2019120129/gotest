@@ -79,6 +79,17 @@ func main() {
 		ticker := time.NewTicker(time.Minute)
 		defer ticker.Stop()
 
+		priceMonitor := make(map[string]*monitor.PriceMonitor)
+		for _, symbol := range symbols {
+			pm := monitor.NewPriceMonitor(
+				symbol,
+				monitor.DefaultConfigs[symbol],
+				mailClient,
+				[]string{"1556403682@qq.com"},
+			)
+			priceMonitor[symbol] = pm
+		}
+
 		for range ticker.C {
 			for _, symbol := range symbols {
 				price := latestPrice[symbol]
@@ -86,16 +97,10 @@ func main() {
 					continue
 				}
 
-				pm := monitor.NewPriceMonitor(
-					symbol,
-					monitor.DefaultConfigs[symbol],
-					mailClient,
-					[]string{"1556403682@qq.com"},
-				)
-
-				pm.Add(price)
-
-				log.Printf("采样 %s: %f\n", symbol, price)
+				if pm, ok := priceMonitor[symbol]; ok {
+					pm.Add(price)
+					log.Printf("采样 %s: %f\n", symbol, price)
+				}
 			}
 		}
 	}()

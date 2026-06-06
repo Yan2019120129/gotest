@@ -14,7 +14,7 @@ mail:
   providers:
     qq:
       host: smtp.qq.com
-      port: 465
+      port: 587
       username: 1556403682@qq.com
       password: dlogwcjjuhfzhdce
       from: 1556403682@qq.com

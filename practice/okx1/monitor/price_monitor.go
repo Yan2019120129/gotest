@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"fmt"
+	"log"
 	"sync"
 	"time"
 )
@@ -210,6 +211,7 @@ func (m *PriceMonitor) check1m(current float64) {
 		}
 
 		m.last1mAlarm = time.Now()
+		log.Println("1分钟异动: ", m.symbol, current, old, change)
 		m.sendAlert(
 			"1分钟异动",
 			current,
@@ -239,6 +241,7 @@ func (m *PriceMonitor) check5m(current float64) {
 		}
 
 		m.last5mAlarm = time.Now()
+		log.Println("5分钟异动: ", m.symbol, current, old, change)
 		m.sendAlert(
 			"5分钟异动",
 			current,
@@ -269,6 +272,7 @@ func (m *PriceMonitor) check15m(current float64) {
 
 		m.last15mAlarm = time.Now()
 
+		log.Println("15分钟异动: ", m.symbol, current, old, change)
 		m.sendAlert(
 			"15分钟异动",
 			current,
@@ -300,6 +304,7 @@ func (m *PriceMonitor) check1h(current float64) {
 		}
 
 		m.last1hAlarm = time.Now()
+		log.Println("1小时均价偏离: ", m.symbol, current, avg, change)
 		m.sendAvgAlert(
 			"1小时均价偏离",
 			current,
@@ -328,10 +333,8 @@ func (m *PriceMonitor) check6h(current float64) {
 		}
 
 		m.last6hAlarm = time.Now()
-		fmt.Println("6小时均价偏离", current,
-			avg,
-			change)
 
+		log.Println("6小时均价偏离: ", m.symbol, current, avg, change)
 		m.sendAvgAlert(
 			"6小时均价偏离",
 			current,
