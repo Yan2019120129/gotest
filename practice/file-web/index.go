@@ -84,7 +84,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 			<input type="file" name="file"/>
 			<input type="submit" value="上传"/>
 		</form>
-
+		<hr>
 		<h2>文件列表</h2>
 		<a href="/files">查看文件</a>
 	</body>
@@ -359,11 +359,13 @@ func chatHandler(w http.ResponseWriter, r *http.Request) {
 
 <form action="/chat/send" method="post">
 
-	<input
-		type="text"
+	<textarea
 		name="content"
-		style="width:400px"
-		placeholder="请输入消息">
+		rows="10"
+		cols="100"
+		placeholder="请输入消息"></textarea>
+
+	<br><br>
 
 	<input
 		type="submit"
