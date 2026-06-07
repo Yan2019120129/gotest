@@ -101,7 +101,7 @@ var DefaultConfigs = map[string]MonitorConfig{
 	},
 	"ALLO-USDT": {
 		OneMinute: AlertRule{
-			Threshold: 2.5,
+			Threshold: 2,
 			Cooldown:  3 * time.Minute,
 		},
 
