@@ -116,16 +116,18 @@ func TestPrice(t *testing.T) {
 
 func TestAccountBalance(t *testing.T) {
 	client := monitor.NewClient(
-		"xxx",
-		"xxx",
-		"xxx",
+		"589978b6-8b1a-40c9-89ee-c33403451cf7",
+		"71EFC47547FA4D820BDA97D2D676F5ED",
+		"Yjj1323106558.",
 	)
 
 	// 获取全部资产
-	res, err := client.GetAccountBalance("")
+	res, err := client.GetAccountBalance("ALLO")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println(res)
 
 	fmt.Println("账户总权益:", res.Data[0].TotalEq)
 

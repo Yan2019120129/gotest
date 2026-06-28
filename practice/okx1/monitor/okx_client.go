@@ -113,6 +113,11 @@ type BalanceResponse struct {
 	Msg string `json:"msg"`
 }
 
+func getTimeNow() string {
+	return time.Now().
+		UTC().
+		Format("2006-01-02T15:04:05.000Z")
+}
 func (c *Client) GetAccountBalance(ccy string) (*BalanceResponse, error) {
 
 	path := "/api/v5/account/balance"
@@ -121,9 +126,7 @@ func (c *Client) GetAccountBalance(ccy string) (*BalanceResponse, error) {
 	if ccy != "" {
 		path = fmt.Sprintf("%s?ccy=%s", path, ccy)
 	}
-	timestamp := time.Now().
-		UTC().
-		Format("2006-01-02T15:04:05.000Z")
+	timestamp := getTimeNow()
 	method := "GET"
 	body := ""
 
