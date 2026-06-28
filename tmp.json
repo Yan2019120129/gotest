@@ -10,17 +10,6 @@
     "rules": [
       {
         "domain": [
-          "smtp.qq.com",
-          "imap.qq.com",
-
-          "smtp.163.com",
-          "imap.163.com",
-
-          "smtp.gmail.com",
-          "imap.gmail.com",
-
-          "smtp.office365.com",
-          "outlook.office365.com",
           "testingcf.jsdelivr.net"
         ],
         "server": "local"
@@ -32,6 +21,14 @@
         "server": "local"
       },
       {
+        "domain_suffix": [
+          "qq.com",
+          "163.com",
+          "gmail.com",
+          "office365.com"
+        ],
+        "server": "remote"
+      },      {
         "domain_suffix": [
           "services.googleapis.cn",
           "play.googleapis.com",
