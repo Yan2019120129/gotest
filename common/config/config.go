@@ -150,11 +150,12 @@ var _once sync.Once
 // 定义全局变量config，并初始化为nil
 var cfg *Config
 
-func Init(path string) {
+func init() {
 	if cfg == nil {
 		_once.Do(
 			func() {
 				//path := GetConfigPath()
+				path := "/home/yan/Documents/file/gofile/gotest/common/config/config.yml"
 				configByte, err := os.ReadFile(path)
 				if err != nil {
 					log.Print("config init err:", err)

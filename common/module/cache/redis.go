@@ -47,7 +47,6 @@ func init() {
 						redis.DialWriteTimeout(time.Duration(cfg.Pool.WriteTimeout)*time.Second),
 					)
 					if err != nil {
-						panic(err)
 						return nil, err
 					}
 					return conn, nil

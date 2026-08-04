@@ -50,7 +50,7 @@ gorm:
       # 数据库名
       db-name: "go_test"
       # 用户名
-      user: "root"
+      user: "yan"
       # 密码
       pass: "Aa123098.."
       # 端口
