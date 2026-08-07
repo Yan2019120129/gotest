@@ -6,14 +6,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// 在最下方回答：bcrypt
-// 定义和核心作用？
-// 解决什么问题？
-// 基本原理和流程？
-// API、配置和示例？
-// 适用场景、限制和风险？
-// 优缺点及替代方案？
-
 // bcrypt 自适应密码哈希函数（Adaptive Password Hash）
 //
 // 案例来源：根目录 main.go，主题为 bcrypt 密码校验
@@ -81,16 +73,3 @@ func main() {
 	//	fmt.Println("新生成的哈希：", hash)
 	//}
 }
-
-// 定义核心作用：bcrypt(自适应单向hash算法)不可逆，常用于用户密码生成hash 存储持久化。
-// 解决什么问题：解决用户密码，不可公开的信息存储，并且不可逆，破解成本高（取决于密码强度，随机复杂字符集和可大大提高破解成本，过于简单可使用穷举，字典，用户信息组合破解）
-// 基本原理和流程：$2a$10$4l1rFD3gAYCBU6IDKEnhPuRXZegZTtqMg8.5AlJLoBSScl4vyTJsy
-//	  		 	│   │  │                     │
-//	  		 	│   │  │                     └─ 校验结果，31 个字符
-//	  		 	│   │  └─ Salt，22 个字符
-//	  		 	│   └─ cost
-//	  		 	└─ bcrypt 版本
-// 生成：bcrypt（标记使用的版本号），cost（密码的扩展级别），salt(随机22个字符)，31字符计算出来的结果
-// API、配置和示例：GenerateFromPassword 生成hash，CompareHashAndPassword 比较密码hash
-// 适用场景、限制和风险：根据密码生成不可逆hash，提高破解成本，杜绝彩虹表批量匹配（暴露了hash之后的密码也是会被彩虹表暴力破解的），不能解决弱密码暴露后的暴力破解。
-// 优缺点及替代方案：优点(生态成熟，兼容性好：旧hash 可继续验证)，缺点（增加接口延迟，Dos风险，不能解决弱密码，撞库，和在线暴力破解），Argon2id 替代（存在迁移成本）

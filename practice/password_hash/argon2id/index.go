@@ -11,15 +11,6 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-// 在最下方回答：Argon2id
-// 定义和核心作用？
-// 解决什么问题？
-// 基本原理和流程？
-// API、配置和示例？
-// 适用场景、限制和风险？
-// 优缺点？
-// 是否有替代方案？
-
 // Argon2id（最低安全级别）
 // Memory-内存：19MB
 // time-迭代：2
@@ -166,29 +157,3 @@ func main() {
 	fmt.Printf("再次生成的哈希：%s\n", hash2)
 	fmt.Printf("两次哈希是否相同：%v\n", hash == hash2)
 }
-
-// 回答：Argon2id
-// 定义核心作用：Argon2id 是内存困难型密码哈希函数（Memory-Hard Password Hash），
-// 2015 年密码哈希竞赛冠军，RFC 9106 标准；核心作用是给密码生成带随机盐、
-// 高计算成本（CPU + 内存）的哈希，用于密码的安全存储与校验。
-
-// 解决什么问题：解决密码明文存储泄露问题，抵御彩虹表/预计算攻击与 GPU/ASIC
-// 并行暴力破解；相比 bcrypt、PBKDF2 增加“内存困难”维度，攻击者的并行破解成本大幅上升。
-
-// 基本原理和流程：$argon2id$v=19$m=65536,t=1,p=4$<base64盐>$<base64哈希>
-// BLAKE2b 生成 H0 → 按 p 条 lane 并行填充 m 块内存（每块 1024 字节）→
-// 迭代 t 轮（每轮 4 个 slice 同步点）→ 末尾 XOR 合并各 lane → 提取 keyLen 字节密钥。
-// API、配置和示例：argon2.IDKey 生成哈希，crypto/rand.Read 生成随机盐，
-// crypto/subtle.ConstantTimeCompare 常数时间比较；推荐参数 time=1、
-// memory=64MiB、threads=4、keyLen=32（RFC 9106）。
-
-// 适用场景、限制和风险：适用用户密码存储等高安全场景；限制是内存参数依赖硬件，
-// 高并发校验会放大内存与 CPU 开销，移动端/低内存设备需调低参数；
-// 风险是参数过低不安全、不能解决弱密码与在线暴力破解、存在 DoS 风险。
-
-// 优缺点：优点（内存困难抗 GPU/ASIC、自动加盐、参数自描述可平滑升级、
-// RFC 9106 标准、常数时间比较）；缺点（内存占用大、单次计算较慢、
-// 生态兼容性不如 bcrypt）。
-
-// 是否有替代方案：有，bcrypt（生态成熟、仅 CPU 成本）、scrypt（内存困难）、
-// PBKDF2（标准成熟、无内存困难）；Argon2id 综合最优，切换需考虑旧哈希迁移成本。
