@@ -11,7 +11,7 @@
 | [SHA-256](sha256/index.go) | 通用哈希函数，不适合直接存密码 | 已实现 |
 | [MD5](md5/index.go) | 通用哈希函数，不能用于密码存储 | 已实现 |
 
-说明：待实现的算法目前只有结构占位（含 `main` 方法与实现思路注释），未编写具体逻辑，也未引入新依赖。
+说明：bcrypt / Argon2id / scrypt / PBKDF2 四个用例依赖 `golang.org/x/crypto`，SHA-256 / MD5 仅使用标准库。
 
 ## 算法详解
 
@@ -32,7 +32,7 @@
 - **核心作用**：生成带随机盐、高计算成本、高内存消耗的密码哈希
 - **解决的问题**：防御 GPU/ASIC 大规模并行破解，抬高攻击者硬件成本
 - **基本原理**：`BLAKE2b 初始化 → 多线程内存块填充 → 多轮计算 → XOR 合并`，参数 `memory / time / parallelism`
-- **API**：`argon2.IDKey()` · 盐 `crypto/rand.Read()` · 比较 `subtle.ConstantTimeCompare()` · 常见参数 `m=64MB, t=1, p=4`
+- **API**：`argon2.IDKey()` · 盐 `crypto/rand.Read()` · 比较 `subtle.ConstantTimeCompare()` · 常见参数 `m=64MiB, t=1, p=4`
 - **适用场景**：新系统密码存储、高安全认证、金融系统
 
 ✅ **优点**：抗 GPU/ASIC 最强 · 安全性最高 · 参数可升级 · 标准化程度高

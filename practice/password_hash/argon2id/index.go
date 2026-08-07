@@ -58,10 +58,10 @@ type PasswordManager struct {
 	Params Argon2idParams
 }
 
-// DefaultArgon2idParams 返回 RFC 9106 推荐参数：time=1, memory=64MiB, threads=4
+// DefaultArgon2idParams 返回 RFC 9106 推荐参数：time=3, memory=64MiB, threads=4
 func DefaultArgon2idParams() Argon2idParams {
 	return Argon2idParams{
-		Time:    1,
+		Time:    3,
 		Memory:  64 * 1024,
 		Threads: 4,
 		KeyLen:  32,
