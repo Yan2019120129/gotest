@@ -38,4 +38,5 @@ func main() {
 	// 演示雪崩效应：仅改动一个字符，摘要完全不同
 	slightly := sha256.Sum256([]byte("hello worle"))
 	fmt.Printf("改动后的摘要：%x\n", slightly)
+	fmt.Printf("修改前后摘要是否相同：%t\n", sum == slightly)
 }
